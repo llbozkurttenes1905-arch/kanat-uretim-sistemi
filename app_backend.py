@@ -397,7 +397,78 @@ def machine_work_hours(date_key: str, facility_id: Optional[str] = Query(None)):
     result.sort(key=lambda x: x["work_hours"], reverse=True)
     return {"date": date_key, "machines": result}
 
-@app.post("/api/machines")
+@app.get("/api/machines/production-summary")
+def machine_production_summary(facility_id: Optional[str] = Query(None), period: Optional[str] = Query("daily"), target_date: Optional[str] = Query(None)):
+    """Makine bazında, seçilen döneme (günlük/haftalık/aylık) göre toplam çalışma saati ve
+    üretim adedi — Dashboard'daki tesis bazlı makine grafikleri için."""
+    d = load_data()
+    machines = d.get("machines", {})
+    daily = d.get("daily_entries", {})
+
+    try:
+        ref_date = date.fromisoformat((target_date or date.today().isoformat())[:10])
+    except Exception:
+        ref_date = date.today()
+
+    if period == "weekly":
+        start = ref_date - timedelta(days=ref_date.weekday())
+        date_list = [start + timedelta(days=i) for i in range(7)]
+    elif period == "monthly":
+        days_in_month = calendar.monthrange(ref_date.year, ref_date.month)[1]
+        date_list = [date(ref_date.year, ref_date.month, i) for i in range(1, days_in_month + 1)]
+    else:
+        period = "daily"
+        date_list = [ref_date]
+
+    agg = {}
+    for dt in date_list:
+        day_data = daily.get(dt.isoformat(), {})
+        for entry in day_data.get("entries", []):
+            for se in entry.get("stage_entries", []):
+                mid = se.get("machine_id") or ""
+                if not mid:
+                    continue
+                m = machines.get(mid)
+                if facility_id and facility_id != "all":
+                    m_fac = (m.get("facility_id") or "fac1") if m else "fac1"
+                    if m_fac != facility_id:
+                        continue
+                if mid not in agg:
+                    agg[mid] = {
+                        "machine_id": mid,
+                        "name": m.get("name", mid) if m else mid,
+                        "stage": m.get("stage", "") if m else "",
+                        "facility_id": (m.get("facility_id") or "fac1") if m else "fac1",
+                        "work_hours": 0.0,
+                        "output_qty": 0,
+                    }
+                agg[mid]["work_hours"] += se.get("work_hours") or 0
+                agg[mid]["output_qty"] += se.get("output_qty") or 0
+
+    for mid, m in machines.items():
+        if facility_id and facility_id != "all" and (m.get("facility_id") or "fac1") != facility_id:
+            continue
+        if mid not in agg:
+            agg[mid] = {
+                "machine_id": mid,
+                "name": m.get("name", mid),
+                "stage": m.get("stage", ""),
+                "facility_id": m.get("facility_id") or "fac1",
+                "work_hours": 0.0,
+                "output_qty": 0,
+            }
+
+    result = list(agg.values())
+    for r in result:
+        r["work_hours"] = round(r["work_hours"], 2)
+    result.sort(key=lambda x: x["work_hours"], reverse=True)
+
+    return {
+        "period": period,
+        "start_date": date_list[0].isoformat(),
+        "end_date": date_list[-1].isoformat(),
+        "machines": result
+    }
 def create_machine(req: MachineCreate):
     d = load_data()
     mid = "MCH-" + str(uuid.uuid4())[:8].upper()

@@ -852,87 +852,54 @@
                 <span id="shipment-badge" class="badge badge-green">0 Sipariş</span>
             </div>
             <div style="padding:16px 20px;">
-                <div style="position:relative;height:220px;margin-bottom:14px;">
+                <div style="position:relative;height:240px;">
                     <canvas id="shipment-week-chart"></canvas>
                 </div>
-                <div id="shipment-week-list" style="display:flex;flex-direction:column;gap:6px;"></div>
             </div>
-        </div>
-
-        <!-- Two columns: Sarkan + Order progress -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
-
-            <!-- Sarkan Siparisler -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div>
-                        <div class="panel-title" style="color:#f87171;">
-                            <svg viewBox="0 0 20 20" fill="currentColor" style="color:#ef4444;"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
-                            Sarkan / Kritik Siparişler
-                        </div>
-                        <div class="panel-sub">Teslim tarihi geçmiş veya bu hafta yetişmesi gerekenler</div>
-                    </div>
-                    <span id="sarkan-badge" class="badge badge-red">0 Sipariş</span>
-                </div>
-                <div style="overflow-x:auto;">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Sipariş No</th>
-                                <th>Tesis</th>
-                                <th>Müşteri</th>
-                                <th style="text-align:center;">Kalan</th>
-                                <th style="text-align:center;">Durum</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sarkan-tbody">
-                            <tr><td colspan="5" style="text-align:center;padding:24px;color:#52525b;">Sarkan sipariş yok ✓</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Aktif Siparis Listesi -->
-            <div class="panel">
-                <div class="panel-header">
-                    <div>
-                        <div class="panel-title">
-                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/></svg>
-                            Aktif Siparişler
-                        </div>
-                        <div class="panel-sub">Üretimde olan siparişlerin tamamlanma oranları</div>
-                    </div>
-                    <button class="btn-secondary" onclick="switchTab('orders')" style="font-size:11px;">Tümünü Gör →</button>
-                </div>
-                <div id="active-orders-list" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
-                    <div style="text-align:center;padding:20px;color:#52525b;font-size:13px;">Yükleniyor...</div>
-                </div>
-            </div>
-
         </div>
 
         <!-- Stage & Machine stats -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"/><path d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0 5 5 0 00-5-5 1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
-                        Aşama Bazlı Üretim
-                    </div>
-                </div>
-                <div id="stage-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
-                    <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
+        <!-- Stage stats -->
+        <div class="panel" style="margin-bottom:20px;">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"/><path d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0 5 5 0 00-5-5 1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
+                    Aşama Bazlı Üretim
                 </div>
             </div>
-            <div class="panel">
-                <div class="panel-header">
+            <div id="stage-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
+                <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
+            </div>
+        </div>
+
+        <!-- Machine production by facility, separate charts, with period toggle -->
+        <div class="panel">
+            <div class="panel-header" style="flex-wrap:wrap;">
+                <div>
                     <div class="panel-title">
                         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.5 10a4.5 4.5 0 004.284-5.882c-.105-.324-.51-.391-.752-.15L15.34 6.66a.454.454 0 01-.493.11 3.01 3.01 0 01-1.618-1.616.455.455 0 01.11-.494l2.694-2.692c.24-.241.174-.647-.15-.752a4.5 4.5 0 00-5.873 4.575c.055.873-.128 1.808-.8 2.368l-7.23 6.024a2.724 2.724 0 103.837 3.837l6.024-7.23c.56-.672 1.495-.855 2.368-.8.096.007.193.01.291.01zM5 16a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/></svg>
-                        Makine Bazlı Üretim
+                        Makine Bazlı Üretim — Tesislere Göre
+                    </div>
+                    <div class="panel-sub">Üst Tesis ve Alt Tesis makineleri ayrı grafiklerde</div>
+                </div>
+                <div class="period-btns" style="display:flex;gap:4px;background:#111118;border:1px solid #27272a;border-radius:7px;padding:3px;">
+                    <button class="period-btn active" id="dash-mp-daily" onclick="setDashMachinePeriod('daily')">Günlük</button>
+                    <button class="period-btn" id="dash-mp-weekly" onclick="setDashMachinePeriod('weekly')">Haftalık</button>
+                    <button class="period-btn" id="dash-mp-monthly" onclick="setDashMachinePeriod('monthly')">Aylık</button>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 20px;">
+                <div>
+                    <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Üst Tesis Makineleri</div>
+                    <div style="position:relative;height:240px;">
+                        <canvas id="dash-fac1-machine-chart"></canvas>
                     </div>
                 </div>
-                <div id="machine-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
-                    <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
+                <div>
+                    <div style="font-size:11px;font-weight:700;color:#22d3ee;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Alt Tesis Makineleri</div>
+                    <div style="position:relative;height:240px;">
+                        <canvas id="dash-fac2-machine-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1373,6 +1340,9 @@ let dailyFacility = 'fac1';
 let groupingEnabled = true;
 let expandedGroups = new Set();
 let machineWorkChartInstance = null;
+let dashMachinePeriod = 'daily';
+let dashFac1ChartInstance = null;
+let dashFac2ChartInstance = null;
 
 // ── INIT ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -1564,53 +1534,6 @@ async function loadDashboard() {
             </div>
         `).join('');
 
-        // Sarkan
-        const sarkan = d.sarkan_siparisler||[];
-        document.getElementById('sarkan-badge').textContent = `${sarkan.length} Sipariş`;
-        document.getElementById('sarkan-tbody').innerHTML = sarkan.length === 0
-            ? `<tr><td colspan="5" style="text-align:center;padding:20px;color:#52525b;">Sarkan sipariş yok ✓</td></tr>`
-            : sarkan.map(s => `
-                <tr>
-                    <td class="font-mono font-bold text-white" style="font-size:12px;">${s.order_no}</td>
-                    <td><span class="badge badge-red" style="font-size:10px;">${s.facility_name||'-'}</span></td>
-                    <td style="font-size:12px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.customer}</td>
-                    <td style="text-align:center;font-weight:700;color:#f87171;">${s.remaining_qty}</td>
-                    <td style="text-align:center;">
-                        ${s.delay_days>0
-                            ? `<span class="badge badge-red">🚨 ${s.delay_days}g gecikti</span>`
-                            : `<span class="badge badge-amber">⚠️ ${s.days_left}g kaldı</span>`}
-                    </td>
-                </tr>`).join('');
-
-        // Active orders progress
-        const ordRes = await fetch(`/api/orders?facility_id=${currentFacility}`);
-        const orders = await ordRes.json();
-        allOrders = orders;
-        const active = orders.filter(o=>o.status==='open').slice(0,12);
-        document.getElementById('active-orders-list').innerHTML = active.length === 0
-            ? `<div style="text-align:center;padding:20px;color:#52525b;font-size:12px;">Açık sipariş yok.</div>`
-            : active.map(o => {
-                const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (o.facility_id==='fac2'?'Alt Tesis':'Üst Tesis');
-                return `
-                <div style="padding:10px 12px;background:#111118;border:1px solid #1f1f27;border-radius:6px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;">
-                        <div style="display:flex;align-items:center;gap:6px;min-width:0;">
-                            <span style="font-size:12px;font-weight:700;color:#f4f4f5;white-space:nowrap;">${o.order_no}</span>
-                            <span class="badge ${o.facility_id==='fac2'?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span>
-                            <span style="font-size:11px;color:#71717a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.customer}</span>
-                        </div>
-                        <div style="font-size:11px;color:#9ca3af;white-space:nowrap;">${o.produced_qty||0}/${o.qty} <span style="color:#52525b;">adet</span></div>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:4px;">
-                        <span style="font-size:10px;color:#52525b;">${(o.stages||[]).join(' → ')}</span>
-                        <span style="font-size:10px;color:#71717a;font-weight:600;">%${o.progress_pct}</span>
-                    </div>
-                </div>`;
-            }).join('');
-
         // Stage stats
         const ss = d.stage_stats||[];
         document.getElementById('stage-stats').innerHTML = ss.length===0
@@ -1621,19 +1544,10 @@ async function loadDashboard() {
                     <span class="badge badge-indigo">${s.output.toLocaleString('tr-TR')} adet</span>
                 </div>`).join('');
 
-        // Machine stats
-        const ms = d.machine_stats||[];
-        document.getElementById('machine-stats').innerHTML = ms.length===0
-            ? `<div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>`
-            : ms.map(m=>`
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#111118;border:1px solid #1f1f27;border-radius:5px;font-size:12px;">
-                    <span style="color:#d4d4d8;">${m.name}</span>
-                    <span class="badge badge-green">${m.output.toLocaleString('tr-TR')} adet</span>
-                </div>`).join('');
-
     } catch(err) { console.error('Dashboard error', err); }
 
     loadShipmentReadyChart();
+    loadDashboardMachineCharts();
 }
 
 let shipmentWeekChartInstance = null;
@@ -1684,19 +1598,79 @@ async function loadShipmentReadyChart() {
                 }
             }
         });
-
-        const listEl = document.getElementById('shipment-week-list');
-        const withOrders = days.filter(d => d.orders.length);
-        listEl.innerHTML = withOrders.length === 0
-            ? `<div style="text-align:center;color:#52525b;font-size:12px;padding:10px;">Bu hafta henüz sevkiyata hazır işaretlenen sipariş yok.</div>`
-            : withOrders.map(d => `
-                <div style="padding:8px 12px;background:#111118;border:1px solid #1f1f27;border-radius:6px;">
-                    <div style="font-size:10px;font-weight:700;color:#4ade80;text-transform:uppercase;margin-bottom:4px;">${d.day_name} · ${d.date}</div>
-                    <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                        ${d.orders.map(o => `<span class="badge ${o.facility_id==='fac2'?'badge-cyan':'badge-red'}" style="font-size:10px;" title="${o.customer} · ${o.qty} adet">${o.order_no}</span>`).join('')}
-                    </div>
-                </div>`).join('');
     } catch(e) { console.error('Sevkiyat grafiği yüklenemedi', e); }
+}
+
+function setDashMachinePeriod(p) {
+    dashMachinePeriod = p;
+    ['daily','weekly','monthly'].forEach(x => {
+        document.getElementById(`dash-mp-${x}`).classList.toggle('active', x===p);
+    });
+    loadDashboardMachineCharts();
+}
+
+async function loadDashboardMachineCharts() {
+    const month = document.getElementById('month-picker').value;
+    const targetDate = month ? `${month}-01` : '';
+    try {
+        const [r1, r2] = await Promise.all([
+            fetch(`/api/machines/production-summary?facility_id=fac1&period=${dashMachinePeriod}${targetDate?`&target_date=${targetDate}`:''}`),
+            fetch(`/api/machines/production-summary?facility_id=fac2&period=${dashMachinePeriod}${targetDate?`&target_date=${targetDate}`:''}`)
+        ]);
+        const d1 = await r1.json();
+        const d2 = await r2.json();
+        dashFac1ChartInstance = renderDashMachineChart('dash-fac1-machine-chart', dashFac1ChartInstance, d1.machines||[], '#d42b2b');
+        dashFac2ChartInstance = renderDashMachineChart('dash-fac2-machine-chart', dashFac2ChartInstance, d2.machines||[], '#0891b2');
+    } catch(e) { console.error('Tesis makine grafikleri yüklenemedi', e); }
+}
+
+function renderDashMachineChart(canvasId, existingInstance, machines, color) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if(existingInstance) existingInstance.destroy();
+    if(!machines.length) {
+        return null;
+    }
+    return new Chart(ctx, {
+        data: {
+            labels: machines.map(m => m.name),
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Üretim (adet)',
+                    data: machines.map(m => m.output_qty),
+                    backgroundColor: color + 'cc',
+                    borderRadius: 4,
+                    yAxisID: 'yOutput',
+                    order: 2
+                },
+                {
+                    type: 'line',
+                    label: 'Çalışma (saat)',
+                    data: machines.map(m => m.work_hours),
+                    borderColor: '#facc15',
+                    backgroundColor: '#facc15',
+                    pointRadius: 3,
+                    tension: 0.3,
+                    yAxisID: 'yHours',
+                    order: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { labels: { color: '#d4d4d8', font: { size: 10 } } },
+                tooltip: { titleColor: '#fff', bodyColor: '#d4d4d8', backgroundColor: '#1c1c24', borderColor: '#3f3f46', borderWidth: 1 }
+            },
+            scales: {
+                x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { display: false } },
+                yOutput: { position: 'left', beginAtZero: true, ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+                yHours: { position: 'right', beginAtZero: true, ticks: { color: '#facc15', font: { size: 10 } }, grid: { display: false } }
+            }
+        }
+    });
 }
 
 // ── ORDERS ────────────────────────────────────────────────
