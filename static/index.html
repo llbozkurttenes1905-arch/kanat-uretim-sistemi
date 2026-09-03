@@ -9,15 +9,19 @@
     <style>
         :root {
             --brand-red: #d42b2b;
-            --brand-dark: #1c0a0a;
-            --brand-maroon: #2d1010;
+            --brand-dark: #0a0a0f;
+            --brand-maroon: #1a0d10;
             --accent: #e63333;
+            --bg-void: #07070a;
+            --bg-panel: #101017;
+            --bg-panel-2: #15151e;
+            --border-soft: rgba(255,255,255,0.07);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background: #0f0f13;
+            background: var(--bg-void);
             color: #d4d4d8;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
@@ -25,12 +29,12 @@
 
         /* ── HEADER ── */
         .site-header {
-            background: linear-gradient(90deg, #1a0808 0%, #2a0f0f 60%, #1e1010 100%);
-            border-bottom: 2px solid #d42b2b;
+            background: linear-gradient(180deg, #0c0c12 0%, #09090d 100%);
+            border-bottom: 1px solid rgba(212,43,43,0.55);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 20px rgba(212,43,43,0.25);
+            box-shadow: 0 1px 24px rgba(212,43,43,0.12);
         }
 
         .header-inner {
@@ -102,7 +106,8 @@
         }
 
         .crescent-svg {
-            opacity: 0.75;
+            opacity: 0.96;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
         }
 
         /* NAV TABS */
@@ -290,14 +295,14 @@
 
         /* ── PANEL / CARD ── */
         .panel {
-            background: #18181f;
-            border: 1px solid #27272a;
-            border-radius: 10px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
         }
 
         .panel-header {
             padding: 16px 20px;
-            border-bottom: 1px solid #27272a;
+            border-bottom: 1px solid var(--border-soft);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -325,10 +330,10 @@
         }
 
         .kpi-card {
-            background: #1c1c24;
-            border: 1px solid #3f3f46;
-            border-radius: 8px;
-            padding: 16px 18px;
+            background: var(--bg-panel-2);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            padding: 18px 20px;
             cursor: pointer;
             transition: all 0.18s;
             position: relative;
@@ -343,7 +348,23 @@
             background: var(--kpi-color, #d42b2b);
         }
 
-        .kpi-card:hover { border-color: #52525b; transform: translateY(-1px); }
+        .kpi-card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+        .kpi-card-icon {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.09);
+        }
+
+        .kpi-card-icon svg { width: 16px; height: 16px; color: var(--kpi-color, #d42b2b); }
 
         .kpi-card-label {
             font-size: 10px;
@@ -355,6 +376,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            padding-right: 40px;
         }
 
         .kpi-card-value {
@@ -550,7 +572,7 @@
         .login-screen {
             position: fixed;
             inset: 0;
-            background: #0a0a0e;
+            background: var(--bg-void);
             z-index: 999;
             display: flex;
             align-items: center;
@@ -558,9 +580,9 @@
         }
 
         .login-card {
-            background: #18181f;
-            border: 1px solid #27272a;
-            border-radius: 14px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 16px;
             padding: 36px 40px;
             width: 100%;
             max-width: 400px;
@@ -702,11 +724,12 @@
         <!-- Right side -->
         <div class="header-right">
             <!-- Turkish Crescent -->
-            <div class="turkish-crescent">
-                <svg class="crescent-svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
-                    <circle cx="17" cy="17" r="10" fill="#d42b2b"/>
-                    <circle cx="20" cy="14" r="8" fill="#1a0808"/>
-                    <circle cx="24" cy="12" r="2.2" fill="#d42b2b"/>
+            <div class="turkish-crescent" title="Türkiye">
+                <svg class="crescent-svg" width="30" height="30" viewBox="0 0 34 34" fill="none">
+                    <circle cx="17" cy="17" r="16" fill="#d42b2b"/>
+                    <circle cx="21" cy="17" r="9.5" fill="#fff"/>
+                    <circle cx="23.5" cy="17" r="8" fill="#d42b2b"/>
+                    <path d="M22.2 12.6l1.15 3.02 3.24.15-2.55 2 0.9 3.11-2.74-1.86-2.74 1.86 0.9-3.11-2.55-2 3.24-.15z" fill="#fff"/>
                 </svg>
             </div>
 
@@ -777,8 +800,10 @@
 
             <!-- Facility breakdown cards (clickable) -->
             <div class="kpi-card" style="--kpi-color:#d42b2b;" onclick="goToFacilityOrders('fac1')">
+                <div class="kpi-card-icon">
+                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
+                </div>
                 <div class="kpi-card-label">
-                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px;color:#d42b2b;"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
                     <span id="kpi-fac1-label">Üst Tesis</span> — Çıkan Kapı
                 </div>
                 <div class="kpi-card-value" id="kpi-fac1-output">0 <span>kapı</span></div>
@@ -786,8 +811,10 @@
             </div>
 
             <div class="kpi-card" style="--kpi-color:#0891b2;" onclick="goToFacilityOrders('fac2')">
+                <div class="kpi-card-icon">
+                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
+                </div>
                 <div class="kpi-card-label" style="color:#0891b2;">
-                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px;color:#0891b2;"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
                     <span id="kpi-fac2-label">Alt Tesis</span> — Çıkan Kapı
                 </div>
                 <div class="kpi-card-value" id="kpi-fac2-output">0 <span>kapı</span></div>
