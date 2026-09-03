@@ -259,8 +259,15 @@ def update_order(oid: str, req: OrderUpdate):
     if oid not in d["orders"]:
         raise HTTPException(404, "Sipariş bulunamadı")
     o = d["orders"][oid]
+    prev_status = o.get("status")
     for k, v in req.dict(exclude_none=True).items():
         o[k] = v
+    # "Sevkiyata Hazır" (done) olarak işaretlendiğinde tarihi otomatik kaydet;
+    # yeniden açılırsa temizle — haftalık sevkiyat grafiği bu alanı kullanır.
+    if req.status == "done" and prev_status != "done":
+        o["ready_date"] = date.today().isoformat()
+    elif req.status == "open":
+        o["ready_date"] = None
     save_data(d)
     return {"status": "ok"}
 
@@ -272,6 +279,56 @@ def delete_order(oid: str):
     del d["orders"][oid]
     save_data(d)
     return {"status": "ok"}
+
+DAY_NAMES_TR = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
+
+@app.get("/api/orders/shipment-ready")
+def shipment_ready_summary(facility_id: Optional[str] = Query(None), target_date: Optional[str] = Query(None)):
+    """Bu hafta (veya seçilen haftada) 'Sevkiyata Hazır' olarak işaretlenen siparişlerin
+    güne göre dağılımı — paketleme aşamasından çıkan siparişleri haftalık olarak gösterir."""
+    d = load_data()
+    orders = list(d["orders"].values())
+    if facility_id and facility_id != "all":
+        orders = [o for o in orders if (o.get("facility_id") or "fac1") == facility_id]
+
+    try:
+        ref_date = date.fromisoformat((target_date or date.today().isoformat())[:10])
+    except Exception:
+        ref_date = date.today()
+    start_of_week = ref_date - timedelta(days=ref_date.weekday())
+
+    by_date = {}
+    for o in orders:
+        rd = o.get("ready_date")
+        if rd:
+            by_date.setdefault(rd, []).append(o)
+
+    days = []
+    total_orders = 0
+    total_qty = 0
+    for i in range(7):
+        cur_day = start_of_week + timedelta(days=i)
+        cur_str = cur_day.isoformat()
+        day_orders = by_date.get(cur_str, [])
+        day_qty = sum(o.get("qty", 0) for o in day_orders)
+        total_orders += len(day_orders)
+        total_qty += day_qty
+        days.append({
+            "date": cur_str,
+            "day_name": DAY_NAMES_TR[i],
+            "is_today": cur_str == date.today().isoformat(),
+            "order_count": len(day_orders),
+            "qty": day_qty,
+            "orders": [{"order_no": o.get("order_no"), "customer": o.get("customer"), "qty": o.get("qty", 0), "facility_id": o.get("facility_id") or "fac1"} for o in day_orders]
+        })
+
+    return {
+        "start_date": start_of_week.isoformat(),
+        "end_date": (start_of_week + timedelta(days=6)).isoformat(),
+        "total_orders": total_orders,
+        "total_qty": total_qty,
+        "days": days
+    }
 
 @app.get("/api/orders/{oid}")
 def get_order(oid: str):
