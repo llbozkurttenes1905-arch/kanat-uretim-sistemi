@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ERGÜNBAŞ Group — Kanat Üretim & Sipariş Portalı</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
     <style>
         :root {
             --brand-red: #d42b2b;
@@ -632,7 +633,7 @@
 <div class="login-screen" id="login-screen">
     <div class="login-card">
         <div style="text-align:center; margin-bottom:28px;">
-            <img src="/static/logo.png" alt="ERGÜNBAŞ" style="height:64px; margin-bottom:12px;">
+            <img src="/static/logo_mark.png" alt="ERGÜNBAŞ" style="height:70px; margin-bottom:14px; filter:drop-shadow(0 0 10px rgba(212,43,43,0.35));">
             <div style="font-size:20px; font-weight:800; color:#f4f4f5;">ERGÜNBAŞ Group</div>
             <div style="font-size:11px; color:#6b7280; margin-top:3px;">Kanat Üretim & Sipariş Takip Sistemi</div>
         </div>
@@ -666,7 +667,7 @@
 
         <!-- Brand -->
         <div class="header-brand">
-            <img src="/static/logo.png" alt="ERGÜNBAŞ" class="header-logo">
+            <img src="/static/logo_mark.png" alt="ERGÜNBAŞ" class="header-logo">
             <div class="header-brand-text">
                 <div class="header-brand-name">ERGÜNBAŞ <span>Group</span></div>
                 <div class="header-brand-sub">Kanat Üretim &amp; Sipariş Yönetim Portalı</div>
@@ -906,6 +907,10 @@
                     <button onclick="selectFacility('fac2')" id="pill-fac2" style="padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;background:transparent;color:#71717a;border:none;cursor:pointer;">Alt Tesis (<span id="pill-cnt-fac2">36</span>)</button>
                 </div>
                 <input type="text" id="order-search" oninput="filterOrders()" placeholder="Ara: sipariş, müşteri, model..." class="form-input" style="width:230px;padding:7px 11px;font-size:12px;">
+                <button class="btn-secondary" id="group-toggle-btn" onclick="toggleGrouping()" style="font-size:11px;padding:7px 12px;white-space:nowrap;" title="Aynı cariye ait siparişleri tek satırda topla">
+                    <svg viewBox="0 0 20 20" fill="currentColor" style="width:13px;height:13px;"><path d="M4 4a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V4zM4 10a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM12 10a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+                    <span id="group-toggle-label">Cariye Göre Grupla: Açık</span>
+                </button>
                 <button class="btn-primary" onclick="openOrderModal()">
                     <svg viewBox="0 0 20 20" fill="currentColor" style="width:14px;height:14px;"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/></svg>
                     Yeni Sipariş
@@ -1046,7 +1051,7 @@
 
     <!-- ===== MACHINES ===== -->
     <div id="section-machines" class="hidden">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
             <div>
                 <div style="font-size:18px;font-weight:800;color:#f4f4f5;">Makine ve İstasyon Yönetimi</div>
                 <div style="font-size:12px;color:#71717a;margin-top:2px;">Tesis bazında tanımlı makineler ve kapasiteler</div>
@@ -1056,6 +1061,25 @@
                 Yeni Makine
             </button>
         </div>
+
+        <!-- Günlük makine çalışma saati grafiği -->
+        <div class="panel" style="margin-bottom:18px;padding:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+                <div class="panel-title" style="margin:0;">
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z"/></svg>
+                    Makinelerin Günlük Çalışma Saati
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <input type="date" id="machine-chart-date" class="form-input" style="padding:6px 10px;font-size:12px;" onchange="loadMachineWorkChart()">
+                    <span id="machine-chart-total" style="font-size:11px;color:#71717a;white-space:nowrap;"></span>
+                </div>
+            </div>
+            <div style="position:relative;height:280px;">
+                <canvas id="machine-work-chart"></canvas>
+            </div>
+            <div id="machine-chart-empty" class="hidden" style="text-align:center;color:#52525b;font-size:12px;padding:20px;">Bu tarihte henüz üretim girişi yapılmamış.</div>
+        </div>
+
         <div class="panel" style="overflow:hidden;">
             <div style="overflow-x:auto;">
                 <table class="data-table">
@@ -1299,6 +1323,9 @@ let stageTags = [];
 let currentFacility = 'all';
 let currentPeriod = 'weekly';
 let dailyFacility = 'fac1';
+let groupingEnabled = true;
+let expandedGroups = new Set();
+let machineWorkChartInstance = null;
 
 // ── INIT ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -1581,54 +1608,153 @@ async function loadOrders() {
 }
 
 function filterOrders() {
+    const q = document.getElementById('order-search').value;
+    renderOrdersTable(!q ? allOrders : allOrders.filter(matchesSearch));
+}
+
+function toggleGrouping() {
+    groupingEnabled = !groupingEnabled;
+    document.getElementById('group-toggle-label').textContent = `Cariye Göre Grupla: ${groupingEnabled ? 'Açık' : 'Kapalı'}`;
+    document.getElementById('group-toggle-btn').style.borderColor = groupingEnabled ? '#d42b2b' : '#27272a';
+    document.getElementById('group-toggle-btn').style.color = groupingEnabled ? '#f87171' : '#a1a1aa';
+    renderOrdersTable(allOrders.length && document.getElementById('order-search').value ? allOrders.filter(matchesSearch) : allOrders);
+}
+
+function matchesSearch(o) {
     const q = document.getElementById('order-search').value.toLowerCase();
-    if(!q) { renderOrdersTable(allOrders); return; }
-    renderOrdersTable(allOrders.filter(o =>
-        (o.order_no||'').toLowerCase().includes(q) ||
+    if(!q) return true;
+    return (o.order_no||'').toLowerCase().includes(q) ||
         (o.customer||'').toLowerCase().includes(q) ||
-        (o.model||'').toLowerCase().includes(q)
-    ));
+        (o.model||'').toLowerCase().includes(q);
+}
+
+// Aynı cariye (order_no) ait birden fazla kalemi tek çatı altında toplar.
+// Bu özellikle Alt Tesis siparişlerinde aynı cari koduna ait farklı ölçü/kalemleri
+// tek bir grup satırında gösterip karışıklığı önler.
+function groupOrdersByCari(orders) {
+    const groups = {};
+    const order = [];
+    orders.forEach(o => {
+        const key = `${o.facility_id||'fac1'}::${o.order_no || o.id}`;
+        if(!groups[key]) {
+            groups[key] = {
+                key, order_no: o.order_no, facility_id: o.facility_id||'fac1',
+                customer: o.customer, items: [], qty: 0, produced_qty: 0, remaining_qty: 0,
+                delivery_dates: [], statuses: new Set(), any_delayed: false
+            };
+            order.push(key);
+        }
+        const g = groups[key];
+        g.items.push(o);
+        g.qty += (o.qty||0);
+        g.produced_qty += (o.produced_qty||0);
+        g.remaining_qty += (o.remaining_qty !== undefined ? o.remaining_qty : (o.qty - (o.produced_qty||0)));
+        if(o.delivery_date) g.delivery_dates.push(o.delivery_date);
+        g.statuses.add(o.status);
+        if(o.status==='open' && o.days_remaining!==null && o.days_remaining!==undefined && o.days_remaining<0) g.any_delayed = true;
+    });
+    return order.map(key => {
+        const g = groups[key];
+        g.delivery_dates.sort();
+        g.delivery_date = g.delivery_dates[0] || '—';
+        g.progress_pct = g.qty > 0 ? Math.round((g.produced_qty / g.qty) * 1000) / 10 : 0;
+        g.all_done = g.statuses.size===1 && g.statuses.has('done');
+        return g;
+    });
 }
 
 function renderOrdersTable(orders) {
     const tb = document.getElementById('orders-tbody');
     if(!orders.length) { tb.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:#52525b;">Seçili tesiste sipariş yok.</td></tr>`; return; }
-    tb.innerHTML = orders.map(o => {
-        const isFac2 = (o.facility_id||'fac1')==='fac2';
-        const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (isFac2?'Alt Tesis':'Üst Tesis');
-        const isDone = o.status==='done';
-        const remaining = o.remaining_qty !== undefined ? o.remaining_qty : (o.qty-(o.produced_qty||0));
-        let statusBadge = isDone
-            ? `<span class="badge badge-green">Tamam</span>`
-            : (o.days_remaining!==null && o.days_remaining<0
-                ? `<span class="badge badge-red">🚨 Sarktı</span>`
-                : `<span class="badge badge-slate">Açık</span>`);
 
-        return `<tr>
-            <td class="font-mono font-bold text-white" style="font-size:12px;">${o.order_no}</td>
+    if(!groupingEnabled) {
+        tb.innerHTML = orders.map(o => renderOrderRow(o)).join('');
+        return;
+    }
+
+    const groups = groupOrdersByCari(orders);
+    tb.innerHTML = groups.map(g => {
+        if(g.items.length === 1) return renderOrderRow(g.items[0]);
+
+        const isFac2 = g.facility_id === 'fac2';
+        const facName = allFacilities.find(f=>f.id===g.facility_id)?.name || (isFac2?'Alt Tesis':'Üst Tesis');
+        const isExpanded = expandedGroups.has(g.key);
+        let statusBadge = g.all_done
+            ? `<span class="badge badge-green">Tamam</span>`
+            : (g.any_delayed ? `<span class="badge badge-red">🚨 Sarktı</span>` : `<span class="badge badge-slate">Açık</span>`);
+
+        const headerRow = `<tr style="background:rgba(212,43,43,0.045);cursor:pointer;" onclick="toggleGroupRow('${g.key.replace(/'/g,"\\'")}')">
+            <td class="font-mono font-bold text-white" style="font-size:12px;">
+                <span style="display:inline-block;transition:transform .15s;transform:rotate(${isExpanded?90:0}deg);margin-right:6px;color:#f87171;">▸</span>${g.order_no}
+            </td>
             <td><span class="badge ${isFac2?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span></td>
-            <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.customer}</td>
-            <td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#9ca3af;">${o.model}</td>
-            <td style="text-align:center;font-weight:700;">${o.qty}</td>
-            <td style="text-align:center;font-weight:700;color:#86efac;">${o.produced_qty||0}</td>
-            <td style="text-align:center;font-weight:700;color:#f87171;">${remaining}</td>
-            <td style="font-size:12px;color:#71717a;">${o.delivery_date||'—'}</td>
+            <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;">${g.customer}</td>
+            <td style="font-size:11px;color:#9ca3af;">
+                <span class="badge badge-indigo" style="font-size:10px;">${g.items.length} kalem — tek çatı</span>
+            </td>
+            <td style="text-align:center;font-weight:700;">${g.qty}</td>
+            <td style="text-align:center;font-weight:700;color:#86efac;">${g.produced_qty}</td>
+            <td style="text-align:center;font-weight:700;color:#f87171;">${g.remaining_qty}</td>
+            <td style="font-size:12px;color:#71717a;">${g.delivery_date}</td>
             <td style="min-width:120px;">
                 <div style="display:flex;align-items:center;gap:6px;">
-                    <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div></div>
-                    <span style="font-size:10px;color:#71717a;font-family:monospace;">%${o.progress_pct}</span>
+                    <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:${Math.min(g.progress_pct,100)}%"></div></div>
+                    <span style="font-size:10px;color:#71717a;font-family:monospace;">%${g.progress_pct}</span>
                 </div>
             </td>
             <td style="text-align:center;">${statusBadge}</td>
-            <td style="text-align:right;white-space:nowrap;">
-                <button class="btn-icon" title="${isDone?'Yeniden Aç':'Tamamlandı'}" onclick="toggleOrderStatus('${o.id}','${isDone?'open':'done'}')">
-                    ${isDone ? '↩' : '✓'}
-                </button>
-                <button class="btn-icon" onclick="editOrder('${o.id}')">✎</button>
-                <button class="btn-icon danger" onclick="deleteOrder('${o.id}')">✕</button>
-            </td>
+            <td style="text-align:right;font-size:11px;color:#52525b;">${isExpanded ? 'Gizle ▲' : 'Detay ▼'}</td>
         </tr>`;
+
+        const childRows = isExpanded ? g.items.map(o => renderOrderRow(o, true)).join('') : '';
+        return headerRow + childRows;
     }).join('');
+}
+
+function toggleGroupRow(key) {
+    if(expandedGroups.has(key)) expandedGroups.delete(key); else expandedGroups.add(key);
+    renderOrdersTable(document.getElementById('order-search').value ? allOrders.filter(matchesSearch) : allOrders);
+}
+
+function renderOrderRow(o, isChild=false) {
+    const isFac2 = (o.facility_id||'fac1')==='fac2';
+    const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (isFac2?'Alt Tesis':'Üst Tesis');
+    const isDone = o.status==='done';
+    const remaining = o.remaining_qty !== undefined ? o.remaining_qty : (o.qty-(o.produced_qty||0));
+    let statusBadge = isDone
+        ? `<span class="badge badge-green">Tamam</span>`
+        : (o.days_remaining!==null && o.days_remaining<0
+            ? `<span class="badge badge-red">🚨 Sarktı</span>`
+            : `<span class="badge badge-slate">Açık</span>`);
+    const childStyle = isChild ? 'background:rgba(255,255,255,0.012);' : '';
+    const firstCell = isChild
+        ? `<span style="color:#3f3f46;padding-left:18px;">└</span> <span style="color:#71717a;">${o.order_no}</span>`
+        : o.order_no;
+
+    return `<tr style="${childStyle}">
+        <td class="font-mono ${isChild?'':'font-bold text-white'}" style="font-size:12px;">${firstCell}</td>
+        <td><span class="badge ${isFac2?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span></td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${isChild?'color:#71717a;':''}">${o.customer}</td>
+        <td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#9ca3af;">${o.model}</td>
+        <td style="text-align:center;font-weight:700;">${o.qty}</td>
+        <td style="text-align:center;font-weight:700;color:#86efac;">${o.produced_qty||0}</td>
+        <td style="text-align:center;font-weight:700;color:#f87171;">${remaining}</td>
+        <td style="font-size:12px;color:#71717a;">${o.delivery_date||'—'}</td>
+        <td style="min-width:120px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div></div>
+                <span style="font-size:10px;color:#71717a;font-family:monospace;">%${o.progress_pct}</span>
+            </div>
+        </td>
+        <td style="text-align:center;">${statusBadge}</td>
+        <td style="text-align:right;white-space:nowrap;">
+            <button class="btn-icon" title="${isDone?'Yeniden Aç':'Tamamlandı'}" onclick="toggleOrderStatus('${o.id}','${isDone?'open':'done'}')">
+                ${isDone ? '↩' : '✓'}
+            </button>
+            <button class="btn-icon" onclick="editOrder('${o.id}')">✎</button>
+            <button class="btn-icon danger" onclick="deleteOrder('${o.id}')">✕</button>
+        </td>
+    </tr>`;
 }
 
 function openOrderModal(isEdit=false) {
@@ -1873,6 +1999,80 @@ async function loadMachines() {
             </tr>`;
         }).join('');
     } catch(e) {}
+
+    const dateInput = document.getElementById('machine-chart-date');
+    if(dateInput && !dateInput.value) dateInput.value = new Date().toISOString().slice(0,10);
+    loadMachineWorkChart();
+}
+
+async function loadMachineWorkChart() {
+    const dateInput = document.getElementById('machine-chart-date');
+    const dateStr = dateInput.value || new Date().toISOString().slice(0,10);
+    try {
+        const r = await fetch(`/api/machines/work-hours/${dateStr}?facility_id=${currentFacility}`);
+        const data = await r.json();
+        const machines = data.machines || [];
+        const emptyEl = document.getElementById('machine-chart-empty');
+        const canvasWrap = document.getElementById('machine-work-chart').parentElement;
+
+        const totalHours = machines.reduce((s,m)=>s+m.work_hours,0);
+        const totalOut = machines.reduce((s,m)=>s+m.output_qty,0);
+        document.getElementById('machine-chart-total').textContent = machines.length
+            ? `Toplam ${totalHours.toLocaleString('tr-TR')} saat çalışma · ${totalOut.toLocaleString('tr-TR')} adet üretim`
+            : '';
+
+        if(!machines.length || totalHours === 0) {
+            canvasWrap.style.display = 'none';
+            emptyEl.classList.remove('hidden');
+        } else {
+            canvasWrap.style.display = '';
+            emptyEl.classList.add('hidden');
+        }
+
+        const ctx = document.getElementById('machine-work-chart').getContext('2d');
+        if(machineWorkChartInstance) machineWorkChartInstance.destroy();
+        machineWorkChartInstance = new Chart(ctx, {
+            data: {
+                labels: machines.map(m => m.name),
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Çalışma Süresi (saat)',
+                        data: machines.map(m => m.work_hours),
+                        backgroundColor: 'rgba(212,43,43,0.75)',
+                        borderRadius: 4,
+                        yAxisID: 'yHours',
+                        order: 2
+                    },
+                    {
+                        type: 'line',
+                        label: 'Üretim (adet)',
+                        data: machines.map(m => m.output_qty),
+                        borderColor: '#22c55e',
+                        backgroundColor: '#22c55e',
+                        pointRadius: 4,
+                        tension: 0.3,
+                        yAxisID: 'yOutput',
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { labels: { color: '#d4d4d8', font: { size: 11 } } },
+                    tooltip: { titleColor: '#fff', bodyColor: '#d4d4d8', backgroundColor: '#1c1c24', borderColor: '#3f3f46', borderWidth: 1 }
+                },
+                scales: {
+                    x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+                    yHours: { position: 'left', ticks: { color: '#f87171', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Saat', color: '#f87171' } },
+                    yOutput: { position: 'right', ticks: { color: '#86efac', font: { size: 10 } }, grid: { display: false }, title: { display: true, text: 'Adet', color: '#86efac' } }
+                }
+            }
+        });
+    } catch(e) { console.error('Makine grafiği yüklenemedi', e); }
 }
 
 function openMachineModal(isEdit=false) {
