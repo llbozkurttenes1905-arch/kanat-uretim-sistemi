@@ -5,23 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ERGÜNBAŞ Group — Kanat Üretim & Sipariş Portalı</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
     <style>
         :root {
             --brand-red: #d42b2b;
-            --brand-dark: #0a0a0f;
-            --brand-maroon: #1a0d10;
+            --brand-dark: #1c0a0a;
+            --brand-maroon: #2d1010;
             --accent: #e63333;
-            --bg-void: #07070a;
-            --bg-panel: #101017;
-            --bg-panel-2: #15151e;
-            --border-soft: rgba(255,255,255,0.07);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background: var(--bg-void);
+            background: #0f0f13;
             color: #d4d4d8;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
@@ -29,12 +24,12 @@
 
         /* ── HEADER ── */
         .site-header {
-            background: linear-gradient(180deg, #0c0c12 0%, #09090d 100%);
-            border-bottom: 1px solid rgba(212,43,43,0.55);
+            background: linear-gradient(90deg, #1a0808 0%, #2a0f0f 60%, #1e1010 100%);
+            border-bottom: 2px solid #d42b2b;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 1px 24px rgba(212,43,43,0.12);
+            box-shadow: 0 2px 20px rgba(212,43,43,0.25);
         }
 
         .header-inner {
@@ -106,8 +101,7 @@
         }
 
         .crescent-svg {
-            opacity: 0.96;
-            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+            opacity: 0.75;
         }
 
         /* NAV TABS */
@@ -295,14 +289,14 @@
 
         /* ── PANEL / CARD ── */
         .panel {
-            background: var(--bg-panel);
-            border: 1px solid var(--border-soft);
-            border-radius: 14px;
+            background: #18181f;
+            border: 1px solid #27272a;
+            border-radius: 10px;
         }
 
         .panel-header {
             padding: 16px 20px;
-            border-bottom: 1px solid var(--border-soft);
+            border-bottom: 1px solid #27272a;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -330,10 +324,10 @@
         }
 
         .kpi-card {
-            background: var(--bg-panel-2);
-            border: 1px solid var(--border-soft);
-            border-radius: 14px;
-            padding: 18px 20px;
+            background: #1c1c24;
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            padding: 16px 18px;
             cursor: pointer;
             transition: all 0.18s;
             position: relative;
@@ -348,23 +342,7 @@
             background: var(--kpi-color, #d42b2b);
         }
 
-        .kpi-card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-1px); }
-
-        .kpi-card-icon {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.09);
-        }
-
-        .kpi-card-icon svg { width: 16px; height: 16px; color: var(--kpi-color, #d42b2b); }
+        .kpi-card:hover { border-color: #52525b; transform: translateY(-1px); }
 
         .kpi-card-label {
             font-size: 10px;
@@ -376,7 +354,6 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            padding-right: 40px;
         }
 
         .kpi-card-value {
@@ -572,7 +549,7 @@
         .login-screen {
             position: fixed;
             inset: 0;
-            background: var(--bg-void);
+            background: #0a0a0e;
             z-index: 999;
             display: flex;
             align-items: center;
@@ -580,9 +557,9 @@
         }
 
         .login-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--border-soft);
-            border-radius: 16px;
+            background: #18181f;
+            border: 1px solid #27272a;
+            border-radius: 14px;
             padding: 36px 40px;
             width: 100%;
             max-width: 400px;
@@ -655,7 +632,7 @@
 <div class="login-screen" id="login-screen">
     <div class="login-card">
         <div style="text-align:center; margin-bottom:28px;">
-            <img src="/static/logo_mark.png" alt="ERGÜNBAŞ" style="height:70px; margin-bottom:14px; filter:drop-shadow(0 0 10px rgba(212,43,43,0.35));">
+            <img src="/static/logo.png" alt="ERGÜNBAŞ" style="height:64px; margin-bottom:12px;">
             <div style="font-size:20px; font-weight:800; color:#f4f4f5;">ERGÜNBAŞ Group</div>
             <div style="font-size:11px; color:#6b7280; margin-top:3px;">Kanat Üretim & Sipariş Takip Sistemi</div>
         </div>
@@ -689,7 +666,7 @@
 
         <!-- Brand -->
         <div class="header-brand">
-            <img src="/static/logo_mark.png" alt="ERGÜNBAŞ" class="header-logo">
+            <img src="/static/logo.png" alt="ERGÜNBAŞ" class="header-logo">
             <div class="header-brand-text">
                 <div class="header-brand-name">ERGÜNBAŞ <span>Group</span></div>
                 <div class="header-brand-sub">Kanat Üretim &amp; Sipariş Yönetim Portalı</div>
@@ -724,12 +701,11 @@
         <!-- Right side -->
         <div class="header-right">
             <!-- Turkish Crescent -->
-            <div class="turkish-crescent" title="Türkiye">
-                <svg class="crescent-svg" width="30" height="30" viewBox="0 0 34 34" fill="none">
-                    <circle cx="17" cy="17" r="16" fill="#d42b2b"/>
-                    <circle cx="21" cy="17" r="9.5" fill="#fff"/>
-                    <circle cx="23.5" cy="17" r="8" fill="#d42b2b"/>
-                    <path d="M22.2 12.6l1.15 3.02 3.24.15-2.55 2 0.9 3.11-2.74-1.86-2.74 1.86 0.9-3.11-2.55-2 3.24-.15z" fill="#fff"/>
+            <div class="turkish-crescent">
+                <svg class="crescent-svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
+                    <circle cx="17" cy="17" r="10" fill="#d42b2b"/>
+                    <circle cx="20" cy="14" r="8" fill="#1a0808"/>
+                    <circle cx="24" cy="12" r="2.2" fill="#d42b2b"/>
                 </svg>
             </div>
 
@@ -800,10 +776,8 @@
 
             <!-- Facility breakdown cards (clickable) -->
             <div class="kpi-card" style="--kpi-color:#d42b2b;" onclick="goToFacilityOrders('fac1')">
-                <div class="kpi-card-icon">
-                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
-                </div>
                 <div class="kpi-card-label">
+                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px;color:#d42b2b;"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
                     <span id="kpi-fac1-label">Üst Tesis</span> — Çıkan Kapı
                 </div>
                 <div class="kpi-card-value" id="kpi-fac1-output">0 <span>kapı</span></div>
@@ -811,10 +785,8 @@
             </div>
 
             <div class="kpi-card" style="--kpi-color:#0891b2;" onclick="goToFacilityOrders('fac2')">
-                <div class="kpi-card-icon">
-                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
-                </div>
                 <div class="kpi-card-label" style="color:#0891b2;">
+                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px;color:#0891b2;"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
                     <span id="kpi-fac2-label">Alt Tesis</span> — Çıkan Kapı
                 </div>
                 <div class="kpi-card-value" id="kpi-fac2-output">0 <span>kapı</span></div>
@@ -839,67 +811,80 @@
             </div>
         </div>
 
-        <!-- Bu Hafta Sevkiyata Hazır Olan Siparişler -->
-        <div class="panel" style="margin-bottom:20px;">
-            <div class="panel-header">
-                <div>
-                    <div class="panel-title" style="color:#4ade80;">
-                        <svg viewBox="0 0 20 20" fill="currentColor" style="color:#22c55e;"><path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h9A1.5 1.5 0 0114 3.5V15a.5.5 0 01-.777.416L9.5 13.5l-3.723 1.916A.5.5 0 015 15V3.5z" clip-rule="evenodd"/></svg>
-                        Bu Hafta Sevkiyata Hazır Olan Siparişler
+        <!-- Two columns: Sarkan + Order progress -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+
+            <!-- Sarkan Siparisler -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title" style="color:#f87171;">
+                            <svg viewBox="0 0 20 20" fill="currentColor" style="color:#ef4444;"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                            Sarkan / Kritik Siparişler
+                        </div>
+                        <div class="panel-sub">Teslim tarihi geçmiş veya bu hafta yetişmesi gerekenler</div>
                     </div>
-                    <div class="panel-sub" id="shipment-range-label">Paketlemesi bitip sevkiyata hazır hale gelen siparişler — güne göre</div>
+                    <span id="sarkan-badge" class="badge badge-red">0 Sipariş</span>
                 </div>
-                <span id="shipment-badge" class="badge badge-green">0 Sipariş</span>
-            </div>
-            <div style="padding:16px 20px;">
-                <div style="position:relative;height:240px;">
-                    <canvas id="shipment-week-chart"></canvas>
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Sipariş No</th>
+                                <th>Tesis</th>
+                                <th>Müşteri</th>
+                                <th style="text-align:center;">Kalan</th>
+                                <th style="text-align:center;">Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sarkan-tbody">
+                            <tr><td colspan="5" style="text-align:center;padding:24px;color:#52525b;">Sarkan sipariş yok ✓</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
+            <!-- Aktif Siparis Listesi -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">
+                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/></svg>
+                            Aktif Siparişler
+                        </div>
+                        <div class="panel-sub">Üretimde olan siparişlerin tamamlanma oranları</div>
+                    </div>
+                    <button class="btn-secondary" onclick="switchTab('orders')" style="font-size:11px;">Tümünü Gör →</button>
+                </div>
+                <div id="active-orders-list" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+                    <div style="text-align:center;padding:20px;color:#52525b;font-size:13px;">Yükleniyor...</div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Stage & Machine stats -->
-        <!-- Stage stats -->
-        <div class="panel" style="margin-bottom:20px;">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"/><path d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0 5 5 0 00-5-5 1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
-                    Aşama Bazlı Üretim
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"/><path d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0 5 5 0 00-5-5 1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
+                        Aşama Bazlı Üretim
+                    </div>
+                </div>
+                <div id="stage-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
+                    <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
                 </div>
             </div>
-            <div id="stage-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
-                <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
-            </div>
-        </div>
-
-        <!-- Machine production by facility, separate charts, with period toggle -->
-        <div class="panel">
-            <div class="panel-header" style="flex-wrap:wrap;">
-                <div>
+            <div class="panel">
+                <div class="panel-header">
                     <div class="panel-title">
                         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.5 10a4.5 4.5 0 004.284-5.882c-.105-.324-.51-.391-.752-.15L15.34 6.66a.454.454 0 01-.493.11 3.01 3.01 0 01-1.618-1.616.455.455 0 01.11-.494l2.694-2.692c.24-.241.174-.647-.15-.752a4.5 4.5 0 00-5.873 4.575c.055.873-.128 1.808-.8 2.368l-7.23 6.024a2.724 2.724 0 103.837 3.837l6.024-7.23c.56-.672 1.495-.855 2.368-.8.096.007.193.01.291.01zM5 16a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/></svg>
-                        Makine Bazlı Üretim — Tesislere Göre
-                    </div>
-                    <div class="panel-sub">Üst Tesis ve Alt Tesis makineleri ayrı grafiklerde</div>
-                </div>
-                <div class="period-btns" style="display:flex;gap:4px;background:#111118;border:1px solid #27272a;border-radius:7px;padding:3px;">
-                    <button class="period-btn active" id="dash-mp-daily" onclick="setDashMachinePeriod('daily')">Günlük</button>
-                    <button class="period-btn" id="dash-mp-weekly" onclick="setDashMachinePeriod('weekly')">Haftalık</button>
-                    <button class="period-btn" id="dash-mp-monthly" onclick="setDashMachinePeriod('monthly')">Aylık</button>
-                </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 20px;">
-                <div>
-                    <div style="font-size:11px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Üst Tesis Makineleri</div>
-                    <div style="position:relative;height:240px;">
-                        <canvas id="dash-fac1-machine-chart"></canvas>
+                        Makine Bazlı Üretim
                     </div>
                 </div>
-                <div>
-                    <div style="font-size:11px;font-weight:700;color:#22d3ee;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Alt Tesis Makineleri</div>
-                    <div style="position:relative;height:240px;">
-                        <canvas id="dash-fac2-machine-chart"></canvas>
-                    </div>
+                <div id="machine-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
+                    <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
                 </div>
             </div>
         </div>
@@ -921,10 +906,6 @@
                     <button onclick="selectFacility('fac2')" id="pill-fac2" style="padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;background:transparent;color:#71717a;border:none;cursor:pointer;">Alt Tesis (<span id="pill-cnt-fac2">36</span>)</button>
                 </div>
                 <input type="text" id="order-search" oninput="filterOrders()" placeholder="Ara: sipariş, müşteri, model..." class="form-input" style="width:230px;padding:7px 11px;font-size:12px;">
-                <button class="btn-secondary" id="group-toggle-btn" onclick="toggleGrouping()" style="font-size:11px;padding:7px 12px;white-space:nowrap;" title="Aynı cariye ait siparişleri tek satırda topla">
-                    <svg viewBox="0 0 20 20" fill="currentColor" style="width:13px;height:13px;"><path d="M4 4a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V4zM4 10a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM12 10a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
-                    <span id="group-toggle-label">Cariye Göre Grupla: Açık</span>
-                </button>
                 <button class="btn-primary" onclick="openOrderModal()">
                     <svg viewBox="0 0 20 20" fill="currentColor" style="width:14px;height:14px;"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/></svg>
                     Yeni Sipariş
@@ -1065,7 +1046,7 @@
 
     <!-- ===== MACHINES ===== -->
     <div id="section-machines" class="hidden">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
             <div>
                 <div style="font-size:18px;font-weight:800;color:#f4f4f5;">Makine ve İstasyon Yönetimi</div>
                 <div style="font-size:12px;color:#71717a;margin-top:2px;">Tesis bazında tanımlı makineler ve kapasiteler</div>
@@ -1075,25 +1056,6 @@
                 Yeni Makine
             </button>
         </div>
-
-        <!-- Günlük makine çalışma saati grafiği -->
-        <div class="panel" style="margin-bottom:18px;padding:16px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
-                <div class="panel-title" style="margin:0;">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z"/></svg>
-                    Makinelerin Günlük Çalışma Saati
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <input type="date" id="machine-chart-date" class="form-input" style="padding:6px 10px;font-size:12px;" onchange="loadMachineWorkChart()">
-                    <span id="machine-chart-total" style="font-size:11px;color:#71717a;white-space:nowrap;"></span>
-                </div>
-            </div>
-            <div style="position:relative;height:280px;">
-                <canvas id="machine-work-chart"></canvas>
-            </div>
-            <div id="machine-chart-empty" class="hidden" style="text-align:center;color:#52525b;font-size:12px;padding:20px;">Bu tarihte henüz üretim girişi yapılmamış.</div>
-        </div>
-
         <div class="panel" style="overflow:hidden;">
             <div style="overflow-x:auto;">
                 <table class="data-table">
@@ -1337,12 +1299,6 @@ let stageTags = [];
 let currentFacility = 'all';
 let currentPeriod = 'weekly';
 let dailyFacility = 'fac1';
-let groupingEnabled = true;
-let expandedGroups = new Set();
-let machineWorkChartInstance = null;
-let dashMachinePeriod = 'daily';
-let dashFac1ChartInstance = null;
-let dashFac2ChartInstance = null;
 
 // ── INIT ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -1534,6 +1490,53 @@ async function loadDashboard() {
             </div>
         `).join('');
 
+        // Sarkan
+        const sarkan = d.sarkan_siparisler||[];
+        document.getElementById('sarkan-badge').textContent = `${sarkan.length} Sipariş`;
+        document.getElementById('sarkan-tbody').innerHTML = sarkan.length === 0
+            ? `<tr><td colspan="5" style="text-align:center;padding:20px;color:#52525b;">Sarkan sipariş yok ✓</td></tr>`
+            : sarkan.map(s => `
+                <tr>
+                    <td class="font-mono font-bold text-white" style="font-size:12px;">${s.order_no}</td>
+                    <td><span class="badge badge-red" style="font-size:10px;">${s.facility_name||'-'}</span></td>
+                    <td style="font-size:12px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.customer}</td>
+                    <td style="text-align:center;font-weight:700;color:#f87171;">${s.remaining_qty}</td>
+                    <td style="text-align:center;">
+                        ${s.delay_days>0
+                            ? `<span class="badge badge-red">🚨 ${s.delay_days}g gecikti</span>`
+                            : `<span class="badge badge-amber">⚠️ ${s.days_left}g kaldı</span>`}
+                    </td>
+                </tr>`).join('');
+
+        // Active orders progress
+        const ordRes = await fetch(`/api/orders?facility_id=${currentFacility}`);
+        const orders = await ordRes.json();
+        allOrders = orders;
+        const active = orders.filter(o=>o.status==='open').slice(0,12);
+        document.getElementById('active-orders-list').innerHTML = active.length === 0
+            ? `<div style="text-align:center;padding:20px;color:#52525b;font-size:12px;">Açık sipariş yok.</div>`
+            : active.map(o => {
+                const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (o.facility_id==='fac2'?'Alt Tesis':'Üst Tesis');
+                return `
+                <div style="padding:10px 12px;background:#111118;border:1px solid #1f1f27;border-radius:6px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;">
+                        <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+                            <span style="font-size:12px;font-weight:700;color:#f4f4f5;white-space:nowrap;">${o.order_no}</span>
+                            <span class="badge ${o.facility_id==='fac2'?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span>
+                            <span style="font-size:11px;color:#71717a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.customer}</span>
+                        </div>
+                        <div style="font-size:11px;color:#9ca3af;white-space:nowrap;">${o.produced_qty||0}/${o.qty} <span style="color:#52525b;">adet</span></div>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                        <span style="font-size:10px;color:#52525b;">${(o.stages||[]).join(' → ')}</span>
+                        <span style="font-size:10px;color:#71717a;font-weight:600;">%${o.progress_pct}</span>
+                    </div>
+                </div>`;
+            }).join('');
+
         // Stage stats
         const ss = d.stage_stats||[];
         document.getElementById('stage-stats').innerHTML = ss.length===0
@@ -1544,133 +1547,17 @@ async function loadDashboard() {
                     <span class="badge badge-indigo">${s.output.toLocaleString('tr-TR')} adet</span>
                 </div>`).join('');
 
+        // Machine stats
+        const ms = d.machine_stats||[];
+        document.getElementById('machine-stats').innerHTML = ms.length===0
+            ? `<div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>`
+            : ms.map(m=>`
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#111118;border:1px solid #1f1f27;border-radius:5px;font-size:12px;">
+                    <span style="color:#d4d4d8;">${m.name}</span>
+                    <span class="badge badge-green">${m.output.toLocaleString('tr-TR')} adet</span>
+                </div>`).join('');
+
     } catch(err) { console.error('Dashboard error', err); }
-
-    loadShipmentReadyChart();
-    loadDashboardMachineCharts();
-}
-
-let shipmentWeekChartInstance = null;
-
-async function loadShipmentReadyChart() {
-    try {
-        const month = document.getElementById('month-picker').value;
-        const url = `/api/orders/shipment-ready?facility_id=${currentFacility}${month?`&target_date=${month}-01`:''}`;
-        const r = await fetch(url);
-        const d = await r.json();
-        const days = d.days || [];
-
-        document.getElementById('shipment-range-label').textContent =
-            `${d.start_date} — ${d.end_date} · Paketlemesi bitip sevkiyata hazır hale gelen siparişler`;
-        document.getElementById('shipment-badge').textContent = `${d.total_orders} Sipariş`;
-
-        const ctx = document.getElementById('shipment-week-chart').getContext('2d');
-        if(shipmentWeekChartInstance) shipmentWeekChartInstance.destroy();
-        shipmentWeekChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: days.map(d => d.day_name),
-                datasets: [{
-                    label: 'Sevkiyata Hazır Sipariş Sayısı',
-                    data: days.map(d => d.order_count),
-                    backgroundColor: days.map(d => d.is_today ? '#4ade80' : 'rgba(34,197,94,0.55)'),
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        titleColor: '#fff', bodyColor: '#d4d4d8', backgroundColor: '#1c1c24', borderColor: '#3f3f46', borderWidth: 1,
-                        callbacks: {
-                            afterLabel: (item) => {
-                                const day = days[item.dataIndex];
-                                return day.qty ? `Toplam ${day.qty} adet` : '';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { display: false } },
-                    y: { beginAtZero: true, ticks: { color: '#9ca3af', font: { size: 10 }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } }
-                }
-            }
-        });
-    } catch(e) { console.error('Sevkiyat grafiği yüklenemedi', e); }
-}
-
-function setDashMachinePeriod(p) {
-    dashMachinePeriod = p;
-    ['daily','weekly','monthly'].forEach(x => {
-        document.getElementById(`dash-mp-${x}`).classList.toggle('active', x===p);
-    });
-    loadDashboardMachineCharts();
-}
-
-async function loadDashboardMachineCharts() {
-    const month = document.getElementById('month-picker').value;
-    const targetDate = month ? `${month}-01` : '';
-    try {
-        const [r1, r2] = await Promise.all([
-            fetch(`/api/machines/production-summary?facility_id=fac1&period=${dashMachinePeriod}${targetDate?`&target_date=${targetDate}`:''}`),
-            fetch(`/api/machines/production-summary?facility_id=fac2&period=${dashMachinePeriod}${targetDate?`&target_date=${targetDate}`:''}`)
-        ]);
-        const d1 = await r1.json();
-        const d2 = await r2.json();
-        dashFac1ChartInstance = renderDashMachineChart('dash-fac1-machine-chart', dashFac1ChartInstance, d1.machines||[], '#d42b2b');
-        dashFac2ChartInstance = renderDashMachineChart('dash-fac2-machine-chart', dashFac2ChartInstance, d2.machines||[], '#0891b2');
-    } catch(e) { console.error('Tesis makine grafikleri yüklenemedi', e); }
-}
-
-function renderDashMachineChart(canvasId, existingInstance, machines, color) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
-    if(existingInstance) existingInstance.destroy();
-    if(!machines.length) {
-        return null;
-    }
-    return new Chart(ctx, {
-        data: {
-            labels: machines.map(m => m.name),
-            datasets: [
-                {
-                    type: 'bar',
-                    label: 'Üretim (adet)',
-                    data: machines.map(m => m.output_qty),
-                    backgroundColor: color + 'cc',
-                    borderRadius: 4,
-                    yAxisID: 'yOutput',
-                    order: 2
-                },
-                {
-                    type: 'line',
-                    label: 'Çalışma (saat)',
-                    data: machines.map(m => m.work_hours),
-                    borderColor: '#facc15',
-                    backgroundColor: '#facc15',
-                    pointRadius: 3,
-                    tension: 0.3,
-                    yAxisID: 'yHours',
-                    order: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
-            plugins: {
-                legend: { labels: { color: '#d4d4d8', font: { size: 10 } } },
-                tooltip: { titleColor: '#fff', bodyColor: '#d4d4d8', backgroundColor: '#1c1c24', borderColor: '#3f3f46', borderWidth: 1 }
-            },
-            scales: {
-                x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { display: false } },
-                yOutput: { position: 'left', beginAtZero: true, ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-                yHours: { position: 'right', beginAtZero: true, ticks: { color: '#facc15', font: { size: 10 } }, grid: { display: false } }
-            }
-        }
-    });
 }
 
 // ── ORDERS ────────────────────────────────────────────────
@@ -1694,153 +1581,54 @@ async function loadOrders() {
 }
 
 function filterOrders() {
-    const q = document.getElementById('order-search').value;
-    renderOrdersTable(!q ? allOrders : allOrders.filter(matchesSearch));
-}
-
-function toggleGrouping() {
-    groupingEnabled = !groupingEnabled;
-    document.getElementById('group-toggle-label').textContent = `Cariye Göre Grupla: ${groupingEnabled ? 'Açık' : 'Kapalı'}`;
-    document.getElementById('group-toggle-btn').style.borderColor = groupingEnabled ? '#d42b2b' : '#27272a';
-    document.getElementById('group-toggle-btn').style.color = groupingEnabled ? '#f87171' : '#a1a1aa';
-    renderOrdersTable(allOrders.length && document.getElementById('order-search').value ? allOrders.filter(matchesSearch) : allOrders);
-}
-
-function matchesSearch(o) {
     const q = document.getElementById('order-search').value.toLowerCase();
-    if(!q) return true;
-    return (o.order_no||'').toLowerCase().includes(q) ||
+    if(!q) { renderOrdersTable(allOrders); return; }
+    renderOrdersTable(allOrders.filter(o =>
+        (o.order_no||'').toLowerCase().includes(q) ||
         (o.customer||'').toLowerCase().includes(q) ||
-        (o.model||'').toLowerCase().includes(q);
-}
-
-// Aynı cariye (order_no) ait birden fazla kalemi tek çatı altında toplar.
-// Bu özellikle Alt Tesis siparişlerinde aynı cari koduna ait farklı ölçü/kalemleri
-// tek bir grup satırında gösterip karışıklığı önler.
-function groupOrdersByCari(orders) {
-    const groups = {};
-    const order = [];
-    orders.forEach(o => {
-        const key = `${o.facility_id||'fac1'}::${o.order_no || o.id}`;
-        if(!groups[key]) {
-            groups[key] = {
-                key, order_no: o.order_no, facility_id: o.facility_id||'fac1',
-                customer: o.customer, items: [], qty: 0, produced_qty: 0, remaining_qty: 0,
-                delivery_dates: [], statuses: new Set(), any_delayed: false
-            };
-            order.push(key);
-        }
-        const g = groups[key];
-        g.items.push(o);
-        g.qty += (o.qty||0);
-        g.produced_qty += (o.produced_qty||0);
-        g.remaining_qty += (o.remaining_qty !== undefined ? o.remaining_qty : (o.qty - (o.produced_qty||0)));
-        if(o.delivery_date) g.delivery_dates.push(o.delivery_date);
-        g.statuses.add(o.status);
-        if(o.status==='open' && o.days_remaining!==null && o.days_remaining!==undefined && o.days_remaining<0) g.any_delayed = true;
-    });
-    return order.map(key => {
-        const g = groups[key];
-        g.delivery_dates.sort();
-        g.delivery_date = g.delivery_dates[0] || '—';
-        g.progress_pct = g.qty > 0 ? Math.round((g.produced_qty / g.qty) * 1000) / 10 : 0;
-        g.all_done = g.statuses.size===1 && g.statuses.has('done');
-        return g;
-    });
+        (o.model||'').toLowerCase().includes(q)
+    ));
 }
 
 function renderOrdersTable(orders) {
     const tb = document.getElementById('orders-tbody');
     if(!orders.length) { tb.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:#52525b;">Seçili tesiste sipariş yok.</td></tr>`; return; }
+    tb.innerHTML = orders.map(o => {
+        const isFac2 = (o.facility_id||'fac1')==='fac2';
+        const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (isFac2?'Alt Tesis':'Üst Tesis');
+        const isDone = o.status==='done';
+        const remaining = o.remaining_qty !== undefined ? o.remaining_qty : (o.qty-(o.produced_qty||0));
+        let statusBadge = isDone
+            ? `<span class="badge badge-green">Tamam</span>`
+            : (o.days_remaining!==null && o.days_remaining<0
+                ? `<span class="badge badge-red">🚨 Sarktı</span>`
+                : `<span class="badge badge-slate">Açık</span>`);
 
-    if(!groupingEnabled) {
-        tb.innerHTML = orders.map(o => renderOrderRow(o)).join('');
-        return;
-    }
-
-    const groups = groupOrdersByCari(orders);
-    tb.innerHTML = groups.map(g => {
-        if(g.items.length === 1) return renderOrderRow(g.items[0]);
-
-        const isFac2 = g.facility_id === 'fac2';
-        const facName = allFacilities.find(f=>f.id===g.facility_id)?.name || (isFac2?'Alt Tesis':'Üst Tesis');
-        const isExpanded = expandedGroups.has(g.key);
-        let statusBadge = g.all_done
-            ? `<span class="badge badge-green">✓ Sevkiyata Hazır</span>`
-            : (g.any_delayed ? `<span class="badge badge-red">🚨 Sarktı</span>` : `<span class="badge badge-slate">Üretimde</span>`);
-
-        const headerRow = `<tr style="background:rgba(212,43,43,0.045);cursor:pointer;" onclick="toggleGroupRow('${g.key.replace(/'/g,"\\'")}')">
-            <td class="font-mono font-bold text-white" style="font-size:12px;">
-                <span style="display:inline-block;transition:transform .15s;transform:rotate(${isExpanded?90:0}deg);margin-right:6px;color:#f87171;">▸</span>${g.order_no}
-            </td>
+        return `<tr>
+            <td class="font-mono font-bold text-white" style="font-size:12px;">${o.order_no}</td>
             <td><span class="badge ${isFac2?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span></td>
-            <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;">${g.customer}</td>
-            <td style="font-size:11px;color:#9ca3af;">
-                <span class="badge badge-indigo" style="font-size:10px;">${g.items.length} kalem — tek çatı</span>
-            </td>
-            <td style="text-align:center;font-weight:700;">${g.qty}</td>
-            <td style="text-align:center;font-weight:700;color:#86efac;">${g.produced_qty}</td>
-            <td style="text-align:center;font-weight:700;color:#f87171;">${g.remaining_qty}</td>
-            <td style="font-size:12px;color:#71717a;">${g.delivery_date}</td>
+            <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.customer}</td>
+            <td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#9ca3af;">${o.model}</td>
+            <td style="text-align:center;font-weight:700;">${o.qty}</td>
+            <td style="text-align:center;font-weight:700;color:#86efac;">${o.produced_qty||0}</td>
+            <td style="text-align:center;font-weight:700;color:#f87171;">${remaining}</td>
+            <td style="font-size:12px;color:#71717a;">${o.delivery_date||'—'}</td>
             <td style="min-width:120px;">
                 <div style="display:flex;align-items:center;gap:6px;">
-                    <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:${Math.min(g.progress_pct,100)}%"></div></div>
-                    <span style="font-size:10px;color:#71717a;font-family:monospace;">%${g.progress_pct}</span>
+                    <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div></div>
+                    <span style="font-size:10px;color:#71717a;font-family:monospace;">%${o.progress_pct}</span>
                 </div>
             </td>
             <td style="text-align:center;">${statusBadge}</td>
-            <td style="text-align:right;font-size:11px;color:#52525b;">${isExpanded ? 'Gizle ▲' : 'Detay ▼'}</td>
+            <td style="text-align:right;white-space:nowrap;">
+                <button class="btn-icon" title="${isDone?'Yeniden Aç':'Tamamlandı'}" onclick="toggleOrderStatus('${o.id}','${isDone?'open':'done'}')">
+                    ${isDone ? '↩' : '✓'}
+                </button>
+                <button class="btn-icon" onclick="editOrder('${o.id}')">✎</button>
+                <button class="btn-icon danger" onclick="deleteOrder('${o.id}')">✕</button>
+            </td>
         </tr>`;
-
-        const childRows = isExpanded ? g.items.map(o => renderOrderRow(o, true)).join('') : '';
-        return headerRow + childRows;
     }).join('');
-}
-
-function toggleGroupRow(key) {
-    if(expandedGroups.has(key)) expandedGroups.delete(key); else expandedGroups.add(key);
-    renderOrdersTable(document.getElementById('order-search').value ? allOrders.filter(matchesSearch) : allOrders);
-}
-
-function renderOrderRow(o, isChild=false) {
-    const isFac2 = (o.facility_id||'fac1')==='fac2';
-    const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (isFac2?'Alt Tesis':'Üst Tesis');
-    const isDone = o.status==='done';
-    const remaining = o.remaining_qty !== undefined ? o.remaining_qty : (o.qty-(o.produced_qty||0));
-    let statusBadge = isDone
-        ? `<span class="badge badge-green">✓ Sevkiyata Hazır</span>`
-        : (o.days_remaining!==null && o.days_remaining<0
-            ? `<span class="badge badge-red">🚨 Sarktı</span>`
-            : `<span class="badge badge-slate">Üretimde</span>`);
-    const childStyle = isChild ? 'background:rgba(255,255,255,0.012);' : '';
-    const firstCell = isChild
-        ? `<span style="color:#3f3f46;padding-left:18px;">└</span> <span style="color:#71717a;">${o.order_no}</span>`
-        : o.order_no;
-
-    return `<tr style="${childStyle}">
-        <td class="font-mono ${isChild?'':'font-bold text-white'}" style="font-size:12px;">${firstCell}</td>
-        <td><span class="badge ${isFac2?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span></td>
-        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${isChild?'color:#71717a;':''}">${o.customer}</td>
-        <td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#9ca3af;">${o.model}</td>
-        <td style="text-align:center;font-weight:700;">${o.qty}</td>
-        <td style="text-align:center;font-weight:700;color:#86efac;">${o.produced_qty||0}</td>
-        <td style="text-align:center;font-weight:700;color:#f87171;">${remaining}</td>
-        <td style="font-size:12px;color:#71717a;">${o.delivery_date||'—'}</td>
-        <td style="min-width:120px;">
-            <div style="display:flex;align-items:center;gap:6px;">
-                <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div></div>
-                <span style="font-size:10px;color:#71717a;font-family:monospace;">%${o.progress_pct}</span>
-            </div>
-        </td>
-        <td style="text-align:center;">${statusBadge}</td>
-        <td style="text-align:right;white-space:nowrap;">
-            <button class="btn-icon" title="${isDone?'Yeniden Aç':'Sevkiyata Hazır Olarak İşaretle'}" onclick="toggleOrderStatus('${o.id}','${isDone?'open':'done'}')">
-                ${isDone ? '↩' : '✓'}
-            </button>
-            <button class="btn-icon" onclick="editOrder('${o.id}')">✎</button>
-            <button class="btn-icon danger" onclick="deleteOrder('${o.id}')">✕</button>
-        </td>
-    </tr>`;
 }
 
 function openOrderModal(isEdit=false) {
@@ -1909,7 +1697,7 @@ function editOrder(oid) {
 
 async function toggleOrderStatus(oid, newStatus) {
     await fetch(`/api/orders/${oid}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({status:newStatus}) });
-    toast(`Sipariş: ${newStatus==='done'?'Sevkiyata Hazır ✓':'Üretime Geri Alındı'}`);
+    toast(`Sipariş: ${newStatus==='done'?'Tamamlandı':'Açık'}`);
     loadOrders(); loadDashboard();
 }
 
@@ -2085,80 +1873,6 @@ async function loadMachines() {
             </tr>`;
         }).join('');
     } catch(e) {}
-
-    const dateInput = document.getElementById('machine-chart-date');
-    if(dateInput && !dateInput.value) dateInput.value = new Date().toISOString().slice(0,10);
-    loadMachineWorkChart();
-}
-
-async function loadMachineWorkChart() {
-    const dateInput = document.getElementById('machine-chart-date');
-    const dateStr = dateInput.value || new Date().toISOString().slice(0,10);
-    try {
-        const r = await fetch(`/api/machines/work-hours/${dateStr}?facility_id=${currentFacility}`);
-        const data = await r.json();
-        const machines = data.machines || [];
-        const emptyEl = document.getElementById('machine-chart-empty');
-        const canvasWrap = document.getElementById('machine-work-chart').parentElement;
-
-        const totalHours = machines.reduce((s,m)=>s+m.work_hours,0);
-        const totalOut = machines.reduce((s,m)=>s+m.output_qty,0);
-        document.getElementById('machine-chart-total').textContent = machines.length
-            ? `Toplam ${totalHours.toLocaleString('tr-TR')} saat çalışma · ${totalOut.toLocaleString('tr-TR')} adet üretim`
-            : '';
-
-        if(!machines.length || totalHours === 0) {
-            canvasWrap.style.display = 'none';
-            emptyEl.classList.remove('hidden');
-        } else {
-            canvasWrap.style.display = '';
-            emptyEl.classList.add('hidden');
-        }
-
-        const ctx = document.getElementById('machine-work-chart').getContext('2d');
-        if(machineWorkChartInstance) machineWorkChartInstance.destroy();
-        machineWorkChartInstance = new Chart(ctx, {
-            data: {
-                labels: machines.map(m => m.name),
-                datasets: [
-                    {
-                        type: 'bar',
-                        label: 'Çalışma Süresi (saat)',
-                        data: machines.map(m => m.work_hours),
-                        backgroundColor: 'rgba(212,43,43,0.75)',
-                        borderRadius: 4,
-                        yAxisID: 'yHours',
-                        order: 2
-                    },
-                    {
-                        type: 'line',
-                        label: 'Üretim (adet)',
-                        data: machines.map(m => m.output_qty),
-                        borderColor: '#22c55e',
-                        backgroundColor: '#22c55e',
-                        pointRadius: 4,
-                        tension: 0.3,
-                        yAxisID: 'yOutput',
-                        order: 1
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { labels: { color: '#d4d4d8', font: { size: 11 } } },
-                    tooltip: { titleColor: '#fff', bodyColor: '#d4d4d8', backgroundColor: '#1c1c24', borderColor: '#3f3f46', borderWidth: 1 }
-                },
-                scales: {
-                    x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-                    yHours: { position: 'left', ticks: { color: '#f87171', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Saat', color: '#f87171' } },
-                    yOutput: { position: 'right', ticks: { color: '#86efac', font: { size: 10 } }, grid: { display: false }, title: { display: true, text: 'Adet', color: '#86efac' } }
-                }
-            }
-        });
-    } catch(e) { console.error('Makine grafiği yüklenemedi', e); }
 }
 
 function openMachineModal(isEdit=false) {
