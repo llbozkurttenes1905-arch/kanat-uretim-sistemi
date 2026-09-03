@@ -38,55 +38,58 @@ def save_users(u):
 
 class OrderCreate(BaseModel):
     order_no: str
+    facility_id: str
     customer: str
     model: str
     qty: int
     delivery_date: str
-    stages: List[str] = []
     notes: Optional[str] = ""
 
 class OrderUpdate(BaseModel):
+    facility_id: Optional[str] = None
     customer: Optional[str] = None
     model: Optional[str] = None
     qty: Optional[int] = None
     delivery_date: Optional[str] = None
-    stages: Optional[List[str]] = None
     status: Optional[str] = None
     notes: Optional[str] = None
 
 class MachineCreate(BaseModel):
     name: str
+    facility_id: str
     stage: str
     capacity_per_hour: Optional[float] = 0
     notes: Optional[str] = ""
 
 class MachineUpdate(BaseModel):
     name: Optional[str] = None
+    facility_id: Optional[str] = None
     stage: Optional[str] = None
     capacity_per_hour: Optional[float] = None
     status: Optional[str] = None
     notes: Optional[str] = None
 
-class StageEntry(BaseModel):
-    stage: str
-    machine_id: Optional[str] = ""
+class OrderEntry(BaseModel):
+    order_id: str
     output_qty: int = 0
-    work_hours: Optional[float] = 0
+    shift: Optional[str] = ""
+    operator: Optional[str] = ""
     notes: Optional[str] = ""
 
-class DailyOrderEntry(BaseModel):
-    order_id: str
-    shift: str
+class MachineEntry(BaseModel):
+    machine_id: str
+    output_qty: int = 0
+    work_hours: float = 0
     operator: Optional[str] = ""
-    stage_entries: List[StageEntry] = []
+    notes: Optional[str] = ""
 
 class DailyPayload(BaseModel):
     date: str
-    entries: List[DailyOrderEntry] = []
+    order_entries: List[OrderEntry] = []
+    machine_entries: List[MachineEntry] = []
 
 class DowntimeEntry(BaseModel):
-    machine_id: Optional[str] = ""
-    stage: Optional[str] = ""
+    machine_id: str
     reason: str
     duration_min: float = 0
     notes: Optional[str] = ""
@@ -155,34 +158,50 @@ def delete_user(uid: str):
     save_users(users)
     return {"status": "ok"}
 
+
+@app.get("/api/facilities")
+def get_facilities():
+    d = load_data()
+    f1 = d.get("facilities", {}).get("fac1", {"id": "fac1", "name": "Üst Tesis"})
+    f2 = d.get("facilities", {}).get("fac2", {"id": "fac2", "name": "Alt Tesis"})
+    return [f1, f2]
+
+@app.put("/api/facilities/{fid}")
+def update_facility(fid: str, payload: dict):
+    d = load_data()
+    if "facilities" not in d: d["facilities"] = {}
+    if fid not in d["facilities"]: d["facilities"][fid] = {"id": fid}
+    d["facilities"][fid]["name"] = payload.get("name", "Bilinmeyen Tesis")
+    save_data(d)
+    return {"status": "ok"}
+
 @app.get("/api/orders")
-def list_orders():
+def list_orders(facility_id: Optional[str] = None):
     d = load_data()
     orders = list(d["orders"].values())
     daily = d.get("daily_entries", {})
     today_dt = date.today()
     
+    res = []
     for order in orders:
+        if facility_id and facility_id != "all" and order.get("facility_id") != facility_id:
+            continue
+            
         oid = order["id"]
         total_out = 0
-        stages = order.get("stages", [])
-        last_stage = stages[-1] if stages else None
         
+        # Calculate produced qty directly from order_entries
         for day_data in daily.values():
-            for entry in day_data.get("entries", []):
-                if entry["order_id"] == oid:
-                    for se in entry.get("stage_entries", []):
-                        if last_stage and se["stage"] == last_stage:
-                            total_out += se.get("output_qty", 0)
-                        elif not stages:
-                            total_out += se.get("output_qty", 0)
+            for oe in day_data.get("order_entries", []):
+                if oe.get("order_id") == oid:
+                    total_out += oe.get("output_qty", 0)
                             
         order["produced_qty"] = total_out
-        order["remaining_qty"] = max(0, order["qty"] - total_out)
-        order["progress_pct"] = round(total_out / order["qty"] * 100, 1) if order["qty"] > 0 else 0
+        order["remaining_qty"] = max(0, order.get("qty",0) - total_out)
+        order["progress_pct"] = round(total_out / order.get("qty",1) * 100, 1) if order.get("qty",0) > 0 else 0
         
         try:
-            deliv_dt = date.fromisoformat(order["delivery_date"])
+            deliv_dt = date.fromisoformat(order.get("delivery_date", ""))
             days_rem = (deliv_dt - today_dt).days
             order["days_remaining"] = days_rem
             if order.get("status") == "open":
@@ -203,8 +222,10 @@ def list_orders():
             order["spillover_status"] = "unknown"
             order["delay_days"] = 0
             
-    orders.sort(key=lambda x: x.get("created_at", ""), reverse=True)
-    return orders
+        res.append(order)
+            
+    res.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+    return res
 
 @app.post("/api/orders")
 def create_order(req: OrderCreate):
@@ -212,12 +233,12 @@ def create_order(req: OrderCreate):
     oid = "SIP-" + datetime.now().strftime("%Y%m%d-%H%M%S")
     d["orders"][oid] = {
         "id": oid,
+        "facility_id": req.facility_id,
         "order_no": req.order_no,
         "customer": req.customer,
         "model": req.model,
         "qty": req.qty,
         "delivery_date": req.delivery_date,
-        "stages": req.stages,
         "status": "open",
         "notes": req.notes or "",
         "created_at": datetime.now().isoformat()
@@ -253,8 +274,12 @@ def get_order(oid: str):
     return d["orders"][oid]
 
 @app.get("/api/machines")
-def list_machines():
-    return list(load_data()["machines"].values())
+def list_machines(facility_id: Optional[str] = None):
+    d = load_data()
+    machines = list(d["machines"].values())
+    if facility_id and facility_id != "all":
+        machines = [m for m in machines if m.get("facility_id") == facility_id]
+    return machines
 
 @app.post("/api/machines")
 def create_machine(req: MachineCreate):
@@ -262,6 +287,7 @@ def create_machine(req: MachineCreate):
     mid = "MCH-" + str(uuid.uuid4())[:8].upper()
     d["machines"][mid] = {
         "id": mid,
+        "facility_id": req.facility_id,
         "name": req.name,
         "stage": req.stage,
         "capacity_per_hour": req.capacity_per_hour,
@@ -294,176 +320,191 @@ def delete_machine(mid: str):
 @app.get("/api/daily/{date_key}")
 def get_daily(date_key: str):
     d = load_data()
-    return d["daily_entries"].get(date_key, {"date": date_key, "entries": [], "downtimes": []})
+    return d.get("daily_entries", {}).get(date_key, {"date": date_key, "order_entries": [], "machine_entries": [], "downtimes": []})
 
 @app.post("/api/daily/{date_key}")
 def save_daily(date_key: str, payload: DailyPayload):
     d = load_data()
-    entries = []
-    for e in payload.entries:
-        stage_list = []
-        for se in e.stage_entries:
-            stage_list.append({
-                "stage": se.stage,
-                "machine_id": se.machine_id,
-                "output_qty": se.output_qty,
-                "work_hours": se.work_hours,
-                "notes": se.notes or ""
-            })
-        entries.append({
-            "order_id": e.order_id,
-            "shift": e.shift,
-            "operator": e.operator,
-            "stage_entries": stage_list,
-            "total_output": sum(s["output_qty"] for s in stage_list)
-        })
-    if date_key not in d["daily_entries"]:
-        d["daily_entries"][date_key] = {}
-    d["daily_entries"][date_key].update({"date": date_key, "entries": entries})
+    if date_key not in d.setdefault("daily_entries", {}):
+        d["daily_entries"][date_key] = {"date": date_key, "order_entries": [], "machine_entries": [], "downtimes": []}
+    
+    # Overwrite the day's order and machine entries for simplicity, or append (here we just update existing ones, but since UI sends full payload, we overwrite them or merge. Wait, UI usually sends incremental data if it's not careful. Let's merge based on order/machine/shift)
+    
+    # Simpler: The UI will just append entries.
+    for oe in payload.order_entries:
+        d["daily_entries"][date_key]["order_entries"].append(oe.dict())
+    
+    for me in payload.machine_entries:
+        d["daily_entries"][date_key]["machine_entries"].append(me.dict())
+        
     save_data(d)
-    return {"status": "ok", "saved": len(entries)}
+    return {"status": "ok"}
 
 @app.post("/api/daily/{date_key}/downtime")
 def save_downtime(date_key: str, payload: DailyDowntime):
     d = load_data()
-    if date_key not in d["daily_entries"]:
-        d["daily_entries"][date_key] = {"date": date_key, "entries": []}
-    d["daily_entries"][date_key]["downtimes"] = [dt.dict() for dt in payload.downtimes]
+    if date_key not in d.setdefault("daily_entries", {}):
+        d["daily_entries"][date_key] = {"date": date_key, "order_entries": [], "machine_entries": [], "downtimes": []}
+    
+    for dt in payload.downtimes:
+        d["daily_entries"][date_key].setdefault("downtimes", []).append(dt.dict())
+    
     save_data(d)
     return {"status": "ok"}
 
 @app.get("/api/dashboard")
-def dashboard():
+def dashboard(facility_id: Optional[str] = "all", period: Optional[str] = "weekly", target_date: Optional[str] = None):
     d = load_data()
     orders = d.get("orders", {})
     machines = d.get("machines", {})
     daily = d.get("daily_entries", {})
-    today_str = date.today().isoformat()
     today_dt = date.today()
-
-    start_of_week = today_dt - timedelta(days=today_dt.weekday())
-    end_of_week   = start_of_week + timedelta(days=6)
+    today_str = today_dt.isoformat()
     
-    total_orders = len(orders)
-    open_orders  = sum(1 for o in orders.values() if o.get("status") == "open")
-    done_orders  = sum(1 for o in orders.values() if o.get("status") == "done")
-    delayed_orders = 0
-    sarkan_siparisler = []
+    start_dt = today_dt
+    end_dt = today_dt
+    
+    if period == "daily":
+        if target_date:
+            try: start_dt = date.fromisoformat(target_date)
+            except: pass
+        end_dt = start_dt
+    elif period == "weekly":
+        start_dt = today_dt - timedelta(days=today_dt.weekday())
+        end_dt = start_dt + timedelta(days=6)
+    elif period == "monthly":
+        if target_date:
+            try: start_dt = date.fromisoformat(target_date).replace(day=1)
+            except: start_dt = today_dt.replace(day=1)
+        else:
+            start_dt = today_dt.replace(day=1)
+        # simplistic end of month
+        nxt = start_dt.replace(day=28) + timedelta(days=4)
+        end_dt = nxt - timedelta(days=nxt.day)
+        
+    # Helper to check if a date string falls in our range
+    def in_range(ds):
+        try:
+            dt = date.fromisoformat(ds)
+            return start_dt <= dt <= end_dt
+        except:
+            return False
+
+    # Orders Summary
+    total_orders = 0
+    open_orders = 0
+    done_orders = 0
+    sarkan = []
     
     for oid, o in orders.items():
+        if facility_id and facility_id != "all" and o.get("facility_id") != facility_id:
+            continue
+            
+        total_orders += 1
+        if o.get("status") == "open": open_orders += 1
+        else: done_orders += 1
+        
         if o.get("status") == "open":
             try:
                 deliv_dt = date.fromisoformat(o["delivery_date"])
                 days_rem = (deliv_dt - today_dt).days
                 
-                total_out = 0
-                stages = o.get("stages", [])
-                last_stage = stages[-1] if stages else None
-                for day_data in daily.values():
-                    for entry in day_data.get("entries", []):
-                        if entry.get("order_id") == oid:
-                            for se in entry.get("stage_entries", []):
-                                if last_stage and se.get("stage") == last_stage:
-                                    total_out += se.get("output_qty", 0)
-                                elif not stages:
-                                    total_out += se.get("output_qty", 0)
-                
-                kalan = max(0, o.get("qty", 0) - total_out)
-                
-                if days_rem < 0:
-                    delayed_orders += 1
-                    sarkan_siparisler.append({
+                if days_rem <= 7:
+                    # calc produced qty
+                    t_out = sum(oe.get("output_qty",0) for dd in daily.values() for oe in dd.get("order_entries",[]) if oe.get("order_id") == oid)
+                    kalan = max(0, o.get("qty",0) - t_out)
+                    sarkan.append({
                         "id": oid,
                         "order_no": o.get("order_no", ""),
+                        "facility_name": o.get("facility_id", ""),
                         "customer": o.get("customer", ""),
                         "model": o.get("model", ""),
                         "qty": o.get("qty", 0),
-                        "produced_qty": total_out,
+                        "produced_qty": t_out,
                         "remaining_qty": kalan,
                         "delivery_date": o.get("delivery_date", ""),
-                        "delay_days": abs(days_rem),
-                        "status_tag": "Sarktı (Gecikmiş)",
-                        "severity": "high"
-                    })
-                elif days_rem <= 7:
-                    sarkan_siparisler.append({
-                        "id": oid,
-                        "order_no": o.get("order_no", ""),
-                        "customer": o.get("customer", ""),
-                        "model": o.get("model", ""),
-                        "qty": o.get("qty", 0),
-                        "produced_qty": total_out,
-                        "remaining_qty": kalan,
-                        "delivery_date": o.get("delivery_date", ""),
-                        "delay_days": 0,
                         "days_left": days_rem,
-                        "status_tag": "Bu Hafta Teslim",
-                        "severity": "medium"
+                        "delay_days": abs(days_rem) if days_rem < 0 else 0
                     })
-            except Exception:
+            except:
                 pass
-
-    today_data = daily.get(today_str, {})
-    today_output = 0
-    for entry in today_data.get("entries", []):
-        for se in entry.get("stage_entries", []):
-            today_output += se.get("output_qty", 0)
-
-    weekly_output = 0
-    weekly_days = []
+                
+    # Calculate period output
+    total_out_period = 0
+    fac1_out = 0
+    fac2_out = 0
     
-    for i in range(7):
-        cur_day = start_of_week + timedelta(days=i)
-        cur_str = cur_day.isoformat()
-        day_entries = daily.get(cur_str, {}).get("entries", [])
-        day_out = sum(se.get("output_qty", 0) for e in day_entries for se in e.get("stage_entries", []))
-        weekly_output += day_out
-        day_names = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
-        weekly_days.append({
-            "date": cur_str,
-            "day_name": day_names[i],
-            "is_today": cur_str == today_str,
-            "output": day_out
+    # For orders output
+    for dk, dd in daily.items():
+        if not in_range(dk): continue
+        for oe in dd.get("order_entries", []):
+            oid = oe.get("order_id")
+            o = orders.get(oid, {})
+            f_id = o.get("facility_id")
+            if facility_id and facility_id != "all" and f_id != facility_id:
+                continue
+            
+            qty = oe.get("output_qty", 0)
+            total_out_period += qty
+            if f_id == "fac1": fac1_out += qty
+            elif f_id == "fac2": fac2_out += qty
+
+    # For weekly days chart (always weekly, or daily if requested)
+    days_arr = []
+    curr = start_dt
+    while curr <= end_dt:
+        ds = curr.isoformat()
+        dd = daily.get(ds, {})
+        d_out = 0
+        for oe in dd.get("order_entries", []):
+            o = orders.get(oe.get("order_id"), {})
+            if facility_id and facility_id != "all" and o.get("facility_id") != facility_id:
+                continue
+            d_out += oe.get("output_qty", 0)
+        days_arr.append({
+            "date": ds,
+            "day_name": ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"][curr.weekday()] if period == "weekly" else str(curr.day),
+            "is_today": ds == today_str,
+            "output": d_out
         })
+        curr += timedelta(days=1)
 
-    total_out = 0
-    machine_out = {}
-    stage_output = {}
-    for day_data in daily.values():
-        for entry in day_data.get("entries", []):
-            for se in entry.get("stage_entries", []):
-                total_out += se.get("output_qty", 0)
-                stg = se.get("stage", "Genel")
-                stage_output[stg] = stage_output.get(stg, 0) + se.get("output_qty", 0)
-                mid = se.get("machine_id", "")
-                if mid:
-                    machine_out[mid] = machine_out.get(mid, 0) + se.get("output_qty", 0)
+    # Machine Performance
+    mach_stats = {}
+    for dk, dd in daily.items():
+        if not in_range(dk): continue
+        for me in dd.get("machine_entries", []):
+            mid = me.get("machine_id")
+            m = machines.get(mid, {})
+            if facility_id and facility_id != "all" and m.get("facility_id") != facility_id:
+                continue
+            
+            if mid not in mach_stats:
+                mach_stats[mid] = {"id": mid, "name": m.get("name", mid), "output": 0, "hours": 0}
+            
+            mach_stats[mid]["output"] += me.get("output_qty", 0)
+            mach_stats[mid]["hours"] += me.get("work_hours", 0)
 
-    mstats = [{"id": mid, "name": machines.get(mid, {}).get("name", mid), "output": q} for mid, q in machine_out.items()]
-    mstats.sort(key=lambda x: x["output"], reverse=True)
-
-    stage_stats = [{"stage": stg, "output": qty} for stg, qty in stage_output.items()]
-    stage_stats.sort(key=lambda x: x["output"], reverse=True)
+    ms_list = []
+    for ms in mach_stats.values():
+        eff = round(ms["output"] / ms["hours"], 1) if ms["hours"] > 0 else ms["output"]
+        ms["efficiency"] = eff
+        ms_list.append(ms)
+        
+    ms_list.sort(key=lambda x: x["output"], reverse=True)
 
     return {
-        "orders": {"total": total_orders, "open": open_orders, "done": done_orders, "delayed": delayed_orders},
-        "machines_count": len(machines),
-        "production": {
-            "total_output": total_out
+        "orders": {"total": total_orders, "open": open_orders, "done": done_orders},
+        "period_summary": {
+            "start_date": start_dt.isoformat(),
+            "end_date": end_dt.isoformat(),
+            "total_output": total_out_period,
+            "days": days_arr,
+            "fac1_output": fac1_out,
+            "fac2_output": fac2_out
         },
-        "today_summary": {
-            "date": today_str,
-            "output": today_output
-        },
-        "weekly_summary": {
-            "start_date": start_of_week.isoformat(),
-            "end_date": end_of_week.isoformat(),
-            "total_output": weekly_output,
-            "days": weekly_days
-        },
-        "sarkan_siparisler": sarkan_siparisler,
-        "stage_stats": stage_stats,
-        "machine_stats": mstats[:10]
+        "sarkan_siparisler": sarkan,
+        "machine_stats": ms_list
     }
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
