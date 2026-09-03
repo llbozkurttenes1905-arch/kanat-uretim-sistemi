@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  kanat-app:
+    build: .
+    container_name: ergunbas_kanat_app
+    ports:
+      - "8001:8001"
+    restart: always
+    volumes:
+      - ./data_kanat.json:/app/data_kanat.json
+      - ./users.json:/app/users.json

@@ -1,0 +1,4790 @@
+{
+  "facilities": {
+    "fac1": {
+      "id": "fac1",
+      "name": "Üst Tesis (Ana Fabrika)"
+    },
+    "fac2": {
+      "id": "fac2",
+      "name": "Alt Tesis (2. Fabrika)"
+    }
+  },
+  "machines": {
+    "MCH_UST_1": {
+      "id": "MCH_UST_1",
+      "name": "Seren Kesim Tezgahı",
+      "facility_id": "fac1",
+      "stage": "Seren Kesim",
+      "capacity_per_hour": 40.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_UST_2": {
+      "id": "MCH_UST_2",
+      "name": "CNC Strafor Kesim Makinesi",
+      "facility_id": "fac1",
+      "stage": "CNC Strafor",
+      "capacity_per_hour": 35.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_UST_3": {
+      "id": "MCH_UST_3",
+      "name": "Levha Vakum Makinesi",
+      "facility_id": "fac1",
+      "stage": "Levha Vakum",
+      "capacity_per_hour": 60.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_UST_4": {
+      "id": "MCH_UST_4",
+      "name": "Sıcak Pres Hattı 1",
+      "facility_id": "fac1",
+      "stage": "Pres",
+      "capacity_per_hour": 30.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_UST_5": {
+      "id": "MCH_UST_5",
+      "name": "Paketleme & Sevkiyat Hattı",
+      "facility_id": "fac1",
+      "stage": "Paketleme",
+      "capacity_per_hour": 45.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_ALT_1": {
+      "id": "MCH_ALT_1",
+      "name": "ETA Makinesi",
+      "facility_id": "fac2",
+      "stage": "ETA (Dolumlu Seren)",
+      "capacity_per_hour": 40.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_ALT_2": {
+      "id": "MCH_ALT_2",
+      "name": "Homag Ebatlama & Kenar",
+      "facility_id": "fac2",
+      "stage": "Homag",
+      "capacity_per_hour": 35.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_ALT_3": {
+      "id": "MCH_ALT_3",
+      "name": "Torwegge Pres / Freze",
+      "facility_id": "fac2",
+      "stage": "Torwegge",
+      "capacity_per_hour": 30.0,
+      "status": "active",
+      "notes": ""
+    },
+    "MCH_ALT_4": {
+      "id": "MCH_ALT_4",
+      "name": "Alt Tesis Paketleme Hattı",
+      "facility_id": "fac2",
+      "stage": "Paketleme",
+      "capacity_per_hour": 40.0,
+      "status": "active",
+      "notes": ""
+    }
+  },
+  "orders": {
+    "SIP-UST-0001": {
+      "id": "SIP-UST-0001",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971105"
+    },
+    "SIP-UST-0002": {
+      "id": "SIP-UST-0002",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971143"
+    },
+    "SIP-UST-0003": {
+      "id": "SIP-UST-0003",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971160"
+    },
+    "SIP-UST-0004": {
+      "id": "SIP-UST-0004",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971169"
+    },
+    "SIP-UST-0005": {
+      "id": "SIP-UST-0005",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT AKÇAAGAÇ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971178"
+    },
+    "SIP-UST-0006": {
+      "id": "SIP-UST-0006",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971186"
+    },
+    "SIP-UST-0007": {
+      "id": "SIP-UST-0007",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971194"
+    },
+    "SIP-UST-0008": {
+      "id": "SIP-UST-0008",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT COCO KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971202"
+    },
+    "SIP-UST-0009": {
+      "id": "SIP-UST-0009",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT COCO KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971212"
+    },
+    "SIP-UST-0010": {
+      "id": "SIP-UST-0010",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT COCO KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971220"
+    },
+    "SIP-UST-0011": {
+      "id": "SIP-UST-0011",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971228"
+    },
+    "SIP-UST-0012": {
+      "id": "SIP-UST-0012",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971236"
+    },
+    "SIP-UST-0013": {
+      "id": "SIP-UST-0013",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971244"
+    },
+    "SIP-UST-0014": {
+      "id": "SIP-UST-0014",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT B.TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971251"
+    },
+    "SIP-UST-0015": {
+      "id": "SIP-UST-0015",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971259"
+    },
+    "SIP-UST-0016": {
+      "id": "SIP-UST-0016",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971267"
+    },
+    "SIP-UST-0017": {
+      "id": "SIP-UST-0017",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT COCO KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971275"
+    },
+    "SIP-UST-0018": {
+      "id": "SIP-UST-0018",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT COCO KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971283"
+    },
+    "SIP-UST-0019": {
+      "id": "SIP-UST-0019",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1004 KANAT COCO KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 15,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971290"
+    },
+    "SIP-UST-0020": {
+      "id": "SIP-UST-0020",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER1011 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 9,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971298"
+    },
+    "SIP-UST-0021": {
+      "id": "SIP-UST-0021",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT K.CEVIZ KOM.SEREN STRAFOR 900X2100X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971305"
+    },
+    "SIP-UST-0022": {
+      "id": "SIP-UST-0022",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT D.BEYAZ KOM.SEREN STRAFOR 1000X2100X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971313"
+    },
+    "SIP-UST-0023": {
+      "id": "SIP-UST-0023",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2100X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971320"
+    },
+    "SIP-UST-0024": {
+      "id": "SIP-UST-0024",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT TEAK KOM.SEREN STRAFOR 1000X2100X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971328"
+    },
+    "SIP-UST-0025": {
+      "id": "SIP-UST-0025",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT TEAK KOM.SEREN STRAFOR 900X2100X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971335"
+    },
+    "SIP-UST-0026": {
+      "id": "SIP-UST-0026",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT B.TEAK KOM.SEREN STRAFOR 1000X2100X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971343"
+    },
+    "SIP-UST-0027": {
+      "id": "SIP-UST-0027",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT COCO KOM.SEREN STR 1000X2100X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971350"
+    },
+    "SIP-UST-0028": {
+      "id": "SIP-UST-0028",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER103 KANAT COCO KOM.SEREN STR 900X2100X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971358"
+    },
+    "SIP-UST-0029": {
+      "id": "SIP-UST-0029",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971367"
+    },
+    "SIP-UST-0030": {
+      "id": "SIP-UST-0030",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971374"
+    },
+    "SIP-UST-0031": {
+      "id": "SIP-UST-0031",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971382"
+    },
+    "SIP-UST-0032": {
+      "id": "SIP-UST-0032",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971390"
+    },
+    "SIP-UST-0033": {
+      "id": "SIP-UST-0033",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 17,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971397"
+    },
+    "SIP-UST-0034": {
+      "id": "SIP-UST-0034",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971404"
+    },
+    "SIP-UST-0035": {
+      "id": "SIP-UST-0035",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT MIX B.TEAK KOM.SERENSTRAFOR 700X2020X4",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971414"
+    },
+    "SIP-UST-0036": {
+      "id": "SIP-UST-0036",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT MIX B.TEAK KOM.SERENSTRAFOR 900X2020X4",
+      "qty": 8,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971422"
+    },
+    "SIP-UST-0037": {
+      "id": "SIP-UST-0037",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT COCO KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971429"
+    },
+    "SIP-UST-0038": {
+      "id": "SIP-UST-0038",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT COCO KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 9,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971436"
+    },
+    "SIP-UST-0039": {
+      "id": "SIP-UST-0039",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT COCO KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971446"
+    },
+    "SIP-UST-0040": {
+      "id": "SIP-UST-0040",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT K.CEVIZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971453"
+    },
+    "SIP-UST-0041": {
+      "id": "SIP-UST-0041",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT K.CEVIZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971460"
+    },
+    "SIP-UST-0042": {
+      "id": "SIP-UST-0042",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT D.BEYAZ  KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971468"
+    },
+    "SIP-UST-0043": {
+      "id": "SIP-UST-0043",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT D.BEYAZ  KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971475"
+    },
+    "SIP-UST-0044": {
+      "id": "SIP-UST-0044",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971483"
+    },
+    "SIP-UST-0045": {
+      "id": "SIP-UST-0045",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971491"
+    },
+    "SIP-UST-0046": {
+      "id": "SIP-UST-0046",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT B.TEAK  KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971498"
+    },
+    "SIP-UST-0047": {
+      "id": "SIP-UST-0047",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT B.TEAK  KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971506"
+    },
+    "SIP-UST-0048": {
+      "id": "SIP-UST-0048",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT COCO  KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971513"
+    },
+    "SIP-UST-0049": {
+      "id": "SIP-UST-0049",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER201 KANAT COCO  KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971522"
+    },
+    "SIP-UST-0050": {
+      "id": "SIP-UST-0050",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER330 KANAT B.TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971530"
+    },
+    "SIP-UST-0051": {
+      "id": "SIP-UST-0051",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER330 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 8,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971537"
+    },
+    "SIP-UST-0052": {
+      "id": "SIP-UST-0052",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER330 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 8,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971545"
+    },
+    "SIP-UST-0053": {
+      "id": "SIP-UST-0053",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER330 KANAT COCO KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971552"
+    },
+    "SIP-UST-0054": {
+      "id": "SIP-UST-0054",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER330 KANAT COCO KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 13,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971560"
+    },
+    "SIP-UST-0055": {
+      "id": "SIP-UST-0055",
+      "order_no": "2026-126-002060",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER330 KANAT COCO KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971568"
+    },
+    "SIP-UST-0056": {
+      "id": "SIP-UST-0056",
+      "order_no": "2026-126-002213",
+      "customer": "ELEGANT DOORS DESIGN SRL",
+      "model": "ER1004 KANAT ANTRASIT KOM.SEREN STRAFOR 700X2020X4",
+      "qty": 284,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971576"
+    },
+    "SIP-UST-0057": {
+      "id": "SIP-UST-0057",
+      "order_no": "2026-126-002213",
+      "customer": "ELEGANT DOORS DESIGN SRL",
+      "model": "ER1004 KANAT ANTRASIT KOM.SEREN STRAFOR 800X2020X4",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971584"
+    },
+    "SIP-UST-0058": {
+      "id": "SIP-UST-0058",
+      "order_no": "2026-126-002213",
+      "customer": "ELEGANT DOORS DESIGN SRL",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 40,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971591"
+    },
+    "SIP-UST-0059": {
+      "id": "SIP-UST-0059",
+      "order_no": "2026-126-002213",
+      "customer": "ELEGANT DOORS DESIGN SRL",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 40,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971599"
+    },
+    "SIP-UST-0060": {
+      "id": "SIP-UST-0060",
+      "order_no": "2026-126-002213",
+      "customer": "ELEGANT DOORS DESIGN SRL",
+      "model": "ER260 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 40,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971606"
+    },
+    "SIP-UST-0061": {
+      "id": "SIP-UST-0061",
+      "order_no": "2026-126-002213",
+      "customer": "ELEGANT DOORS DESIGN SRL",
+      "model": "ER260 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 40,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971614"
+    },
+    "SIP-UST-0062": {
+      "id": "SIP-UST-0062",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER210 KANAT D.BEYAZ KOM.SEREN STRAFOR 820X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971622"
+    },
+    "SIP-UST-0063": {
+      "id": "SIP-UST-0063",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER210 KANAT D.BEYAZ KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971630"
+    },
+    "SIP-UST-0064": {
+      "id": "SIP-UST-0064",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 820X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971638"
+    },
+    "SIP-UST-0065": {
+      "id": "SIP-UST-0065",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 75,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971649"
+    },
+    "SIP-UST-0066": {
+      "id": "SIP-UST-0066",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 75,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971658"
+    },
+    "SIP-UST-0067": {
+      "id": "SIP-UST-0067",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER230 KANAT D.BEYAZ KOM.SEREN STRAFOR 820X2020X40",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971669"
+    },
+    "SIP-UST-0068": {
+      "id": "SIP-UST-0068",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER230 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971677"
+    },
+    "SIP-UST-0069": {
+      "id": "SIP-UST-0069",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER520 KANAT D.BEYAZ KOM.SEREN STRAFOR 820X2020X40",
+      "qty": 65,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971686"
+    },
+    "SIP-UST-0070": {
+      "id": "SIP-UST-0070",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER520 KANAT D.BEYAZ KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 65,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971698"
+    },
+    "SIP-UST-0071": {
+      "id": "SIP-UST-0071",
+      "order_no": "2430",
+      "customer": "HALİL ELDEMİR",
+      "model": "ER520 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 100,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971707"
+    },
+    "SIP-UST-0072": {
+      "id": "SIP-UST-0072",
+      "order_no": "2026-126-002830",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 40,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971715"
+    },
+    "SIP-UST-0073": {
+      "id": "SIP-UST-0073",
+      "order_no": "2026-126-002830",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 180,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971723"
+    },
+    "SIP-UST-0074": {
+      "id": "SIP-UST-0074",
+      "order_no": "2026-126-002830",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER261 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 72,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971731"
+    },
+    "SIP-UST-0075": {
+      "id": "SIP-UST-0075",
+      "order_no": "2830",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER260 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 84,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971739"
+    },
+    "SIP-UST-0076": {
+      "id": "SIP-UST-0076",
+      "order_no": "2830",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER260 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 88,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971747"
+    },
+    "SIP-UST-0077": {
+      "id": "SIP-UST-0077",
+      "order_no": "2026-126-002890",
+      "customer": "DOĞUKAP ORMAN ÜRÜNLERİ SAN.TİC.LTD.ŞTİ.",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 52,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971756"
+    },
+    "SIP-UST-0078": {
+      "id": "SIP-UST-0078",
+      "order_no": "2890",
+      "customer": "DOĞUKAP ORMAN ÜRÜNLERİ SAN.TİC.LTD.ŞTİ.",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971764"
+    },
+    "SIP-UST-0079": {
+      "id": "SIP-UST-0079",
+      "order_no": "2026-126-002890",
+      "customer": "DOĞUKAP ORMAN ÜRÜNLERİ SAN.TİC.LTD.ŞTİ.",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 100,
+      "facility_id": "fac1",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34.Hafta",
+      "created_at": "2026-09-02T15:54:13.971772"
+    },
+    "SIP-UST-0080": {
+      "id": "SIP-UST-0080",
+      "order_no": "2026-126-002897",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
+      "model": "ER1010 KANAT ANTRASİT KOM.SEREN STRAFR 700X2020X40",
+      "qty": 31,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971781"
+    },
+    "SIP-UST-0081": {
+      "id": "SIP-UST-0081",
+      "order_no": "2026-126-002897",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
+      "model": "ER1010 KANAT ANTRASİT KOM.SEREN STRAFOR 850X2020",
+      "qty": 71,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971789"
+    },
+    "SIP-UST-0082": {
+      "id": "SIP-UST-0082",
+      "order_no": "2026-126-002897",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
+      "model": "ER1010 KANAT ANTRASİT KOM.SEREN STRAFOR 900X2020",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971797"
+    },
+    "SIP-UST-0083": {
+      "id": "SIP-UST-0083",
+      "order_no": "2827",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971805"
+    },
+    "SIP-UST-0084": {
+      "id": "SIP-UST-0084",
+      "order_no": "2827",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 22,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971813"
+    },
+    "SIP-UST-0085": {
+      "id": "SIP-UST-0085",
+      "order_no": "2827",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971821"
+    },
+    "SIP-UST-0086": {
+      "id": "SIP-UST-0086",
+      "order_no": "2827",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971829"
+    },
+    "SIP-UST-0087": {
+      "id": "SIP-UST-0087",
+      "order_no": "2827",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 100,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971839"
+    },
+    "SIP-UST-0088": {
+      "id": "SIP-UST-0088",
+      "order_no": "2827",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971847"
+    },
+    "SIP-UST-0089": {
+      "id": "SIP-UST-0089",
+      "order_no": "2857",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1011 KANAT ANTRASİT KOM.SEREN STRAFOR 800X2020",
+      "qty": 100,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971855"
+    },
+    "SIP-UST-0090": {
+      "id": "SIP-UST-0090",
+      "order_no": "2026-126-002857",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 78,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971862"
+    },
+    "SIP-UST-0091": {
+      "id": "SIP-UST-0091",
+      "order_no": "2026-126-002764",
+      "customer": "ÇAĞSAN PVC YAPI AKS SAN VE TİC LTD.ŞTİ",
+      "model": "ER1011 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 162,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971870"
+    },
+    "SIP-UST-0092": {
+      "id": "SIP-UST-0092",
+      "order_no": "2026-126-002764",
+      "customer": "ÇAĞSAN PVC YAPI AKS SAN VE TİC LTD.ŞTİ",
+      "model": "ER1011 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 162,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971878"
+    },
+    "SIP-UST-0093": {
+      "id": "SIP-UST-0093",
+      "order_no": "2770",
+      "customer": "ÇAĞSAN",
+      "model": "ER1011 KANAT VİZON KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 36,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971886"
+    },
+    "SIP-UST-0094": {
+      "id": "SIP-UST-0094",
+      "order_no": "2770",
+      "customer": "ÇAĞSAN",
+      "model": "ER1011 KANAT VİZON KOM.SEREN STRAFOR 750X2020X40",
+      "qty": 12,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971894"
+    },
+    "SIP-UST-0095": {
+      "id": "SIP-UST-0095",
+      "order_no": "2770",
+      "customer": "ÇAĞSAN",
+      "model": "ER1011 KANAT VİZON KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 96,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971902"
+    },
+    "SIP-UST-0096": {
+      "id": "SIP-UST-0096",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER210 KANAT B.TEAK KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971910"
+    },
+    "SIP-UST-0097": {
+      "id": "SIP-UST-0097",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER210 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 75,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971918"
+    },
+    "SIP-UST-0098": {
+      "id": "SIP-UST-0098",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER520 KANAT  B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971926"
+    },
+    "SIP-UST-0099": {
+      "id": "SIP-UST-0099",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER520 KANAT  B.TEAK KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 75,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971935"
+    },
+    "SIP-UST-0100": {
+      "id": "SIP-UST-0100",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER520 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 100,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971943"
+    },
+    "SIP-UST-0101": {
+      "id": "SIP-UST-0101",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER610 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971951"
+    },
+    "SIP-UST-0102": {
+      "id": "SIP-UST-0102",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER610 KANAT B.TEAK KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971959"
+    },
+    "SIP-UST-0103": {
+      "id": "SIP-UST-0103",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER610 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 80,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971967"
+    },
+    "SIP-UST-0104": {
+      "id": "SIP-UST-0104",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER800 KANAT B.TEAK KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971975"
+    },
+    "SIP-UST-0105": {
+      "id": "SIP-UST-0105",
+      "order_no": "2026-126-002448",
+      "customer": "HALİL ELDEMİR - EREN PEN PVC VE AKSESUAR",
+      "model": "ER800 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971982"
+    },
+    "SIP-UST-0106": {
+      "id": "SIP-UST-0106",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971991"
+    },
+    "SIP-UST-0107": {
+      "id": "SIP-UST-0107",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.971999"
+    },
+    "SIP-UST-0108": {
+      "id": "SIP-UST-0108",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT D.BEYAZ KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972006"
+    },
+    "SIP-UST-0109": {
+      "id": "SIP-UST-0109",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 30,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972015"
+    },
+    "SIP-UST-0110": {
+      "id": "SIP-UST-0110",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT B.TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972023"
+    },
+    "SIP-UST-0111": {
+      "id": "SIP-UST-0111",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972031"
+    },
+    "SIP-UST-0112": {
+      "id": "SIP-UST-0112",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT B.TEAK KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972039"
+    },
+    "SIP-UST-0113": {
+      "id": "SIP-UST-0113",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER210 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 30,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972047"
+    },
+    "SIP-UST-0114": {
+      "id": "SIP-UST-0114",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 10,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972054"
+    },
+    "SIP-UST-0115": {
+      "id": "SIP-UST-0115",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972062"
+    },
+    "SIP-UST-0116": {
+      "id": "SIP-UST-0116",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972070"
+    },
+    "SIP-UST-0117": {
+      "id": "SIP-UST-0117",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 30,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972078"
+    },
+    "SIP-UST-0118": {
+      "id": "SIP-UST-0118",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER520 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972085"
+    },
+    "SIP-UST-0119": {
+      "id": "SIP-UST-0119",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER520 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972095"
+    },
+    "SIP-UST-0120": {
+      "id": "SIP-UST-0120",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER520 KANAT D.BEYAZ KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972103"
+    },
+    "SIP-UST-0121": {
+      "id": "SIP-UST-0121",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER520 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 30,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972111"
+    },
+    "SIP-UST-0122": {
+      "id": "SIP-UST-0122",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER520 KANAT  B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 30,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972118"
+    },
+    "SIP-UST-0123": {
+      "id": "SIP-UST-0123",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER520 KANAT  B.TEAK KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 20,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972126"
+    },
+    "SIP-UST-0124": {
+      "id": "SIP-UST-0124",
+      "order_no": "2250",
+      "customer": "ÇAĞSAN",
+      "model": "ER520 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 15,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35.hHafta",
+      "created_at": "2026-09-02T15:54:13.972134"
+    },
+    "SIP-UST-0125": {
+      "id": "SIP-UST-0125",
+      "order_no": "2317",
+      "customer": "BERAT YAPI",
+      "model": "ER200 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972142"
+    },
+    "SIP-UST-0126": {
+      "id": "SIP-UST-0126",
+      "order_no": "2317",
+      "customer": "BERAT YAPI",
+      "model": "ER201 KANAT B.TEAK  KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972150"
+    },
+    "SIP-UST-0127": {
+      "id": "SIP-UST-0127",
+      "order_no": "2317",
+      "customer": "BERAT YAPI",
+      "model": "ER500 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972158"
+    },
+    "SIP-UST-0128": {
+      "id": "SIP-UST-0128",
+      "order_no": "2317",
+      "customer": "BERAT YAPI",
+      "model": "ER500 KANAT D.B. KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972166"
+    },
+    "SIP-UST-0129": {
+      "id": "SIP-UST-0129",
+      "order_no": "2317",
+      "customer": "BERAT YAPI",
+      "model": "ER501 KANAT D.BEYAZ  KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972175"
+    },
+    "SIP-UST-0130": {
+      "id": "SIP-UST-0130",
+      "order_no": "2026-126-002416",
+      "customer": "BERAT YAPI İNŞAAT MALZEMELERİ - FATİH BEKDİLİ",
+      "model": "ER102 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972183"
+    },
+    "SIP-UST-0131": {
+      "id": "SIP-UST-0131",
+      "order_no": "2026-126-002416",
+      "customer": "BERAT YAPI İNŞAAT MALZEMELERİ - FATİH BEKDİLİ",
+      "model": "ER102 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 4,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972191"
+    },
+    "SIP-UST-0132": {
+      "id": "SIP-UST-0132",
+      "order_no": "2026-126-002416",
+      "customer": "BERAT YAPI İNŞAAT MALZEMELERİ - FATİH BEKDİLİ",
+      "model": "ER103 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972198"
+    },
+    "SIP-UST-0133": {
+      "id": "SIP-UST-0133",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER1006 KANAT TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 16,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972206"
+    },
+    "SIP-UST-0134": {
+      "id": "SIP-UST-0134",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER1006 KANAT TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 15,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972214"
+    },
+    "SIP-UST-0135": {
+      "id": "SIP-UST-0135",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER1006 KANAT TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 13,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972222"
+    },
+    "SIP-UST-0136": {
+      "id": "SIP-UST-0136",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 18,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972230"
+    },
+    "SIP-UST-0137": {
+      "id": "SIP-UST-0137",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 15,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972237"
+    },
+    "SIP-UST-0138": {
+      "id": "SIP-UST-0138",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 13,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972245"
+    },
+    "SIP-UST-0139": {
+      "id": "SIP-UST-0139",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER900 KANAT B.TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972255"
+    },
+    "SIP-UST-0140": {
+      "id": "SIP-UST-0140",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER900 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972263"
+    },
+    "SIP-UST-0141": {
+      "id": "SIP-UST-0141",
+      "order_no": "2032",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER901 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972271"
+    },
+    "SIP-UST-0142": {
+      "id": "SIP-UST-0142",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 29,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972279"
+    },
+    "SIP-UST-0143": {
+      "id": "SIP-UST-0143",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 71,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972286"
+    },
+    "SIP-UST-0144": {
+      "id": "SIP-UST-0144",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1011 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 29,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972294"
+    },
+    "SIP-UST-0145": {
+      "id": "SIP-UST-0145",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1011 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 71,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972302"
+    },
+    "SIP-UST-0146": {
+      "id": "SIP-UST-0146",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 29,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972310"
+    },
+    "SIP-UST-0147": {
+      "id": "SIP-UST-0147",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 71,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972317"
+    },
+    "SIP-UST-0148": {
+      "id": "SIP-UST-0148",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1020 KANAT VİZON KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 29,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972325"
+    },
+    "SIP-UST-0149": {
+      "id": "SIP-UST-0149",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER1020 KANAT VİZON KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 71,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972336"
+    },
+    "SIP-UST-0150": {
+      "id": "SIP-UST-0150",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER103 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972344"
+    },
+    "SIP-UST-0151": {
+      "id": "SIP-UST-0151",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER261 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972352"
+    },
+    "SIP-UST-0152": {
+      "id": "SIP-UST-0152",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER500 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 29,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972359"
+    },
+    "SIP-UST-0153": {
+      "id": "SIP-UST-0153",
+      "order_no": "2026-126-002454",
+      "customer": "MEKADOOR ÇELİK KAPI - MÜCAHİT YÜKSEL",
+      "model": "ER500 KANAT D.B. KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 71,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972367"
+    },
+    "SIP-UST-0154": {
+      "id": "SIP-UST-0154",
+      "order_no": "2805",
+      "customer": "UKA MOBİLYA KAĞIT İTHALAT İHRACAT TİC LTD.ŞTİ",
+      "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 600X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.hafta",
+      "created_at": "2026-09-02T15:54:13.972375"
+    },
+    "SIP-UST-0155": {
+      "id": "SIP-UST-0155",
+      "order_no": "2026-126-002805",
+      "customer": "UKA MOBİLYA KAĞIT İTHALAT İHRACAT TİC LTD.ŞTİ",
+      "model": "ER102 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972383"
+    },
+    "SIP-UST-0156": {
+      "id": "SIP-UST-0156",
+      "order_no": "2026-126-002805",
+      "customer": "UKA MOBİLYA KAĞIT İTHALAT İHRACAT TİC LTD.ŞTİ",
+      "model": "ER102 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972391"
+    },
+    "SIP-UST-0157": {
+      "id": "SIP-UST-0157",
+      "order_no": "E202400000001222",
+      "customer": "ÇETİN KARAOĞLU",
+      "model": "ER900 KANAT AKÇAAGAÇ A.SEREN PETEK 800X2020X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972398"
+    },
+    "SIP-UST-0158": {
+      "id": "SIP-UST-0158",
+      "order_no": "E202600000001243",
+      "customer": "UKA MOBİLYA KAĞIT İTHALAT İHRACAT TİC LTD.ŞTİ",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972406"
+    },
+    "SIP-UST-0159": {
+      "id": "SIP-UST-0159",
+      "order_no": "2026-126-002071",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2020X4",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972416"
+    },
+    "SIP-UST-0160": {
+      "id": "SIP-UST-0160",
+      "order_no": "2026-126-002071",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER1004 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972424"
+    },
+    "SIP-UST-0161": {
+      "id": "SIP-UST-0161",
+      "order_no": "2026-126-002071",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER102 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972431"
+    },
+    "SIP-UST-0162": {
+      "id": "SIP-UST-0162",
+      "order_no": "2026-126-002402",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER500 KANAT B.TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972439"
+    },
+    "SIP-UST-0163": {
+      "id": "SIP-UST-0163",
+      "order_no": "2026-126-002402",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER500 KANAT B.TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972447"
+    },
+    "SIP-UST-0164": {
+      "id": "SIP-UST-0164",
+      "order_no": "2026-126-002402",
+      "customer": "ERG PLASTİK SAN.TİC.LTD.ŞTİ",
+      "model": "ER500 KANAT B.TEAK KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 6,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972455"
+    },
+    "SIP-UST-0165": {
+      "id": "SIP-UST-0165",
+      "order_no": "2026-126-002452",
+      "customer": "HAYIR BAGIŞ VE YARDIMLAR",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2020X4",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972462"
+    },
+    "SIP-UST-0166": {
+      "id": "SIP-UST-0166",
+      "order_no": "2026-126-002452",
+      "customer": "HAYIR BAGIŞ VE YARDIMLAR",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR 900X2020x",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972470"
+    },
+    "SIP-UST-0167": {
+      "id": "SIP-UST-0167",
+      "order_no": "2026-126-002806",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1010 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 100,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972478"
+    },
+    "SIP-UST-0168": {
+      "id": "SIP-UST-0168",
+      "order_no": "2026-126-002806",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1011 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972486"
+    },
+    "SIP-UST-0169": {
+      "id": "SIP-UST-0169",
+      "order_no": "2026-126-002806",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 30,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972496"
+    },
+    "SIP-UST-0170": {
+      "id": "SIP-UST-0170",
+      "order_no": "2026-126-002806",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 70,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972504"
+    },
+    "SIP-UST-0171": {
+      "id": "SIP-UST-0171",
+      "order_no": "2026-126-002806",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972512"
+    },
+    "SIP-UST-0172": {
+      "id": "SIP-UST-0172",
+      "order_no": "2026-126-002806",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER220 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 100,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972522"
+    },
+    "SIP-UST-0173": {
+      "id": "SIP-UST-0173",
+      "order_no": "2026-126-002806",
+      "customer": "CABİR KOŞSALUN",
+      "model": "ER330 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 50,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972530"
+    },
+    "SIP-UST-0174": {
+      "id": "SIP-UST-0174",
+      "order_no": "2282",
+      "customer": "BERAT DÖNMEZ",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972538"
+    },
+    "SIP-UST-0175": {
+      "id": "SIP-UST-0175",
+      "order_no": "2282",
+      "customer": "BERAT DÖNMEZ",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972545"
+    },
+    "SIP-UST-0176": {
+      "id": "SIP-UST-0176",
+      "order_no": "2282",
+      "customer": "BERAT DÖNMEZ",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 950X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972553"
+    },
+    "SIP-UST-0177": {
+      "id": "SIP-UST-0177",
+      "order_no": "2554",
+      "customer": "MEKADOOR",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 650X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972561"
+    },
+    "SIP-UST-0178": {
+      "id": "SIP-UST-0178",
+      "order_no": "2554",
+      "customer": "MEKADOOR",
+      "model": "ER260 KANAT K.CEVIZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972569"
+    },
+    "SIP-UST-0179": {
+      "id": "SIP-UST-0179",
+      "order_no": "2554",
+      "customer": "MEKADOOR",
+      "model": "ER260 KANAT K.CEVIZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 7,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972579"
+    },
+    "SIP-UST-0180": {
+      "id": "SIP-UST-0180",
+      "order_no": "2554",
+      "customer": "MEKADOOR",
+      "model": "ER260 KANAT K.CEVIZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972587"
+    },
+    "SIP-UST-0181": {
+      "id": "SIP-UST-0181",
+      "order_no": "2554",
+      "customer": "MEKADOOR",
+      "model": "ER261 KANAT K.CEVIZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972595"
+    },
+    "SIP-UST-0182": {
+      "id": "SIP-UST-0182",
+      "order_no": "2619",
+      "customer": "RAMAZAN TEKİN",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 850X2020X40",
+      "qty": 91,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972603"
+    },
+    "SIP-UST-0183": {
+      "id": "SIP-UST-0183",
+      "order_no": "2770",
+      "customer": "ÇAĞSAN",
+      "model": "ER1011 KANAT VİZON KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 36,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972611"
+    },
+    "SIP-UST-0184": {
+      "id": "SIP-UST-0184",
+      "order_no": "2770",
+      "customer": "ÇAĞSAN",
+      "model": "ER1011 KANAT VİZON KOM.SEREN STRAFOR 750X2020X40",
+      "qty": 12,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972628"
+    },
+    "SIP-UST-0185": {
+      "id": "SIP-UST-0185",
+      "order_no": "2770",
+      "customer": "ÇAĞSAN",
+      "model": "ER1011 KANAT VİZON KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 96,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972637"
+    },
+    "SIP-UST-0186": {
+      "id": "SIP-UST-0186",
+      "order_no": "3000",
+      "customer": "MEKADOOR",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972645"
+    },
+    "SIP-UST-0187": {
+      "id": "SIP-UST-0187",
+      "order_no": "3022",
+      "customer": "BERAT DÖNMEZ",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 600X2020X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972653"
+    },
+    "SIP-UST-0188": {
+      "id": "SIP-UST-0188",
+      "order_no": "3022",
+      "customer": "BERAT DÖNMEZ",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 65,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972667"
+    },
+    "SIP-UST-0189": {
+      "id": "SIP-UST-0189",
+      "order_no": "3022",
+      "customer": "BERAT DÖNMEZ",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 750X2020X40",
+      "qty": 25,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972676"
+    },
+    "SIP-UST-0190": {
+      "id": "SIP-UST-0190",
+      "order_no": "731",
+      "customer": "fas",
+      "model": "ER1004 KANAT TEAK KOM.SEREN STRAFOR 800X2050X40",
+      "qty": 200,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36.Hafta",
+      "created_at": "2026-09-02T15:54:13.972683"
+    },
+    "SIP-UST-0191": {
+      "id": "SIP-UST-0191",
+      "order_no": "2026-126-002969",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
+      "model": "ER1010 KANAT ANTRASİT KOM.SEREN STRAFR 700X2020X40",
+      "qty": 91,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972691"
+    },
+    "SIP-UST-0192": {
+      "id": "SIP-UST-0192",
+      "order_no": "2026-126-002969",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
+      "model": "ER1010 KANAT ANTRASİT KOM.SEREN STRAFOR 850X2020",
+      "qty": 133,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972699"
+    },
+    "SIP-UST-0193": {
+      "id": "SIP-UST-0193",
+      "order_no": "2026-126-002969",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
+      "model": "ER1010 KANAT ANTRASİT KOM.SEREN STRAFOR 900X2020",
+      "qty": 37,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972706"
+    },
+    "SIP-UST-0194": {
+      "id": "SIP-UST-0194",
+      "order_no": "2026-126-002708",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER1004 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 22,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972714"
+    },
+    "SIP-UST-0195": {
+      "id": "SIP-UST-0195",
+      "order_no": "2026-126-002708",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER1011 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 65,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972721"
+    },
+    "SIP-UST-0196": {
+      "id": "SIP-UST-0196",
+      "order_no": "2026-126-002708",
+      "customer": "NURMAR İNŞAAT PVC ALÜM. NAKL. TAR. SAN VE TİC.LTD.ŞTİ",
+      "model": "ER1020 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 5,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972728"
+    },
+    "SIP-UST-0197": {
+      "id": "SIP-UST-0197",
+      "order_no": "2026-126-002895",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SERENSTRAFOR 700X2020X4",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972736"
+    },
+    "SIP-UST-0198": {
+      "id": "SIP-UST-0198",
+      "order_no": "2026-126-002895",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2020X4",
+      "qty": 17,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972743"
+    },
+    "SIP-UST-0199": {
+      "id": "SIP-UST-0199",
+      "order_no": "2026-126-002895",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR 900X2020x",
+      "qty": 12,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972752"
+    },
+    "SIP-UST-0200": {
+      "id": "SIP-UST-0200",
+      "order_no": "2026-126-002895",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972759"
+    },
+    "SIP-UST-0201": {
+      "id": "SIP-UST-0201",
+      "order_no": "2026-126-002895",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 15,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972767"
+    },
+    "SIP-UST-0202": {
+      "id": "SIP-UST-0202",
+      "order_no": "2026-126-002895",
+      "customer": "OMAR ABU KALAM",
+      "model": "ER200 KANAT D.BEYAZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 9,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972774"
+    },
+    "SIP-UST-0203": {
+      "id": "SIP-UST-0203",
+      "order_no": "2026-126-002902",
+      "customer": "VEDAT KILIÇOĞLU",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972782"
+    },
+    "SIP-UST-0204": {
+      "id": "SIP-UST-0204",
+      "order_no": "2026-126-002902",
+      "customer": "VEDAT KILIÇOĞLU",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 2,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972789"
+    },
+    "SIP-UST-0205": {
+      "id": "SIP-UST-0205",
+      "order_no": "2026-126-002902",
+      "customer": "VEDAT KILIÇOĞLU",
+      "model": "ER103 KANAT MİX TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972796"
+    },
+    "SIP-UST-0206": {
+      "id": "SIP-UST-0206",
+      "order_no": "2026-126-002902",
+      "customer": "VEDAT KILIÇOĞLU",
+      "model": "ER103 KANAT MİX TEAK KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 3,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972804"
+    },
+    "SIP-UST-0207": {
+      "id": "SIP-UST-0207",
+      "order_no": "2026-126-002902",
+      "customer": "VEDAT KILIÇOĞLU",
+      "model": "ER103 KANAT TEAK KOM.SEREN STRAFOR 400X2020X40",
+      "qty": 1,
+      "facility_id": "fac1",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "Seren Kesim",
+        "CNC Strafor",
+        "Levha Vakum",
+        "Pres",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37.hafta",
+      "created_at": "2026-09-02T15:54:13.972811"
+    },
+    "SIP-ALT-0208": {
+      "id": "SIP-ALT-0208",
+      "order_no": "689",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 50,
+      "facility_id": "fac2",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34. Hafta",
+      "created_at": "2026-09-02T15:54:13.972861"
+    },
+    "SIP-ALT-0209": {
+      "id": "SIP-ALT-0209",
+      "order_no": "689",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 750X2020X40",
+      "qty": 97,
+      "facility_id": "fac2",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34. Hafta",
+      "created_at": "2026-09-02T15:54:13.972875"
+    },
+    "SIP-ALT-0210": {
+      "id": "SIP-ALT-0210",
+      "order_no": "689",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 87,
+      "facility_id": "fac2",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34. Hafta",
+      "created_at": "2026-09-02T15:54:13.972885"
+    },
+    "SIP-ALT-0211": {
+      "id": "SIP-ALT-0211",
+      "order_no": "731",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 800X2050X40",
+      "qty": 15,
+      "facility_id": "fac2",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34. Hafta",
+      "created_at": "2026-09-02T15:54:13.972893"
+    },
+    "SIP-ALT-0212": {
+      "id": "SIP-ALT-0212",
+      "order_no": "1115",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 800X2050X40",
+      "qty": 1099,
+      "facility_id": "fac2",
+      "delivery_date": "2026-08-29",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 34. Hafta",
+      "created_at": "2026-09-02T15:54:13.972902"
+    },
+    "SIP-ALT-0213": {
+      "id": "SIP-ALT-0213",
+      "order_no": "1115",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 800X2050X40",
+      "qty": 1099,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35. Hafta",
+      "created_at": "2026-09-02T15:54:13.972911"
+    },
+    "SIP-ALT-0214": {
+      "id": "SIP-ALT-0214",
+      "order_no": "1115",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 900X2050X40",
+      "qty": 200,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-05",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 35. Hafta",
+      "created_at": "2026-09-02T15:54:13.972919"
+    },
+    "SIP-ALT-0215": {
+      "id": "SIP-ALT-0215",
+      "order_no": "1115",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 800X2050X40",
+      "qty": 1470,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-12",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 36. Hafta",
+      "created_at": "2026-09-02T15:54:13.972927"
+    },
+    "SIP-ALT-0216": {
+      "id": "SIP-ALT-0216",
+      "order_no": "1115",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 900X2050X40",
+      "qty": 200,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37. Hafta",
+      "created_at": "2026-09-02T15:54:13.972936"
+    },
+    "SIP-ALT-0217": {
+      "id": "SIP-ALT-0217",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT B.TEAK KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 600,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37. Hafta",
+      "created_at": "2026-09-02T15:54:13.972945"
+    },
+    "SIP-ALT-0218": {
+      "id": "SIP-ALT-0218",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR 700X2050X",
+      "qty": 537,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-19",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 37. Hafta",
+      "created_at": "2026-09-02T15:54:13.972953"
+    },
+    "SIP-ALT-0219": {
+      "id": "SIP-ALT-0219",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 820,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-26",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 38,Hafta",
+      "created_at": "2026-09-02T15:54:13.972963"
+    },
+    "SIP-ALT-0220": {
+      "id": "SIP-ALT-0220",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 410,
+      "facility_id": "fac2",
+      "delivery_date": "2026-09-26",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 38,Hafta",
+      "created_at": "2026-09-02T15:54:13.972972"
+    },
+    "SIP-ALT-0221": {
+      "id": "SIP-ALT-0221",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 410,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-03",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 39.Hafta",
+      "created_at": "2026-09-02T15:54:13.972980"
+    },
+    "SIP-ALT-0222": {
+      "id": "SIP-ALT-0222",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 846,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-03",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 39.Hafta",
+      "created_at": "2026-09-02T15:54:13.972988"
+    },
+    "SIP-ALT-0223": {
+      "id": "SIP-ALT-0223",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 423,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-10",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 40.Hafta",
+      "created_at": "2026-09-02T15:54:13.972996"
+    },
+    "SIP-ALT-0224": {
+      "id": "SIP-ALT-0224",
+      "order_no": "1117",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 423,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-10",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 40.Hafta",
+      "created_at": "2026-09-02T15:54:13.973005"
+    },
+    "SIP-ALT-0225": {
+      "id": "SIP-ALT-0225",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT B.TEAK KOM.SEREN STRAFOR 900X2050X40",
+      "qty": 100,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-10",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 40.Hafta",
+      "created_at": "2026-09-02T15:54:13.973013"
+    },
+    "SIP-ALT-0226": {
+      "id": "SIP-ALT-0226",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT M.B.TEAK KOM.SEREN STRAFOR 900X2050X40",
+      "qty": 100,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-10",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 40.Hafta",
+      "created_at": "2026-09-02T15:54:13.973022"
+    },
+    "SIP-ALT-0227": {
+      "id": "SIP-ALT-0227",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2050X4",
+      "qty": 272,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-10",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 40.Hafta",
+      "created_at": "2026-09-02T15:54:13.973030"
+    },
+    "SIP-ALT-0228": {
+      "id": "SIP-ALT-0228",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2050X4",
+      "qty": 500,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-17",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 41. Hafta",
+      "created_at": "2026-09-02T15:54:13.973038"
+    },
+    "SIP-ALT-0229": {
+      "id": "SIP-ALT-0229",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 700X2050X40",
+      "qty": 506,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-17",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 41. Hafta",
+      "created_at": "2026-09-02T15:54:13.973051"
+    },
+    "SIP-ALT-0230": {
+      "id": "SIP-ALT-0230",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 800X2050X40",
+      "qty": 200,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-17",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 41. Hafta",
+      "created_at": "2026-09-02T15:54:13.973059"
+    },
+    "SIP-ALT-0231": {
+      "id": "SIP-ALT-0231",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 800X2050X40",
+      "qty": 600,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973068"
+    },
+    "SIP-ALT-0232": {
+      "id": "SIP-ALT-0232",
+      "order_no": "1118",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 900X2050X40",
+      "qty": 100,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973076"
+    },
+    "SIP-ALT-0233": {
+      "id": "SIP-ALT-0233",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT AKÇAAGAÇ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 4,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973088"
+    },
+    "SIP-ALT-0234": {
+      "id": "SIP-ALT-0234",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT COCO KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 17,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973096"
+    },
+    "SIP-ALT-0235": {
+      "id": "SIP-ALT-0235",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT COCO KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 10,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973104"
+    },
+    "SIP-ALT-0236": {
+      "id": "SIP-ALT-0236",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 1,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973112"
+    },
+    "SIP-ALT-0237": {
+      "id": "SIP-ALT-0237",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 12,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973120"
+    },
+    "SIP-ALT-0238": {
+      "id": "SIP-ALT-0238",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 6,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973128"
+    },
+    "SIP-ALT-0239": {
+      "id": "SIP-ALT-0239",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 900X2020X40",
+      "qty": 10,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973140"
+    },
+    "SIP-ALT-0240": {
+      "id": "SIP-ALT-0240",
+      "order_no": "2060",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 4,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973149"
+    },
+    "SIP-ALT-0241": {
+      "id": "SIP-ALT-0241",
+      "order_no": "2895",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR 900X2020x",
+      "qty": 12,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973159"
+    },
+    "SIP-ALT-0242": {
+      "id": "SIP-ALT-0242",
+      "order_no": "2895",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2020X4",
+      "qty": 17,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973169"
+    },
+    "SIP-ALT-0243": {
+      "id": "SIP-ALT-0243",
+      "order_no": "2895",
+      "customer": "Alt Tesis Müşterisi",
+      "model": "ER100 KANAT MIX B.TEAK KOM.SERENSTRAFOR 700X2020X4",
+      "qty": 2,
+      "facility_id": "fac2",
+      "delivery_date": "2026-10-24",
+      "stages": [
+        "ETA (Dolumlu Seren)",
+        "Homag",
+        "Torwegge",
+        "Paketleme"
+      ],
+      "status": "open",
+      "notes": "Hafta: 42.Hafta",
+      "created_at": "2026-09-02T15:54:13.973177"
+    }
+  },
+  "daily_entries": {
+    "2026-08-17": {
+      "date": "2026-08-17",
+      "entries": [
+        {
+          "order_id": "SIP-UST-0001",
+          "facility_id": "fac1",
+          "shift": "gunduz",
+          "operator": "operator1",
+          "stage_entries": [
+            {
+              "stage": "Seren Kesim",
+              "machine_id": "MCH_UST_1",
+              "output_qty": 250,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            },
+            {
+              "stage": "CNC Strafor",
+              "machine_id": "MCH_UST_2",
+              "output_qty": 230,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            },
+            {
+              "stage": "Levha Vakum",
+              "machine_id": "MCH_UST_3",
+              "output_qty": 590,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            },
+            {
+              "stage": "Pres",
+              "machine_id": "MCH_UST_4",
+              "output_qty": 163,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            },
+            {
+              "stage": "Paketleme",
+              "machine_id": "MCH_UST_5",
+              "output_qty": 288,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            }
+          ],
+          "total_output": 1521
+        },
+        {
+          "order_id": "SIP-ALT-0208",
+          "facility_id": "fac2",
+          "shift": "gunduz",
+          "operator": "operator1",
+          "stage_entries": [
+            {
+              "stage": "ETA (Dolumlu Seren)",
+              "machine_id": "MCH_ALT_1",
+              "output_qty": 334,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            },
+            {
+              "stage": "Homag",
+              "machine_id": "MCH_ALT_2",
+              "output_qty": 213,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            },
+            {
+              "stage": "Paketleme",
+              "machine_id": "MCH_ALT_4",
+              "output_qty": 196,
+              "work_hours": 8.0,
+              "notes": "Excel aktarımı"
+            }
+          ],
+          "total_output": 743
+        }
+      ],
+      "downtimes": []
+    },
+    "2026-08-18": {
+      "date": "2026-08-18",
+      "entries": [],
+      "downtimes": []
+    },
+    "2026-08-19": {
+      "date": "2026-08-19",
+      "entries": [],
+      "downtimes": []
+    },
+    "2026-08-20": {
+      "date": "2026-08-20",
+      "entries": [],
+      "downtimes": []
+    },
+    "2026-08-21": {
+      "date": "2026-08-21",
+      "entries": [],
+      "downtimes": []
+    },
+    "2026-08-22": {
+      "date": "2026-08-22",
+      "entries": [],
+      "downtimes": []
+    },
+    "2026-08-23": {
+      "date": "2026-08-23",
+      "entries": [],
+      "downtimes": []
+    }
+  }
+}

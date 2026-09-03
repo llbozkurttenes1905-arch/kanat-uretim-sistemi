@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERGÜNBAŞ Group — Kanat Üretim & Sipariş Portalı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-red: #d42b2b;
+            --brand-dark: #1c0a0a;
+            --brand-maroon: #2d1010;
+            --accent: #e63333;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0f0f13;
+            color: #d4d4d8;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        .site-header {
+            background: linear-gradient(90deg, #1a0808 0%, #2a0f0f 60%, #1e1010 100%);
+            border-bottom: 2px solid #d42b2b;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(212,43,43,0.25);
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .header-logo {
+            height: 44px;
+            width: auto;
+            filter: drop-shadow(0 0 6px rgba(212,43,43,0.4));
+        }
+
+        .header-brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .header-brand-name {
+            font-size: 17px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .header-brand-name span {
+            color: #e53e3e;
+        }
+
+        .header-brand-sub {
+            font-size: 10px;
+            color: #9ca3af;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            margin-top: 1px;
+        }
+
+        .header-badge {
+            background: rgba(212,43,43,0.15);
+            border: 1px solid rgba(212,43,43,0.4);
+            color: #f87171;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Turkish Crescent */
+        .turkish-crescent {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .crescent-svg {
+            opacity: 0.75;
+        }
+
+        /* NAV TABS */
+        .nav-tabs {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #9ca3af;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+            height: 64px;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover { color: #f5f5f5; background: rgba(255,255,255,0.04); }
+        .nav-tab.active { color: #fff; border-bottom-color: #d42b2b; background: rgba(212,43,43,0.08); }
+
+        .nav-tab svg { width: 15px; height: 15px; }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-settings {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #9ca3af;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-settings:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #d1d5db;
+        }
+
+        .user-dot { width: 7px; height: 7px; background: #22c55e; border-radius: 50%; flex-shrink: 0; }
+
+        .btn-logout {
+            padding: 6px 10px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-logout:hover { color: #ef4444; border-color: rgba(239,68,68,0.3); }
+
+        /* ── FACILITY SWITCHER BAR ── */
+        .facility-bar {
+            background: #161620;
+            border-bottom: 1px solid #27272a;
+            padding: 10px 0;
+        }
+
+        .facility-bar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .fac-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        .fac-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid #3f3f46;
+            background: #1c1c24;
+            color: #71717a;
+            transition: all 0.18s;
+            letter-spacing: 0.2px;
+        }
+
+        .fac-btn:hover { border-color: #52525b; color: #d4d4d8; }
+
+        .fac-btn.active-all {
+            background: #1e1e2e;
+            border-color: #6366f1;
+            color: #a5b4fc;
+            box-shadow: 0 0 0 1px rgba(99,102,241,0.2), 0 2px 8px rgba(99,102,241,0.15);
+        }
+
+        .fac-btn.active-fac1 {
+            background: #1e0e0e;
+            border-color: #d42b2b;
+            color: #fca5a5;
+            box-shadow: 0 0 0 1px rgba(212,43,43,0.2), 0 2px 8px rgba(212,43,43,0.2);
+        }
+
+        .fac-btn.active-fac2 {
+            background: #0e1a1e;
+            border-color: #0891b2;
+            color: #67e8f9;
+            box-shadow: 0 0 0 1px rgba(8,145,178,0.2), 0 2px 8px rgba(8,145,178,0.15);
+        }
+
+        .fac-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+        .period-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .period-btns {
+            display: flex;
+            background: #1c1c24;
+            border: 1px solid #3f3f46;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .period-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #71717a;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .period-btn:hover { color: #d4d4d8; background: rgba(255,255,255,0.05); }
+        .period-btn.active { background: #d42b2b; color: #fff; }
+
+        input[type="month"] {
+            background: #1c1c24;
+            border: 1px solid #3f3f46;
+            color: #d4d4d8;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* ── PANEL / CARD ── */
+        .panel {
+            background: #18181f;
+            border: 1px solid #27272a;
+            border-radius: 10px;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #f4f4f5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title svg { width: 16px; height: 16px; color: #d42b2b; }
+
+        .panel-sub { font-size: 11px; color: #71717a; margin-top: 2px; }
+
+        /* ── KPI CARDS ── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .kpi-card {
+            background: #1c1c24;
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: all 0.18s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: var(--kpi-color, #d42b2b);
+        }
+
+        .kpi-card:hover { border-color: #52525b; transform: translateY(-1px); }
+
+        .kpi-card-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #71717a;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .kpi-card-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: #f4f4f5;
+            line-height: 1;
+        }
+
+        .kpi-card-value span { font-size: 12px; font-weight: 400; color: #71717a; }
+
+        .kpi-card-meta { font-size: 10px; color: #52525b; margin-top: 4px; }
+
+        /* ── TABLES ── */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .data-table th {
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #71717a;
+            background: #111118;
+            border-bottom: 1px solid #27272a;
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid #1f1f27;
+            color: #d4d4d8;
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr:hover { background: rgba(255,255,255,0.025); }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+
+        /* ── BADGES ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-red { background: rgba(212,43,43,0.15); color: #fca5a5; border: 1px solid rgba(212,43,43,0.3); }
+        .badge-cyan { background: rgba(8,145,178,0.12); color: #67e8f9; border: 1px solid rgba(8,145,178,0.3); }
+        .badge-green { background: rgba(34,197,94,0.12); color: #86efac; border: 1px solid rgba(34,197,94,0.25); }
+        .badge-amber { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+        .badge-slate { background: rgba(100,116,139,0.12); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
+        .badge-indigo { background: rgba(99,102,241,0.12); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
+
+        /* ── PROGRESS BAR ── */
+        .progress-bar-bg {
+            background: #27272a;
+            border-radius: 9999px;
+            height: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 5px;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #d42b2b, #f97316);
+            transition: width 0.4s ease;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #d42b2b;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-primary:hover { background: #b91c1c; }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            background: transparent;
+            color: #9ca3af;
+            border: 1px solid #3f3f46;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-secondary:hover { color: #fff; border-color: #52525b; }
+
+        .btn-icon {
+            padding: 5px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            color: #52525b;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-icon:hover { color: #d4d4d8; border-color: #3f3f46; background: #27272a; }
+        .btn-icon.danger:hover { color: #ef4444; border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.08); }
+
+        /* ── FORMS / INPUTS ── */
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #71717a;
+            margin-bottom: 5px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            background: #111118;
+            border: 1px solid #3f3f46;
+            color: #f4f4f5;
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: border-color 0.15s;
+            outline: none;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #d42b2b;
+            box-shadow: 0 0 0 2px rgba(212,43,43,0.15);
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: #18181f;
+            border: 1px solid #3f3f46;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 580px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+
+        .modal-box.wide { max-width: 760px; }
+
+        .modal-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title { font-size: 15px; font-weight: 700; color: #f4f4f5; }
+        .modal-body { padding: 22px; }
+        .modal-footer {
+            padding: 16px 22px;
+            border-top: 1px solid #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* ── LOGIN SCREEN ── */
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0e;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            background: #18181f;
+            border: 1px solid #27272a;
+            border-radius: 14px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+        .toast-inner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 240px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .toast-success { background: #14241a; border: 1px solid #166534; color: #86efac; }
+        .toast-error { background: #250d0d; border: 1px solid #7f1d1d; color: #fca5a5; }
+        .toast-info { background: #0d1e32; border: 1px solid #1e40af; color: #93c5fd; }
+
+        /* ── WEEKLY DAYS ── */
+        .day-card {
+            background: #1c1c24;
+            border: 1px solid #27272a;
+            border-radius: 7px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .day-card.today { border-color: #d42b2b; background: #1e0d0d; }
+
+        /* ── MISC ── */
+        .hidden { display: none !important; }
+        .divider { border: none; border-top: 1px solid #27272a; margin: 16px 0; }
+        .text-red { color: #f87171; }
+        .text-green { color: #86efac; }
+        .text-amber { color: #fcd34d; }
+        .text-cyan { color: #67e8f9; }
+        .text-muted { color: #71717a; }
+        .text-white { color: #f4f4f5; }
+        .font-mono { font-family: 'Consolas', 'Courier New', monospace; }
+        .font-bold { font-weight: 700; }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<!-- ======================================================= -->
+<!-- LOGIN -->
+<!-- ======================================================= -->
+<div class="login-screen" id="login-screen">
+    <div class="login-card">
+        <div style="text-align:center; margin-bottom:28px;">
+            <img src="/static/logo.png" alt="ERGÜNBAŞ" style="height:64px; margin-bottom:12px;">
+            <div style="font-size:20px; font-weight:800; color:#f4f4f5;">ERGÜNBAŞ Group</div>
+            <div style="font-size:11px; color:#6b7280; margin-top:3px;">Kanat Üretim & Sipariş Takip Sistemi</div>
+        </div>
+
+        <form id="login-form" onsubmit="handleLogin(event)" style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+                <label class="form-label">Kullanıcı Adı</label>
+                <input type="text" id="l-user" required class="form-input" placeholder="kullanici_adi" autocomplete="username">
+            </div>
+            <div>
+                <label class="form-label">Şifre</label>
+                <input type="password" id="l-pass" required class="form-input" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <div id="l-err" class="hidden" style="font-size:12px;color:#f87171;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);padding:8px 12px;border-radius:6px;"></div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:4px;padding:10px;">
+                <svg viewBox="0 0 20 20" fill="currentColor" style="width:15px;height:15px;"><path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+                Giriş Yap
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-inner" id="toast-inner"></div></div>
+
+<!-- ======================================================= -->
+<!-- SITE HEADER -->
+<!-- ======================================================= -->
+<header class="site-header">
+    <div class="header-inner">
+
+        <!-- Brand -->
+        <div class="header-brand">
+            <img src="/static/logo.png" alt="ERGÜNBAŞ" class="header-logo">
+            <div class="header-brand-text">
+                <div class="header-brand-name">ERGÜNBAŞ <span>Group</span></div>
+                <div class="header-brand-sub">Kanat Üretim &amp; Sipariş Yönetim Portalı</div>
+            </div>
+            <div class="header-badge">ÜRETİM & SİPARİŞ</div>
+        </div>
+
+        <!-- Nav Tabs -->
+        <nav class="nav-tabs" id="main-nav">
+            <button class="nav-tab active" onclick="switchTab('dashboard')" id="tab-dashboard">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm6.39-2.908a.75.75 0 01.766.027l3.5 2.25a.75.75 0 010 1.262l-3.5 2.25A.75.75 0 018 12.25v-4.5a.75.75 0 01.39-.658z"/></svg>
+                Dashboard
+            </button>
+            <button class="nav-tab" onclick="switchTab('orders')" id="tab-orders">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z" clip-rule="evenodd"/></svg>
+                Siparişler
+            </button>
+            <button class="nav-tab" onclick="switchTab('daily')" id="tab-daily">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd"/></svg>
+                Günlük Giriş
+            </button>
+            <button class="nav-tab" onclick="switchTab('machines')" id="tab-machines">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.5 10a4.5 4.5 0 004.284-5.882c-.105-.324-.51-.391-.752-.15L15.34 6.66a.454.454 0 01-.493.11 3.01 3.01 0 01-1.618-1.616.455.455 0 01.11-.494l2.694-2.692c.24-.241.174-.647-.15-.752a4.5 4.5 0 00-5.873 4.575c.055.873-.128 1.808-.8 2.368l-7.23 6.024a2.724 2.724 0 103.837 3.837l6.024-7.23c.56-.672 1.495-.855 2.368-.8.096.007.193.01.291.01zM5 16a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/></svg>
+                Makineler
+            </button>
+            <button class="nav-tab hidden" onclick="switchTab('users')" id="tab-users">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.78.78 0 01-.358-.442 3 3 0 014.308-3.516 6.484 6.484 0 00-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 01-2.07-.655zM16.44 15.98a4.97 4.97 0 002.07-.654.78.78 0 00.357-.442 3 3 0 00-4.308-3.517 6.484 6.484 0 011.907 3.96 2.32 2.32 0 01-.026.654zM18 8a2 2 0 11-4 0 2 2 0 014 0zM5.304 16.19a.844.844 0 01-.277-.71 5 5 0 019.947 0 .843.843 0 01-.277.71A6.975 6.975 0 0110 18a6.974 6.974 0 01-4.696-1.81z"/></svg>
+                Kullanıcılar
+            </button>
+        </nav>
+
+        <!-- Right side -->
+        <div class="header-right">
+            <!-- Turkish Crescent -->
+            <div class="turkish-crescent">
+                <svg class="crescent-svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
+                    <circle cx="17" cy="17" r="10" fill="#d42b2b"/>
+                    <circle cx="20" cy="14" r="8" fill="#1a0808"/>
+                    <circle cx="24" cy="12" r="2.2" fill="#d42b2b"/>
+                </svg>
+            </div>
+
+            <button class="btn-settings" onclick="openFacilityModal()">
+                <svg viewBox="0 0 20 20" fill="currentColor" style="width:13px;height:13px;"><path fill-rule="evenodd" d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+                Tesis İsimleri
+            </button>
+
+            <div class="user-pill">
+                <div class="user-dot"></div>
+                <span id="user-display-name">—</span>
+            </div>
+
+            <button class="btn-logout" onclick="handleLogout()" title="Çıkış Yap">
+                <svg viewBox="0 0 20 20" fill="currentColor" style="width:15px;height:15px;"><path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M19 10a.75.75 0 00-.75-.75H8.704l1.048-1.083a.75.75 0 10-1.004-1.114l-2.5 2.5a.75.75 0 000 1.114l2.5 2.5a.75.75 0 101.004-1.114l-1.048-1.083h9.546A.75.75 0 0019 10z" clip-rule="evenodd"/></svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ======================================================= -->
+<!-- FACILITY SWITCHER BAR -->
+<!-- ======================================================= -->
+<div class="facility-bar">
+    <div class="facility-bar-inner">
+        <div class="fac-btns">
+            <button class="fac-btn active-all" id="fac-btn-all" onclick="goToFacilityOrders('all')">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h10.5a.75.75 0 010 1.5H12v13.75a.75.75 0 01-1.5 0V3.5h-1v13.75a.75.75 0 01-1.5 0V3.5H3.5v13.75a.75.75 0 01-1.5 0V3.5h-.25A.75.75 0 011 2.75zM13 3.5h.25A.75.75 0 0014 2.75a.75.75 0 01.75-.75h3.5A.75.75 0 0119 2.75v14.5a.75.75 0 01-.75.75h-3.5a.75.75 0 01-.75-.75V3.5z" clip-rule="evenodd"/></svg>
+                TÜM SİPARİŞLER <span id="cnt-all" style="font-weight:400;opacity:.7;">(243)</span>
+            </button>
+            <button class="fac-btn" id="fac-btn-fac1" onclick="goToFacilityOrders('fac1')">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h10.5a.75.75 0 010 1.5H12v13.75a.75.75 0 01-1.5 0V3.5h-1v13.75a.75.75 0 01-1.5 0V3.5H3.5v13.75a.75.75 0 01-1.5 0V3.5h-.25A.75.75 0 011 2.75zM13 3.5h.25A.75.75 0 0014 2.75a.75.75 0 01.75-.75h3.5A.75.75 0 0119 2.75v14.5a.75.75 0 01-.75.75h-3.5a.75.75 0 01-.75-.75V3.5z" clip-rule="evenodd"/></svg>
+                <span id="fac1-btn-label">ÜST TESİS</span> <span id="cnt-fac1" style="font-weight:400;opacity:.7;">(207)</span>
+            </button>
+            <button class="fac-btn" id="fac-btn-fac2" onclick="goToFacilityOrders('fac2')">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h10.5a.75.75 0 010 1.5H12v13.75a.75.75 0 01-1.5 0V3.5h-1v13.75a.75.75 0 01-1.5 0V3.5H3.5v13.75a.75.75 0 01-1.5 0V3.5h-.25A.75.75 0 011 2.75zM13 3.5h.25A.75.75 0 0014 2.75a.75.75 0 01.75-.75h3.5A.75.75 0 0119 2.75v14.5a.75.75 0 01-.75.75h-3.5a.75.75 0 01-.75-.75V3.5z" clip-rule="evenodd"/></svg>
+                <span id="fac2-btn-label">ALT TESİS</span> <span id="cnt-fac2" style="font-weight:400;opacity:.7;">(36)</span>
+            </button>
+        </div>
+
+        <div class="period-group">
+            <div class="period-btns">
+                <button class="period-btn" id="period-daily" onclick="setPeriod('daily')">Günlük</button>
+                <button class="period-btn active" id="period-weekly" onclick="setPeriod('weekly')">Haftalık</button>
+                <button class="period-btn" id="period-monthly" onclick="setPeriod('monthly')">Aylık</button>
+            </div>
+            <input type="month" id="month-picker" onchange="loadDashboard()">
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================= -->
+<!-- MAIN CONTENT -->
+<!-- ======================================================= -->
+<main class="main-content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="section-dashboard">
+
+        <!-- Top KPI Row -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px;">
+
+            <div class="panel" style="padding:18px 20px;">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#71717a;margin-bottom:8px;">Toplam Çıkan Kapı</div>
+                <div id="kpi-total-output" style="font-size:30px;font-weight:800;color:#f4f4f5;">0 <span style="font-size:13px;font-weight:400;color:#71717a;">kapı</span></div>
+                <div id="kpi-period-label" style="font-size:11px;color:#52525b;margin-top:4px;">Bu Hafta</div>
+            </div>
+
+            <!-- Facility breakdown cards (clickable) -->
+            <div class="kpi-card" style="--kpi-color:#d42b2b;" onclick="goToFacilityOrders('fac1')">
+                <div class="kpi-card-label">
+                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px;color:#d42b2b;"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
+                    <span id="kpi-fac1-label">Üst Tesis</span> — Çıkan Kapı
+                </div>
+                <div class="kpi-card-value" id="kpi-fac1-output">0 <span>kapı</span></div>
+                <div class="kpi-card-meta">207 Sipariş · Hedef: 6.223 kapı · Tıkla →</div>
+            </div>
+
+            <div class="kpi-card" style="--kpi-color:#0891b2;" onclick="goToFacilityOrders('fac2')">
+                <div class="kpi-card-label" style="color:#0891b2;">
+                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px;color:#0891b2;"><path d="M0 5.5A.5.5 0 01.5 5h10a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H.5a.5.5 0 01-.5-.5v-7z"/><path d="M2 4a1 1 0 011-1h6a1 1 0 011 1v1H2V4zM12.5 5H13a1 1 0 011 1v7a1 1 0 01-1 1h-1a.5.5 0 01-.5-.5v-8a.5.5 0 01.5-.5z"/></svg>
+                    <span id="kpi-fac2-label">Alt Tesis</span> — Çıkan Kapı
+                </div>
+                <div class="kpi-card-value" id="kpi-fac2-output">0 <span>kapı</span></div>
+                <div class="kpi-card-meta">36 Sipariş · Hedef: 11.259 kapı · Tıkla →</div>
+            </div>
+
+        </div>
+
+        <!-- Weekly Days -->
+        <div class="panel" style="margin-bottom:20px;">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h16.5a.75.75 0 010 1.5H1.75A.75.75 0 011 2.75zm8.25 3.5a.75.75 0 011.5 0v2.5h2.5a.75.75 0 010 1.5h-2.5v2.5a.75.75 0 01-1.5 0v-2.5H6.5a.75.75 0 010-1.5h2.5v-2.5z" clip-rule="evenodd"/></svg>
+                        Haftalık Üretim Takibi
+                    </div>
+                    <div class="panel-sub" id="weekly-range-label">Pazartesi — Pazar</div>
+                </div>
+            </div>
+            <div style="padding:16px 20px;">
+                <div id="weekly-days-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;"></div>
+            </div>
+        </div>
+
+        <!-- Two columns: Sarkan + Order progress -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+
+            <!-- Sarkan Siparisler -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title" style="color:#f87171;">
+                            <svg viewBox="0 0 20 20" fill="currentColor" style="color:#ef4444;"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                            Sarkan / Kritik Siparişler
+                        </div>
+                        <div class="panel-sub">Teslim tarihi geçmiş veya bu hafta yetişmesi gerekenler</div>
+                    </div>
+                    <span id="sarkan-badge" class="badge badge-red">0 Sipariş</span>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Sipariş No</th>
+                                <th>Tesis</th>
+                                <th>Müşteri</th>
+                                <th style="text-align:center;">Kalan</th>
+                                <th style="text-align:center;">Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sarkan-tbody">
+                            <tr><td colspan="5" style="text-align:center;padding:24px;color:#52525b;">Sarkan sipariş yok ✓</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Aktif Siparis Listesi -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">
+                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/></svg>
+                            Aktif Siparişler
+                        </div>
+                        <div class="panel-sub">Üretimde olan siparişlerin tamamlanma oranları</div>
+                    </div>
+                    <button class="btn-secondary" onclick="switchTab('orders')" style="font-size:11px;">Tümünü Gör →</button>
+                </div>
+                <div id="active-orders-list" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+                    <div style="text-align:center;padding:20px;color:#52525b;font-size:13px;">Yükleniyor...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Stage & Machine stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"/><path d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0 5 5 0 00-5-5 1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
+                        Aşama Bazlı Üretim
+                    </div>
+                </div>
+                <div id="stage-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
+                    <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.5 10a4.5 4.5 0 004.284-5.882c-.105-.324-.51-.391-.752-.15L15.34 6.66a.454.454 0 01-.493.11 3.01 3.01 0 01-1.618-1.616.455.455 0 01.11-.494l2.694-2.692c.24-.241.174-.647-.15-.752a4.5 4.5 0 00-5.873 4.575c.055.873-.128 1.808-.8 2.368l-7.23 6.024a2.724 2.724 0 103.837 3.837l6.024-7.23c.56-.672 1.495-.855 2.368-.8.096.007.193.01.291.01zM5 16a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/></svg>
+                        Makine Bazlı Üretim
+                    </div>
+                </div>
+                <div id="machine-stats" style="padding:14px;display:flex;flex-direction:column;gap:6px;">
+                    <div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== ORDERS ===== -->
+    <div id="section-orders" class="hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;">
+            <div>
+                <div style="font-size:18px;font-weight:800;color:#f4f4f5;">Sipariş Yönetimi</div>
+                <div id="orders-sub-label" style="font-size:12px;color:#71717a;margin-top:2px;">Tüm tesislerin sipariş listesi</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <!-- Sub facility filter pills -->
+                <div style="display:flex;gap:4px;background:#18181f;border:1px solid #27272a;border-radius:6px;padding:4px;">
+                    <button onclick="selectFacility('all')" id="pill-all" style="padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;background:#3f3f46;color:#f4f4f5;border:none;cursor:pointer;">Tümü (<span id="pill-cnt-all">243</span>)</button>
+                    <button onclick="selectFacility('fac1')" id="pill-fac1" style="padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;background:transparent;color:#71717a;border:none;cursor:pointer;">Üst Tesis (<span id="pill-cnt-fac1">207</span>)</button>
+                    <button onclick="selectFacility('fac2')" id="pill-fac2" style="padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;background:transparent;color:#71717a;border:none;cursor:pointer;">Alt Tesis (<span id="pill-cnt-fac2">36</span>)</button>
+                </div>
+                <input type="text" id="order-search" oninput="filterOrders()" placeholder="Ara: sipariş, müşteri, model..." class="form-input" style="width:230px;padding:7px 11px;font-size:12px;">
+                <button class="btn-primary" onclick="openOrderModal()">
+                    <svg viewBox="0 0 20 20" fill="currentColor" style="width:14px;height:14px;"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/></svg>
+                    Yeni Sipariş
+                </button>
+            </div>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Sipariş No</th>
+                            <th>Tesis</th>
+                            <th>Müşteri</th>
+                            <th>Model</th>
+                            <th style="text-align:center;">Hedef</th>
+                            <th style="text-align:center;color:#86efac;">Üretilen</th>
+                            <th style="text-align:center;color:#f87171;">Kalan</th>
+                            <th>Teslim</th>
+                            <th style="min-width:120px;">İlerleme</th>
+                            <th style="text-align:center;">Durum</th>
+                            <th style="text-align:right;">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-tbody">
+                        <tr><td colspan="11" style="text-align:center;padding:32px;color:#52525b;">Yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DAILY ENTRY ===== -->
+    <div id="section-daily" class="hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;">
+            <div>
+                <div style="font-size:18px;font-weight:800;color:#f4f4f5;">Günlük Üretim Girişi</div>
+                <div style="font-size:12px;color:#71717a;margin-top:2px;">Tesis, tarih ve sipariş bazlı aşama üretim takibi</div>
+            </div>
+            <button class="btn-primary" onclick="saveDailyProduction()" style="background:#16a34a;">
+                <svg viewBox="0 0 20 20" fill="currentColor" style="width:14px;height:14px;"><path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z"/><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z"/></svg>
+                Kaydet
+            </button>
+        </div>
+
+        <!-- Facility selector -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+            <button onclick="setDailyFacility('fac1')" id="daily-fac1-btn" style="padding:14px;border-radius:8px;border:2px solid #d42b2b;background:#1e0d0d;color:#fca5a5;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;">
+                <svg viewBox="0 0 20 20" fill="currentColor" style="width:16px;height:16px;"><path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h10.5a.75.75 0 010 1.5H12v13.75a.75.75 0 01-1.5 0V3.5h-1v13.75a.75.75 0 01-1.5 0V3.5H3.5v13.75a.75.75 0 01-1.5 0V3.5h-.25A.75.75 0 011 2.75zM13 3.5h.25A.75.75 0 0014 2.75a.75.75 0 01.75-.75h3.5A.75.75 0 0119 2.75v14.5a.75.75 0 01-.75.75h-3.5a.75.75 0 01-.75-.75V3.5z" clip-rule="evenodd"/></svg>
+                <span id="daily-fac1-label">ÜST TESİS — 207 Sipariş</span>
+            </button>
+            <button onclick="setDailyFacility('fac2')" id="daily-fac2-btn" style="padding:14px;border-radius:8px;border:1px solid #27272a;background:#1c1c24;color:#71717a;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;">
+                <svg viewBox="0 0 20 20" fill="currentColor" style="width:16px;height:16px;"><path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h10.5a.75.75 0 010 1.5H12v13.75a.75.75 0 01-1.5 0V3.5h-1v13.75a.75.75 0 01-1.5 0V3.5H3.5v13.75a.75.75 0 01-1.5 0V3.5h-.25A.75.75 0 011 2.75zM13 3.5h.25A.75.75 0 0014 2.75a.75.75 0 01.75-.75h3.5A.75.75 0 0119 2.75v14.5a.75.75 0 01-.75.75h-3.5a.75.75 0 01-.75-.75V3.5z" clip-rule="evenodd"/></svg>
+                <span id="daily-fac2-label">ALT TESİS — 36 Sipariş</span>
+            </button>
+        </div>
+
+        <!-- Date / Shift / Operator -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;" class="panel" id="daily-controls" style="padding:16px 20px;">
+            <div style="padding:16px 20px;">
+                <label class="form-label">Tarih</label>
+                <input type="date" id="daily-date" onchange="handleDailyDateChange()" class="form-input">
+            </div>
+            <div style="padding:16px 20px;">
+                <label class="form-label">Vardiya</label>
+                <select id="daily-shift" onchange="handleDailyDateChange()" class="form-select">
+                    <option value="gunduz">Gündüz (08:00—20:00)</option>
+                    <option value="gece">Gece (20:00—08:00)</option>
+                </select>
+            </div>
+            <div style="padding:16px 20px;">
+                <label class="form-label">Operatör</label>
+                <select id="daily-operator" class="form-select">
+                    <option value="">Seçiniz...</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Order select & stage table -->
+        <div class="panel" style="margin-bottom:16px;">
+            <div class="panel-header">
+                <div>
+                    <label class="form-label" style="margin:0;">İşlem Yapılacak Sipariş</label>
+                </div>
+            </div>
+            <div style="padding:16px 20px;border-bottom:1px solid #27272a;">
+                <select id="daily-order-select" onchange="handleOrderSelectionForDaily()" class="form-select">
+                    <option value="">Sipariş seçiniz...</option>
+                </select>
+                <div id="daily-order-info" class="hidden" style="margin-top:10px;padding:10px 14px;background:#111118;border:1px solid #27272a;border-radius:6px;font-size:12px;color:#9ca3af;"></div>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Üretim Aşaması</th>
+                            <th>Makine / İstasyon</th>
+                            <th style="text-align:center;color:#86efac;">Üretilen Adet</th>
+                            <th style="text-align:center;">Çalışma (sa)</th>
+                            <th>Notlar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="daily-stages-tbody">
+                        <tr><td colspan="5" style="text-align:center;padding:24px;color:#52525b;">Sipariş seçiniz.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Downtimes -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title" style="color:#fcd34d;">
+                    <svg viewBox="0 0 20 20" fill="currentColor" style="color:#f59e0b;"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                    Makine Duruş Kayıtları
+                </div>
+                <button class="btn-secondary" onclick="addDowntimeRow()" style="font-size:11px;">+ Duruş Ekle</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Makine</th>
+                            <th>Duruş Nedeni</th>
+                            <th style="text-align:center;width:120px;">Süre (dk)</th>
+                            <th>Açıklama</th>
+                            <th style="width:40px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="daily-downtimes-tbody">
+                        <tr><td colspan="5" style="text-align:center;padding:16px;color:#52525b;font-size:12px;">Duruş kaydı yok.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MACHINES ===== -->
+    <div id="section-machines" class="hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div>
+                <div style="font-size:18px;font-weight:800;color:#f4f4f5;">Makine ve İstasyon Yönetimi</div>
+                <div style="font-size:12px;color:#71717a;margin-top:2px;">Tesis bazında tanımlı makineler ve kapasiteler</div>
+            </div>
+            <button class="btn-primary" onclick="openMachineModal()">
+                <svg viewBox="0 0 20 20" fill="currentColor" style="width:14px;height:14px;"><path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z"/></svg>
+                Yeni Makine
+            </button>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Makine / Hat</th>
+                            <th>Tesis</th>
+                            <th>Aşama</th>
+                            <th style="text-align:center;">Kapasite (adet/sa)</th>
+                            <th style="text-align:center;">Durum</th>
+                            <th>Notlar</th>
+                            <th style="text-align:right;">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="machines-tbody">
+                        <tr><td colspan="7" style="text-align:center;padding:32px;color:#52525b;">Yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== USERS ===== -->
+    <div id="section-users" class="hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div>
+                <div style="font-size:18px;font-weight:800;color:#f4f4f5;">Kullanıcı Yönetimi</div>
+                <div style="font-size:12px;color:#71717a;margin-top:2px;">Sisteme erişim yetkili operatörler ve yöneticiler</div>
+            </div>
+            <button class="btn-primary" onclick="openUserModal()">+ Yeni Kullanıcı</button>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Ad Soyad</th>
+                        <th>Kullanıcı Adı</th>
+                        <th style="text-align:center;">Rol</th>
+                        <th style="text-align:right;">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody id="users-tbody">
+                    <tr><td colspan="4" style="text-align:center;padding:32px;color:#52525b;">Yükleniyor...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<!-- ======================================================= -->
+<!-- MODALS -->
+<!-- ======================================================= -->
+
+<!-- Facility Names Modal -->
+<div class="modal-overlay" id="modal-facility">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title">Tesis İsimlerini Düzenle</div>
+            <button class="btn-icon" onclick="closeModal('modal-facility')">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="facility-form" onsubmit="handleFacilitySubmit(event)" style="display:flex;flex-direction:column;gap:14px;">
+                <div>
+                    <label class="form-label">1. Tesis Adı (Üst Tesis)</label>
+                    <input type="text" id="f-fac1" class="form-input" required>
+                </div>
+                <div>
+                    <label class="form-label">2. Tesis Adı (Alt Tesis)</label>
+                    <input type="text" id="f-fac2" class="form-input" required>
+                </div>
+                <div class="modal-footer" style="padding:0;border:none;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modal-facility')">İptal</button>
+                    <button type="submit" class="btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Order Modal -->
+<div class="modal-overlay" id="modal-order">
+    <div class="modal-box wide">
+        <div class="modal-header">
+            <div class="modal-title" id="modal-order-title">Yeni Sipariş</div>
+            <button class="btn-icon" onclick="closeModal('modal-order')">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="order-form" onsubmit="handleOrderSubmit(event)" style="display:flex;flex-direction:column;gap:14px;">
+                <input type="hidden" id="order-edit-id">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <label class="form-label">Tesis *</label>
+                        <select id="o-facility" class="form-select"></select>
+                    </div>
+                    <div>
+                        <label class="form-label">Sipariş No *</label>
+                        <input type="text" id="o-no" required class="form-input" placeholder="Örn: 2026-001">
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <label class="form-label">Müşteri *</label>
+                        <input type="text" id="o-customer" required class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">Model *</label>
+                        <input type="text" id="o-model" required class="form-input" placeholder="Örn: ER100 WPC 900x2020x40">
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <label class="form-label">Sipariş Adedi *</label>
+                        <input type="number" id="o-qty" min="1" required class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">Teslim Tarihi *</label>
+                        <input type="date" id="o-delivery" required class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Üretim Aşamaları</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+                        <button type="button" onclick="addStage('Seren Kesim')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">+Seren Kesim</button>
+                        <button type="button" onclick="addStage('CNC Strafor')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">+CNC Strafor</button>
+                        <button type="button" onclick="addStage('Levha Vakum')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">+Levha Vakum</button>
+                        <button type="button" onclick="addStage('ETA')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">+ETA</button>
+                        <button type="button" onclick="addStage('Homag')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">+Homag</button>
+                        <button type="button" onclick="addStage('Pres')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">+Pres</button>
+                        <button type="button" onclick="addStage('Paketleme')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">+Paketleme</button>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-bottom:6px;">
+                        <input type="text" id="custom-stage" placeholder="Özel aşama..." class="form-input" style="flex:1;">
+                        <button type="button" onclick="addCustomStage()" class="btn-secondary">Ekle</button>
+                    </div>
+                    <div id="stages-tags" style="min-height:36px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;background:#111118;border:1px solid #27272a;border-radius:6px;">
+                        <span style="font-size:11px;color:#52525b;">Aşama seçilmedi.</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Notlar</label>
+                    <textarea id="o-notes" rows="2" class="form-textarea" placeholder="Özel talepler, ambalaj notu vb."></textarea>
+                </div>
+                <div class="modal-footer" style="padding:0;border:none;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modal-order')">İptal</button>
+                    <button type="submit" class="btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Machine Modal -->
+<div class="modal-overlay" id="modal-machine">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title" id="modal-machine-title">Yeni Makine</div>
+            <button class="btn-icon" onclick="closeModal('modal-machine')">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="machine-form" onsubmit="handleMachineSubmit(event)" style="display:flex;flex-direction:column;gap:14px;">
+                <input type="hidden" id="machine-edit-id">
+                <div>
+                    <label class="form-label">Tesis *</label>
+                    <select id="m-facility" class="form-select"></select>
+                </div>
+                <div>
+                    <label class="form-label">Makine / Hat Adı *</label>
+                    <input type="text" id="m-name" required class="form-input" placeholder="Örn: Homag Ebatlama Hattı 1">
+                </div>
+                <div>
+                    <label class="form-label">Aşama *</label>
+                    <input type="text" id="m-stage" required class="form-input" placeholder="Örn: Homag, Pres, Paketleme">
+                </div>
+                <div>
+                    <label class="form-label">Kapasite (Adet/Saat)</label>
+                    <input type="number" step="0.1" id="m-capacity" class="form-input" placeholder="0">
+                </div>
+                <div>
+                    <label class="form-label">Notlar</label>
+                    <textarea id="m-notes" rows="2" class="form-textarea"></textarea>
+                </div>
+                <div class="modal-footer" style="padding:0;border:none;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modal-machine')">İptal</button>
+                    <button type="submit" class="btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- User Modal -->
+<div class="modal-overlay" id="modal-user">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title" id="modal-user-title">Yeni Kullanıcı</div>
+            <button class="btn-icon" onclick="closeModal('modal-user')">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="user-form" onsubmit="handleUserSubmit(event)" style="display:flex;flex-direction:column;gap:14px;">
+                <input type="hidden" id="user-edit-id">
+                <div>
+                    <label class="form-label">Ad Soyad *</label>
+                    <input type="text" id="u-name" required class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Kullanıcı Adı *</label>
+                    <input type="text" id="u-username" required class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Şifre *</label>
+                    <input type="password" id="u-password" class="form-input">
+                    <div id="u-pw-hint" class="hidden" style="font-size:11px;color:#71717a;margin-top:4px;">Değiştirmek istemiyorsanız boş bırakın.</div>
+                </div>
+                <div>
+                    <label class="form-label">Rol *</label>
+                    <select id="u-role" class="form-select">
+                        <option value="operator">Operatör</option>
+                        <option value="admin">Yönetici</option>
+                    </select>
+                </div>
+                <div class="modal-footer" style="padding:0;border:none;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modal-user')">İptal</button>
+                    <button type="submit" class="btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ======================================================= -->
+<script>
+let currentUser = null;
+let allFacilities = [];
+let allOrders = [];
+let allMachines = [];
+let allUsers = [];
+let stageTags = [];
+let currentFacility = 'all';
+let currentPeriod = 'weekly';
+let dailyFacility = 'fac1';
+
+// ── INIT ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date();
+    document.getElementById('daily-date').value = now.toISOString().split('T')[0];
+    document.getElementById('month-picker').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+
+    document.getElementById('custom-stage').addEventListener('keydown', e => {
+        if(e.key === 'Enter') { e.preventDefault(); addCustomStage(); }
+    });
+
+    const stored = localStorage.getItem('kanat_user');
+    if(stored) { try { currentUser = JSON.parse(stored); bootApp(); } catch(e) {} }
+});
+
+// ── AUTH ──────────────────────────────────────────────────
+async function handleLogin(e) {
+    e.preventDefault();
+    const errEl = document.getElementById('l-err');
+    errEl.classList.add('hidden');
+    try {
+        const res = await fetch('/api/auth/login', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ username: document.getElementById('l-user').value.trim(), password: document.getElementById('l-pass').value })
+        });
+        const d = await res.json();
+        if(!res.ok) { errEl.textContent = d.detail || 'Giriş başarısız.'; errEl.classList.remove('hidden'); return; }
+        currentUser = d.user;
+        localStorage.setItem('kanat_user', JSON.stringify(currentUser));
+        bootApp();
+    } catch(e) { errEl.textContent = 'Sunucuya bağlanılamadı.'; errEl.classList.remove('hidden'); }
+}
+
+function handleLogout() { localStorage.removeItem('kanat_user'); currentUser = null; location.reload(); }
+
+function bootApp() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('user-display-name').textContent = currentUser.name;
+    if(currentUser.role === 'admin') document.getElementById('tab-users').classList.remove('hidden');
+    loadFacilities();
+    loadDashboard();
+    loadOrders();
+    loadMachines();
+    loadUsersList();
+    handleDailyDateChange();
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg, type='success') {
+    const t = document.getElementById('toast');
+    const ti = document.getElementById('toast-inner');
+    ti.className = `toast-inner toast-${type}`;
+    ti.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── TABS ──────────────────────────────────────────────────
+const sections = ['dashboard','orders','daily','machines','users'];
+
+function switchTab(id) {
+    sections.forEach(s => {
+        document.getElementById(`section-${s}`).classList.toggle('hidden', s !== id);
+        document.getElementById(`tab-${s}`).classList.toggle('active', s === id);
+    });
+    if(id==='dashboard') loadDashboard();
+    if(id==='orders') loadOrders();
+    if(id==='machines') loadMachines();
+    if(id==='users') loadUsersList();
+    if(id==='daily') handleDailyDateChange();
+}
+
+// ── MODALS ────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// ── FACILITY ──────────────────────────────────────────────
+function goToFacilityOrders(fid) { selectFacility(fid); switchTab('orders'); }
+
+function selectFacility(fid) {
+    currentFacility = fid;
+    // Main fac buttons
+    ['all','fac1','fac2'].forEach(x => {
+        const b = document.getElementById(`fac-btn-${x}`);
+        b.className = 'fac-btn';
+        if(x === fid) b.classList.add(`active-${x}`);
+    });
+    // Pills
+    ['all','fac1','fac2'].forEach(x => {
+        const p = document.getElementById(`pill-${x}`);
+        if(!p) return;
+        p.style.background = x===fid ? '#3f3f46' : 'transparent';
+        p.style.color = x===fid ? '#f4f4f5' : '#71717a';
+    });
+    const facName = fid==='all' ? 'Tüm Tesisler' : (allFacilities.find(f=>f.id===fid)?.name || (fid==='fac1'?'Üst Tesis':'Alt Tesis'));
+    document.getElementById('orders-sub-label').textContent = `${facName} — Sipariş Listesi`;
+    loadOrders();
+    loadMachines();
+    loadDashboard();
+}
+
+async function loadFacilities() {
+    try {
+        const r = await fetch('/api/facilities');
+        allFacilities = await r.json();
+        updateFacilityTexts();
+    } catch(e) {}
+}
+
+function updateFacilityTexts() {
+    const f1 = allFacilities.find(f=>f.id==='fac1') || {name:'Üst Tesis'};
+    const f2 = allFacilities.find(f=>f.id==='fac2') || {name:'Alt Tesis'};
+
+    document.getElementById('fac1-btn-label').textContent = f1.name.toUpperCase();
+    document.getElementById('fac2-btn-label').textContent = f2.name.toUpperCase();
+    document.getElementById('kpi-fac1-label').textContent = f1.name;
+    document.getElementById('kpi-fac2-label').textContent = f2.name;
+    document.getElementById('daily-fac1-label').textContent = `${f1.name.toUpperCase()} — 207 Sipariş`;
+    document.getElementById('daily-fac2-label').textContent = `${f2.name.toUpperCase()} — 36 Sipariş`;
+
+    const facOptions = `<option value="fac1">${f1.name}</option><option value="fac2">${f2.name}</option>`;
+    ['o-facility','m-facility'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.innerHTML = facOptions;
+    });
+}
+
+function openFacilityModal() {
+    const f1 = allFacilities.find(f=>f.id==='fac1') || {name:'Üst Tesis'};
+    const f2 = allFacilities.find(f=>f.id==='fac2') || {name:'Alt Tesis'};
+    document.getElementById('f-fac1').value = f1.name;
+    document.getElementById('f-fac2').value = f2.name;
+    openModal('modal-facility');
+}
+
+async function handleFacilitySubmit(e) {
+    e.preventDefault();
+    await fetch('/api/facilities/fac1', { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name: document.getElementById('f-fac1').value.trim()}) });
+    await fetch('/api/facilities/fac2', { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name: document.getElementById('f-fac2').value.trim()}) });
+    toast('Tesis isimleri güncellendi!');
+    closeModal('modal-facility');
+    await loadFacilities();
+    selectFacility(currentFacility);
+}
+
+// ── PERIOD ────────────────────────────────────────────────
+function setPeriod(p) {
+    currentPeriod = p;
+    ['daily','weekly','monthly'].forEach(x => {
+        document.getElementById(`period-${x}`).classList.toggle('active', x===p);
+    });
+    loadDashboard();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────
+async function loadDashboard() {
+    try {
+        const month = document.getElementById('month-picker').value;
+        const url = `/api/dashboard?facility_id=${currentFacility}&period=${currentPeriod}&target_date=${month ? month+'-01' : ''}`;
+        const r = await fetch(url);
+        const d = await r.json();
+
+        // KPIs
+        let output = 0, label = 'Bu Hafta';
+        if(currentPeriod==='daily') { output = d.today_summary?.output||0; label = 'Bugün'; }
+        else if(currentPeriod==='weekly') { output = d.weekly_summary?.total_output||0; label = 'Bu Hafta'; }
+        else { output = d.monthly_summary?.total_output||0; label = d.monthly_summary?.month_name||'Bu Ay'; }
+
+        document.getElementById('kpi-total-output').innerHTML = `${output.toLocaleString('tr-TR')} <span style="font-size:13px;font-weight:400;color:#71717a;">kapı</span>`;
+        document.getElementById('kpi-period-label').textContent = label;
+
+        const fb1 = d.facility_breakdown?.fac1||{};
+        const fb2 = d.facility_breakdown?.fac2||{};
+        let o1=fb1.weekly_output||0, o2=fb2.weekly_output||0;
+        if(currentPeriod==='daily') { o1=fb1.today_output||0; o2=fb2.today_output||0; }
+        else if(currentPeriod==='monthly') { o1=fb1.monthly_output||0; o2=fb2.monthly_output||0; }
+        document.getElementById('kpi-fac1-output').innerHTML = `${o1.toLocaleString('tr-TR')} <span>kapı</span>`;
+        document.getElementById('kpi-fac2-output').innerHTML = `${o2.toLocaleString('tr-TR')} <span>kapı</span>`;
+
+        // Weekly days
+        const wg = document.getElementById('weekly-days-grid');
+        const days = d.weekly_summary?.days||[];
+        document.getElementById('weekly-range-label').textContent = `${d.weekly_summary?.start_date} — ${d.weekly_summary?.end_date}`;
+        wg.innerHTML = days.map(day => `
+            <div class="day-card ${day.is_today?'today':''}">
+                <div style="font-size:10px;font-weight:700;color:${day.is_today?'#f87171':'#71717a'};margin-bottom:6px;">${day.day_name}</div>
+                <div style="font-size:20px;font-weight:800;color:${day.output>0?'#86efac':'#3f3f46'};">${day.output}</div>
+                <div style="font-size:9px;color:#52525b;margin-top:3px;">${day.is_today?'BUGÜN':'kapı'}</div>
+            </div>
+        `).join('');
+
+        // Sarkan
+        const sarkan = d.sarkan_siparisler||[];
+        document.getElementById('sarkan-badge').textContent = `${sarkan.length} Sipariş`;
+        document.getElementById('sarkan-tbody').innerHTML = sarkan.length === 0
+            ? `<tr><td colspan="5" style="text-align:center;padding:20px;color:#52525b;">Sarkan sipariş yok ✓</td></tr>`
+            : sarkan.map(s => `
+                <tr>
+                    <td class="font-mono font-bold text-white" style="font-size:12px;">${s.order_no}</td>
+                    <td><span class="badge badge-red" style="font-size:10px;">${s.facility_name||'-'}</span></td>
+                    <td style="font-size:12px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.customer}</td>
+                    <td style="text-align:center;font-weight:700;color:#f87171;">${s.remaining_qty}</td>
+                    <td style="text-align:center;">
+                        ${s.delay_days>0
+                            ? `<span class="badge badge-red">🚨 ${s.delay_days}g gecikti</span>`
+                            : `<span class="badge badge-amber">⚠️ ${s.days_left}g kaldı</span>`}
+                    </td>
+                </tr>`).join('');
+
+        // Active orders progress
+        const ordRes = await fetch(`/api/orders?facility_id=${currentFacility}`);
+        const orders = await ordRes.json();
+        allOrders = orders;
+        const active = orders.filter(o=>o.status==='open').slice(0,12);
+        document.getElementById('active-orders-list').innerHTML = active.length === 0
+            ? `<div style="text-align:center;padding:20px;color:#52525b;font-size:12px;">Açık sipariş yok.</div>`
+            : active.map(o => {
+                const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (o.facility_id==='fac2'?'Alt Tesis':'Üst Tesis');
+                return `
+                <div style="padding:10px 12px;background:#111118;border:1px solid #1f1f27;border-radius:6px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px;">
+                        <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+                            <span style="font-size:12px;font-weight:700;color:#f4f4f5;white-space:nowrap;">${o.order_no}</span>
+                            <span class="badge ${o.facility_id==='fac2'?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span>
+                            <span style="font-size:11px;color:#71717a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.customer}</span>
+                        </div>
+                        <div style="font-size:11px;color:#9ca3af;white-space:nowrap;">${o.produced_qty||0}/${o.qty} <span style="color:#52525b;">adet</span></div>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                        <span style="font-size:10px;color:#52525b;">${(o.stages||[]).join(' → ')}</span>
+                        <span style="font-size:10px;color:#71717a;font-weight:600;">%${o.progress_pct}</span>
+                    </div>
+                </div>`;
+            }).join('');
+
+        // Stage stats
+        const ss = d.stage_stats||[];
+        document.getElementById('stage-stats').innerHTML = ss.length===0
+            ? `<div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>`
+            : ss.map(s=>`
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#111118;border:1px solid #1f1f27;border-radius:5px;font-size:12px;">
+                    <span style="color:#d4d4d8;">${s.stage}</span>
+                    <span class="badge badge-indigo">${s.output.toLocaleString('tr-TR')} adet</span>
+                </div>`).join('');
+
+        // Machine stats
+        const ms = d.machine_stats||[];
+        document.getElementById('machine-stats').innerHTML = ms.length===0
+            ? `<div style="text-align:center;color:#52525b;font-size:12px;padding:16px;">Veri yok</div>`
+            : ms.map(m=>`
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#111118;border:1px solid #1f1f27;border-radius:5px;font-size:12px;">
+                    <span style="color:#d4d4d8;">${m.name}</span>
+                    <span class="badge badge-green">${m.output.toLocaleString('tr-TR')} adet</span>
+                </div>`).join('');
+
+    } catch(err) { console.error('Dashboard error', err); }
+}
+
+// ── ORDERS ────────────────────────────────────────────────
+async function loadOrders() {
+    try {
+        const allR = await fetch('/api/orders?facility_id=all');
+        const allO = await allR.json();
+        const cAll=allO.length, cF1=allO.filter(o=>(o.facility_id||'fac1')==='fac1').length, cF2=allO.filter(o=>(o.facility_id||'fac1')==='fac2').length;
+        ['all','fac1','fac2'].forEach(x => {
+            ['cnt-','pill-cnt-'].forEach(pre => {
+                const el = document.getElementById(`${pre}${x}`);
+                if(el) el.textContent = x==='all'?cAll:x==='fac1'?cF1:cF2;
+            });
+        });
+
+        const r = await fetch(`/api/orders?facility_id=${currentFacility}`);
+        allOrders = await r.json();
+        renderOrdersTable(allOrders);
+        populateDailyOrderSelect();
+    } catch(e) {}
+}
+
+function filterOrders() {
+    const q = document.getElementById('order-search').value.toLowerCase();
+    if(!q) { renderOrdersTable(allOrders); return; }
+    renderOrdersTable(allOrders.filter(o =>
+        (o.order_no||'').toLowerCase().includes(q) ||
+        (o.customer||'').toLowerCase().includes(q) ||
+        (o.model||'').toLowerCase().includes(q)
+    ));
+}
+
+function renderOrdersTable(orders) {
+    const tb = document.getElementById('orders-tbody');
+    if(!orders.length) { tb.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:#52525b;">Seçili tesiste sipariş yok.</td></tr>`; return; }
+    tb.innerHTML = orders.map(o => {
+        const isFac2 = (o.facility_id||'fac1')==='fac2';
+        const facName = allFacilities.find(f=>f.id===(o.facility_id||'fac1'))?.name || (isFac2?'Alt Tesis':'Üst Tesis');
+        const isDone = o.status==='done';
+        const remaining = o.remaining_qty !== undefined ? o.remaining_qty : (o.qty-(o.produced_qty||0));
+        let statusBadge = isDone
+            ? `<span class="badge badge-green">Tamam</span>`
+            : (o.days_remaining!==null && o.days_remaining<0
+                ? `<span class="badge badge-red">🚨 Sarktı</span>`
+                : `<span class="badge badge-slate">Açık</span>`);
+
+        return `<tr>
+            <td class="font-mono font-bold text-white" style="font-size:12px;">${o.order_no}</td>
+            <td><span class="badge ${isFac2?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span></td>
+            <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.customer}</td>
+            <td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#9ca3af;">${o.model}</td>
+            <td style="text-align:center;font-weight:700;">${o.qty}</td>
+            <td style="text-align:center;font-weight:700;color:#86efac;">${o.produced_qty||0}</td>
+            <td style="text-align:center;font-weight:700;color:#f87171;">${remaining}</td>
+            <td style="font-size:12px;color:#71717a;">${o.delivery_date||'—'}</td>
+            <td style="min-width:120px;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:${Math.min(o.progress_pct,100)}%"></div></div>
+                    <span style="font-size:10px;color:#71717a;font-family:monospace;">%${o.progress_pct}</span>
+                </div>
+            </td>
+            <td style="text-align:center;">${statusBadge}</td>
+            <td style="text-align:right;white-space:nowrap;">
+                <button class="btn-icon" title="${isDone?'Yeniden Aç':'Tamamlandı'}" onclick="toggleOrderStatus('${o.id}','${isDone?'open':'done'}')">
+                    ${isDone ? '↩' : '✓'}
+                </button>
+                <button class="btn-icon" onclick="editOrder('${o.id}')">✎</button>
+                <button class="btn-icon danger" onclick="deleteOrder('${o.id}')">✕</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function openOrderModal(isEdit=false) {
+    document.getElementById('modal-order-title').textContent = isEdit ? 'Siparişi Düzenle' : 'Yeni Sipariş';
+    if(!isEdit) {
+        document.getElementById('order-form').reset();
+        document.getElementById('order-edit-id').value = '';
+        document.getElementById('o-facility').value = currentFacility!=='all' ? currentFacility : 'fac1';
+        stageTags = ['Seren Kesim','CNC Strafor','Levha Vakum','Pres','Paketleme'];
+        renderStageTags();
+    }
+    openModal('modal-order');
+}
+
+function addStage(s) { if(!stageTags.includes(s)) { stageTags.push(s); renderStageTags(); } }
+function addCustomStage() { const v=document.getElementById('custom-stage').value.trim(); if(v && !stageTags.includes(v)){ stageTags.push(v); document.getElementById('custom-stage').value=''; renderStageTags(); } }
+function removeStage(i) { stageTags.splice(i,1); renderStageTags(); }
+
+function renderStageTags() {
+    const c = document.getElementById('stages-tags');
+    if(!stageTags.length) { c.innerHTML = `<span style="font-size:11px;color:#52525b;">Aşama seçilmedi.</span>`; return; }
+    c.innerHTML = stageTags.map((s,i) => `
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:#1e1e2e;border:1px solid #3f3f46;border-radius:4px;font-size:11px;font-weight:600;color:#a5b4fc;">
+            <span style="color:#6366f1;font-size:10px;">${i+1}.</span>${s}
+            <button type="button" onclick="removeStage(${i})" style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:12px;padding:0 1px;line-height:1;">×</button>
+        </span>`).join('');
+}
+
+async function handleOrderSubmit(e) {
+    e.preventDefault();
+    const editId = document.getElementById('order-edit-id').value;
+    const payload = {
+        order_no: document.getElementById('o-no').value.trim(),
+        facility_id: document.getElementById('o-facility').value,
+        customer: document.getElementById('o-customer').value.trim(),
+        model: document.getElementById('o-model').value.trim(),
+        qty: parseInt(document.getElementById('o-qty').value),
+        delivery_date: document.getElementById('o-delivery').value,
+        stages: stageTags,
+        notes: document.getElementById('o-notes').value.trim()
+    };
+    if(!stageTags.length) { toast('En az bir aşama seçiniz.','error'); return; }
+    try {
+        const url = editId ? `/api/orders/${editId}` : '/api/orders';
+        const method = editId ? 'PUT' : 'POST';
+        const r = await fetch(url, { method, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        if(r.ok) { toast(editId?'Sipariş güncellendi!':'Yeni sipariş oluşturuldu!'); closeModal('modal-order'); loadOrders(); loadDashboard(); }
+        else { const err=await r.json(); toast(err.detail||'Hata.','error'); }
+    } catch(e) { toast('Sunucu hatası.','error'); }
+}
+
+function editOrder(oid) {
+    const o = allOrders.find(x=>x.id===oid); if(!o) return;
+    document.getElementById('order-edit-id').value = o.id;
+    document.getElementById('o-facility').value = o.facility_id||'fac1';
+    document.getElementById('o-no').value = o.order_no;
+    document.getElementById('o-customer').value = o.customer;
+    document.getElementById('o-model').value = o.model;
+    document.getElementById('o-qty').value = o.qty;
+    document.getElementById('o-delivery').value = o.delivery_date;
+    document.getElementById('o-notes').value = o.notes||'';
+    stageTags = [...(o.stages||[])];
+    renderStageTags();
+    openOrderModal(true);
+}
+
+async function toggleOrderStatus(oid, newStatus) {
+    await fetch(`/api/orders/${oid}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({status:newStatus}) });
+    toast(`Sipariş: ${newStatus==='done'?'Tamamlandı':'Açık'}`);
+    loadOrders(); loadDashboard();
+}
+
+async function deleteOrder(oid) {
+    if(!confirm('Bu siparişi silmek istediğinize emin misiniz?')) return;
+    const r = await fetch(`/api/orders/${oid}`, {method:'DELETE'});
+    if(r.ok) { toast('Sipariş silindi.'); loadOrders(); loadDashboard(); }
+}
+
+// ── DAILY ─────────────────────────────────────────────────
+function setDailyFacility(fid) {
+    dailyFacility = fid;
+    const b1 = document.getElementById('daily-fac1-btn');
+    const b2 = document.getElementById('daily-fac2-btn');
+    if(fid==='fac1') {
+        b1.style.cssText = 'padding:14px;border-radius:8px;border:2px solid #d42b2b;background:#1e0d0d;color:#fca5a5;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;';
+        b2.style.cssText = 'padding:14px;border-radius:8px;border:1px solid #27272a;background:#1c1c24;color:#71717a;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;';
+    } else {
+        b2.style.cssText = 'padding:14px;border-radius:8px;border:2px solid #0891b2;background:#0e1a1e;color:#67e8f9;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;';
+        b1.style.cssText = 'padding:14px;border-radius:8px;border:1px solid #27272a;background:#1c1c24;color:#71717a;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;';
+    }
+    populateDailyOrderSelect();
+    handleDailyDateChange();
+}
+
+async function populateDailyOrderSelect() {
+    const r = await fetch(`/api/orders?facility_id=${dailyFacility}`);
+    const orders = await r.json();
+    const active = orders.filter(o=>o.status==='open');
+    const facName = allFacilities.find(f=>f.id===dailyFacility)?.name || (dailyFacility==='fac1'?'Üst Tesis':'Alt Tesis');
+    document.getElementById('daily-order-select').innerHTML =
+        `<option value="">${facName} — ${active.length} Açık Sipariş</option>` +
+        active.map(o=>`<option value="${o.id}">${o.order_no} | ${o.customer} | ${o.model} (${o.qty} adet)</option>`).join('');
+}
+
+async function populateDailyOperators() {
+    const sel = document.getElementById('daily-operator');
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">Operatör seçiniz...</option>` +
+        allUsers.map(u=>`<option value="${u.username}">${u.name}</option>`).join('');
+    if(cur) sel.value = cur;
+}
+
+async function handleDailyDateChange() {
+    const date = document.getElementById('daily-date').value;
+    if(!date) return;
+    try {
+        const r = await fetch(`/api/daily/${date}`);
+        const dayData = await r.json();
+        populateDailyOperators();
+        const shift = document.getElementById('daily-shift').value;
+        const entry = (dayData.entries||[]).find(e=>e.shift===shift && (e.facility_id||'fac1')===dailyFacility);
+        if(entry) {
+            if(entry.operator) document.getElementById('daily-operator').value = entry.operator;
+            document.getElementById('daily-order-select').value = entry.order_id;
+            renderStagesTable(entry.order_id, entry.stage_entries);
+        } else {
+            const curOrder = document.getElementById('daily-order-select').value;
+            if(curOrder) renderStagesTable(curOrder);
+            else document.getElementById('daily-stages-tbody').innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:#52525b;">Sipariş seçiniz.</td></tr>`;
+        }
+        const dtFac = (dayData.downtimes||[]).filter(d=>(d.facility_id||'fac1')===dailyFacility);
+        renderDowntimesTable(dtFac);
+    } catch(e) {}
+}
+
+async function handleOrderSelectionForDaily() {
+    const oid = document.getElementById('daily-order-select').value;
+    const info = document.getElementById('daily-order-info');
+    if(!oid) { info.classList.add('hidden'); document.getElementById('daily-stages-tbody').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:24px;color:#52525b;">Sipariş seçiniz.</td></tr>`; return; }
+    const r = await fetch(`/api/orders/${oid}`);
+    const o = await r.json();
+    info.classList.remove('hidden');
+    info.innerHTML = `<strong>${o.model}</strong> · Hedef: <strong>${o.qty}</strong> · Üretilen: <strong style="color:#86efac;">${o.produced_qty||0}</strong> · Kalan: <strong style="color:#f87171;">${Math.max(0,o.qty-(o.produced_qty||0))}</strong>`;
+    renderStagesTable(oid, null, o);
+}
+
+async function renderStagesTable(oid, savedStages=null, orderObj=null) {
+    let order = orderObj || await (await fetch(`/api/orders/${oid}`)).json();
+    const machines = await (await fetch(`/api/machines?facility_id=${dailyFacility}`)).json();
+    const tbody = document.getElementById('daily-stages-tbody');
+    tbody.innerHTML = (order.stages||[]).map((stg,idx) => {
+        const saved = savedStages ? savedStages.find(s=>s.stage===stg) : null;
+        const machOpts = `<option value="">—</option>` + machines.map(m=>`<option value="${m.id}" ${saved?.machine_id===m.id?'selected':''}>${m.name}</option>`).join('');
+        return `<tr class="stage-row" data-stage="${stg}">
+            <td style="font-weight:600;color:#f4f4f5;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#1e1e2e;border:1px solid #3f3f46;border-radius:4px;font-size:10px;color:#a5b4fc;margin-right:8px;">${idx+1}</span>${stg}</td>
+            <td><select class="stage-machine form-select" style="padding:6px 8px;font-size:12px;">${machOpts}</select></td>
+            <td style="text-align:center;"><input type="number" min="0" value="${saved?.output_qty||0}" class="stage-output form-input" style="width:90px;text-align:center;font-weight:700;color:#86efac;font-size:13px;"></td>
+            <td style="text-align:center;"><input type="number" step="0.5" min="0" value="${saved?.work_hours||0}" class="stage-hours form-input" style="width:70px;text-align:center;font-size:12px;"></td>
+            <td><input type="text" value="${saved?.notes||''}" placeholder="Not..." class="stage-notes form-input" style="font-size:12px;"></td>
+        </tr>`;
+    }).join('');
+}
+
+function renderDowntimesTable(dts) {
+    const tb = document.getElementById('daily-downtimes-tbody');
+    if(!dts.length) { tb.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:14px;color:#52525b;font-size:12px;">Duruş kaydı yok.</td></tr>`; return; }
+    tb.innerHTML = dts.map(dt => createDtRow(dt)).join('');
+}
+
+function addDowntimeRow() {
+    const tb = document.getElementById('daily-downtimes-tbody');
+    if(tb.innerHTML.includes('Duruş kaydı yok')) tb.innerHTML = '';
+    tb.insertAdjacentHTML('beforeend', createDtRow({machine_id:'',reason:'',duration_min:30,notes:''}));
+}
+
+function createDtRow(dt) {
+    const machines = allMachines.filter(m=>(m.facility_id||'fac1')===dailyFacility);
+    const opts = `<option value="">Seçin...</option>` + machines.map(m=>`<option value="${m.id}" ${dt.machine_id===m.id?'selected':''}>${m.name}</option>`).join('');
+    return `<tr class="dt-row">
+        <td><select class="dt-machine form-select" style="padding:5px 8px;font-size:12px;">${opts}</select></td>
+        <td><input type="text" value="${dt.reason||''}" placeholder="Arıza nedeni..." class="dt-reason form-input" style="font-size:12px;padding:5px 8px;"></td>
+        <td style="text-align:center;"><input type="number" min="0" value="${dt.duration_min||0}" class="dt-duration form-input" style="width:80px;text-align:center;font-size:12px;padding:5px 8px;"></td>
+        <td><input type="text" value="${dt.notes||''}" placeholder="Açıklama..." class="dt-notes form-input" style="font-size:12px;padding:5px 8px;"></td>
+        <td style="text-align:right;"><button class="btn-icon danger" onclick="this.closest('tr').remove()">✕</button></td>
+    </tr>`;
+}
+
+async function saveDailyProduction() {
+    const date = document.getElementById('daily-date').value;
+    if(!date) { toast('Tarih seçiniz.','error'); return; }
+    const oid = document.getElementById('daily-order-select').value;
+    const stageEntries = [...document.querySelectorAll('.stage-row')].map(tr => ({
+        stage: tr.dataset.stage,
+        machine_id: tr.querySelector('.stage-machine').value,
+        output_qty: parseInt(tr.querySelector('.stage-output').value)||0,
+        work_hours: parseFloat(tr.querySelector('.stage-hours').value)||0,
+        notes: tr.querySelector('.stage-notes').value.trim()
+    }));
+    const payload = {
+        date,
+        entries: oid ? [{ order_id:oid, facility_id:dailyFacility, shift:document.getElementById('daily-shift').value, operator:document.getElementById('daily-operator').value, stage_entries:stageEntries }] : []
+    };
+    const downtimes = [...document.querySelectorAll('.dt-row')].map(tr => ({
+        machine_id: tr.querySelector('.dt-machine').value,
+        facility_id: dailyFacility, stage:'',
+        reason: tr.querySelector('.dt-reason').value.trim(),
+        duration_min: parseFloat(tr.querySelector('.dt-duration').value)||0,
+        notes: tr.querySelector('.dt-notes').value.trim()
+    }));
+    try {
+        const r = await fetch(`/api/daily/${date}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        await fetch(`/api/daily/${date}/downtime`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({date, downtimes}) });
+        if(r.ok) { toast('Günlük üretim kaydedildi!'); loadDashboard(); loadOrders(); }
+        else toast('Kayıt hatası.','error');
+    } catch(e) { toast('Bağlantı hatası.','error'); }
+}
+
+// ── MACHINES ──────────────────────────────────────────────
+async function loadMachines() {
+    try {
+        const r = await fetch(`/api/machines?facility_id=${currentFacility}`);
+        allMachines = await r.json();
+        const tb = document.getElementById('machines-tbody');
+        if(!allMachines.length) { tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:32px;color:#52525b;">Makine kaydı yok.</td></tr>`; return; }
+        tb.innerHTML = allMachines.map(m => {
+            const isFac2 = (m.facility_id||'fac1')==='fac2';
+            const facName = allFacilities.find(f=>f.id===(m.facility_id||'fac1'))?.name || (isFac2?'Alt Tesis':'Üst Tesis');
+            const statusBadge = m.status==='broken' ? `<span class="badge badge-red">Arızalı</span>` :
+                m.status==='maintenance' ? `<span class="badge badge-amber">Bakımda</span>` :
+                `<span class="badge badge-green">Aktif</span>`;
+            return `<tr>
+                <td style="font-weight:600;color:#f4f4f5;">${m.name}</td>
+                <td><span class="badge ${isFac2?'badge-cyan':'badge-red'}" style="font-size:10px;">${facName}</span></td>
+                <td style="color:#a5b4fc;">${m.stage}</td>
+                <td style="text-align:center;font-family:monospace;">${m.capacity_per_hour||0}</td>
+                <td style="text-align:center;">${statusBadge}</td>
+                <td style="font-size:11px;color:#71717a;">${m.notes||'—'}</td>
+                <td style="text-align:right;">
+                    <button class="btn-icon" onclick="editMachine('${m.id}')">✎</button>
+                    <button class="btn-icon danger" onclick="deleteMachine('${m.id}')">✕</button>
+                </td>
+            </tr>`;
+        }).join('');
+    } catch(e) {}
+}
+
+function openMachineModal(isEdit=false) {
+    document.getElementById('modal-machine-title').textContent = isEdit ? 'Makineyi Düzenle' : 'Yeni Makine';
+    if(!isEdit) { document.getElementById('machine-form').reset(); document.getElementById('machine-edit-id').value=''; document.getElementById('m-facility').value=currentFacility!=='all'?currentFacility:'fac1'; }
+    openModal('modal-machine');
+}
+
+async function handleMachineSubmit(e) {
+    e.preventDefault();
+    const editId = document.getElementById('machine-edit-id').value;
+    const payload = { name:document.getElementById('m-name').value.trim(), facility_id:document.getElementById('m-facility').value, stage:document.getElementById('m-stage').value.trim(), capacity_per_hour:parseFloat(document.getElementById('m-capacity').value)||0, notes:document.getElementById('m-notes').value.trim() };
+    const url = editId ? `/api/machines/${editId}` : '/api/machines';
+    const method = editId ? 'PUT' : 'POST';
+    const r = await fetch(url, { method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    if(r.ok) { toast(editId?'Makine güncellendi!':'Makine eklendi!'); closeModal('modal-machine'); loadMachines(); }
+    else toast('Hata.','error');
+}
+
+function editMachine(mid) {
+    const m = allMachines.find(x=>x.id===mid); if(!m) return;
+    document.getElementById('machine-edit-id').value=m.id;
+    document.getElementById('m-facility').value=m.facility_id||'fac1';
+    document.getElementById('m-name').value=m.name;
+    document.getElementById('m-stage').value=m.stage;
+    document.getElementById('m-capacity').value=m.capacity_per_hour||0;
+    document.getElementById('m-notes').value=m.notes||'';
+    openMachineModal(true);
+}
+
+async function deleteMachine(mid) {
+    if(!confirm('Bu makineyi silmek istediğinize emin misiniz?')) return;
+    const r = await fetch(`/api/machines/${mid}`, {method:'DELETE'});
+    if(r.ok) { toast('Makine silindi.'); loadMachines(); }
+}
+
+// ── USERS ─────────────────────────────────────────────────
+async function loadUsersList() {
+    try {
+        const r = await fetch('/api/users');
+        allUsers = await r.json();
+        const tb = document.getElementById('users-tbody');
+        tb.innerHTML = allUsers.map(u => `<tr>
+            <td style="font-weight:600;color:#f4f4f5;">${u.name}</td>
+            <td style="font-family:monospace;color:#9ca3af;">${u.username}</td>
+            <td style="text-align:center;"><span class="badge ${u.role==='admin'?'badge-red':'badge-slate'}">${u.role==='admin'?'Yönetici':'Operatör'}</span></td>
+            <td style="text-align:right;">
+                <button class="btn-icon" onclick="editUser('${u.id}')">✎</button>
+                ${u.id!=='u1'?`<button class="btn-icon danger" onclick="deleteUser('${u.id}')">✕</button>`:''}
+            </td>
+        </tr>`).join('');
+        populateDailyOperators();
+    } catch(e) {}
+}
+
+function openUserModal(isEdit=false) {
+    document.getElementById('modal-user-title').textContent = isEdit ? 'Kullanıcıyı Düzenle' : 'Yeni Kullanıcı';
+    if(!isEdit) { document.getElementById('user-form').reset(); document.getElementById('user-edit-id').value=''; document.getElementById('u-pw-hint').classList.add('hidden'); document.getElementById('u-password').required=true; document.getElementById('u-username').disabled=false; }
+    openModal('modal-user');
+}
+
+async function handleUserSubmit(e) {
+    e.preventDefault();
+    const editId = document.getElementById('user-edit-id').value;
+    const pw = document.getElementById('u-password').value;
+    if(editId) {
+        const payload = { name:document.getElementById('u-name').value.trim(), role:document.getElementById('u-role').value };
+        if(pw) payload.password = pw;
+        const r = await fetch(`/api/users/${editId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        if(r.ok) { toast('Kullanıcı güncellendi!'); closeModal('modal-user'); loadUsersList(); }
+    } else {
+        const payload = { name:document.getElementById('u-name').value.trim(), username:document.getElementById('u-username').value.trim(), password:pw, role:document.getElementById('u-role').value };
+        const r = await fetch('/api/users', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        if(r.ok) { toast('Kullanıcı eklendi!'); closeModal('modal-user'); loadUsersList(); }
+        else { const err=await r.json(); toast(err.detail||'Hata.','error'); }
+    }
+}
+
+function editUser(uid) {
+    const u=allUsers.find(x=>x.id===uid); if(!u) return;
+    document.getElementById('user-edit-id').value=u.id;
+    document.getElementById('u-name').value=u.name;
+    document.getElementById('u-username').value=u.username;
+    document.getElementById('u-password').value='';
+    document.getElementById('u-role').value=u.role;
+    document.getElementById('u-pw-hint').classList.remove('hidden');
+    document.getElementById('u-password').required=false;
+    document.getElementById('u-username').disabled=true;
+    openUserModal(true);
+}
+
+async function deleteUser(uid) {
+    if(!confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')) return;
+    const r = await fetch(`/api/users/${uid}`, {method:'DELETE'});
+    if(r.ok) { toast('Kullanıcı silindi.'); loadUsersList(); } else { const err=await r.json(); toast(err.detail||'Silinemedi.','error'); }
+}
+</script>
+</body>
+</html>

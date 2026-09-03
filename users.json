@@ -1,0 +1,16 @@
+{
+  "u1": {
+    "id": "u1",
+    "username": "admin",
+    "password": "ergunbas2026",
+    "role": "admin",
+    "name": "Sistem Yöneticisi"
+  },
+  "u2": {
+    "id": "u2",
+    "username": "operator1",
+    "password": "operator1",
+    "role": "operator",
+    "name": "Kanat Operatörü 1"
+  }
+}
