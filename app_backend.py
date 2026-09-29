@@ -328,12 +328,108 @@ def get_default_recipes():
         }
     }
 
+def get_default_maintenance_tools():
+    return {
+        "TOOL_HOMAG_BLADE": {
+            "id": "TOOL_HOMAG_BLADE",
+            "name": "Homag Kazıma & Kalibre Jileti",
+            "station": "Homag Ebatlama & Kenar",
+            "metric_unit": "Metre",
+            "metric_type": "pvc_meters",
+            "max_capacity": 15000,
+            "warning_threshold": 12000,
+            "current_usage": 8420,
+            "last_service_date": "2026-09-18",
+            "last_service_operator": "Murat Usta",
+            "service_count": 5,
+            "status": "good",
+            "notes": "4 kenar PVC kenar frezeleme ve radüs kazıma elmas jilet takımı"
+        },
+        "TOOL_HOMAG_GLUE": {
+            "id": "TOOL_HOMAG_GLUE",
+            "name": "Homag Tutkal Kazanı & Sürme Merdanesi",
+            "station": "Homag Ebatlama & Kenar",
+            "metric_unit": "Kapı",
+            "metric_type": "door_count",
+            "max_capacity": 5000,
+            "warning_threshold": 4000,
+            "current_usage": 4120,
+            "last_service_date": "2026-09-15",
+            "last_service_operator": "Murat Usta",
+            "service_count": 8,
+            "status": "warning",
+            "notes": "EVA/PUR tutkal haznesi teflon temizliği ve sürme valfi bakımı"
+        },
+        "TOOL_SEREN_SAW": {
+            "id": "TOOL_SEREN_SAW",
+            "name": "Seren Kesim Elmas Dairesel Testere",
+            "station": "Seren Kesim",
+            "metric_unit": "Kesim / Kapı",
+            "metric_type": "door_count",
+            "max_capacity": 8000,
+            "warning_threshold": 6500,
+            "current_usage": 3200,
+            "last_service_date": "2026-09-20",
+            "last_service_operator": "Kenan Usta",
+            "service_count": 6,
+            "status": "good",
+            "notes": "Kompozit seren boy ve en ebatlama çift kafa dairesel testeresi"
+        },
+        "TOOL_PRESS_TEFLON": {
+            "id": "TOOL_PRESS_TEFLON",
+            "name": "Sıcak Pres Teflon Bezi & Baskı Keçesi",
+            "station": "Pres",
+            "metric_unit": "Pres Baskısı",
+            "metric_type": "door_count",
+            "max_capacity": 4000,
+            "warning_threshold": 3200,
+            "current_usage": 3850,
+            "last_service_date": "2026-09-10",
+            "last_service_operator": "Ali Usta",
+            "service_count": 4,
+            "status": "warning",
+            "notes": "Sıcak pres tablaları yapışmaz teflon izolasyon bezi"
+        },
+        "TOOL_CNC_FUGA": {
+            "id": "TOOL_CNC_FUGA",
+            "name": "CNC Yüzey Freze Bıçağı (Fuga & Derz)",
+            "station": "CNC Yüzey Freze / Fuga",
+            "metric_unit": "Kapı",
+            "metric_type": "fuga_doors",
+            "max_capacity": 2500,
+            "warning_threshold": 2000,
+            "current_usage": 1150,
+            "last_service_date": "2026-09-22",
+            "last_service_operator": "Hasan Usta",
+            "service_count": 5,
+            "status": "good",
+            "notes": "V-Kanal ve özel fuga desen freze ucu (R3/V90)"
+        },
+        "TOOL_CNC_CAM": {
+            "id": "TOOL_CNC_CAM",
+            "name": "CNC Cam Yeri Boşaltma Freze Ucu",
+            "station": "Cam Yeri Boşaltma",
+            "metric_unit": "Kapı",
+            "metric_type": "cam_doors",
+            "max_capacity": 1500,
+            "warning_threshold": 1200,
+            "current_usage": 480,
+            "last_service_date": "2026-09-12",
+            "last_service_operator": "Hasan Usta",
+            "service_count": 3,
+            "status": "good",
+            "notes": "Karkas içi cam boşaltma karbür parmak freze ucu"
+        }
+    }
+
 def load_data():
     if not os.path.exists(DATA_FILE):
         return {
             "orders": {}, "machines": {}, "daily_entries": {},
             "materials": get_default_materials(), "recipes": get_default_recipes(),
-            "scraps": {}, "shipments": {}, "order_stages": {}
+            "scraps": {}, "shipments": {}, "order_stages": {},
+            "maintenance_tools": get_default_maintenance_tools(),
+            "maintenance_history": []
         }
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         d = json.load(f)
@@ -344,6 +440,10 @@ def load_data():
         if "scraps" not in d: d["scraps"] = {}
         if "shipments" not in d: d["shipments"] = {}
         if "order_stages" not in d: d["order_stages"] = {}
+        if "maintenance_tools" not in d or not d["maintenance_tools"]:
+            d["maintenance_tools"] = get_default_maintenance_tools()
+        if "maintenance_history" not in d:
+            d["maintenance_history"] = []
         return d
 
 def save_data(d):
@@ -1969,6 +2069,160 @@ def dashboard(facility_id: Optional[str] = "all", period: Optional[str] = "weekl
         "sarkan_siparisler": sarkan,
         "machine_stats": ms_list
     }
+
+# ── 4. BIÇAK & KESTİRİMCİ BAKIM TAKİBİ (MADDE 4) ────────────
+
+class ToolServiceRequest(BaseModel):
+    operator: Optional[str] = "Bakım Operatörü"
+    notes: Optional[str] = ""
+
+@app.get("/api/maintenance/tools")
+def get_maintenance_tools():
+    d = load_data()
+    tools = d.get("maintenance_tools", {})
+    history = d.get("maintenance_history", [])
+    
+    res = []
+    for tid, t in tools.items():
+        cur = t.get("current_usage", 0)
+        max_c = t.get("max_capacity", 10000)
+        warn = t.get("warning_threshold", 8000)
+        
+        pct = min(100.0, round((cur / max_c) * 100, 1)) if max_c > 0 else 0
+        status = "critical" if cur >= max_c else ("warning" if cur >= warn else "good")
+        remaining = max(0, max_c - cur)
+        
+        res.append({
+            **t,
+            "wear_pct": pct,
+            "status": status,
+            "remaining": remaining
+        })
+    
+    return {
+        "tools": res,
+        "history": sorted(history, key=lambda x: x.get("timestamp", ""), reverse=True)[:25],
+        "overall_status": "critical" if any(t["status"] == "critical" for t in res) else ("warning" if any(t["status"] == "warning" for t in res) else "good")
+    }
+
+@app.post("/api/maintenance/tools/{tool_id}/service")
+def service_maintenance_tool(tool_id: str, req: ToolServiceRequest):
+    d = load_data()
+    tools = d.get("maintenance_tools", {})
+    if tool_id not in tools:
+        raise HTTPException(404, "Takım/Bıçak bulunamadı")
+        
+    t = tools[tool_id]
+    prev_usage = t.get("current_usage", 0)
+    t["current_usage"] = 0
+    t["last_service_date"] = date.today().isoformat()
+    t["last_service_operator"] = req.operator or "Bakım Operatörü"
+    t["service_count"] = t.get("service_count", 0) + 1
+    t["status"] = "good"
+    
+    log_entry = {
+        "id": "SRV-" + datetime.now().strftime("%Y%m%d%H%M%S"),
+        "tool_id": tool_id,
+        "tool_name": t.get("name", tool_id),
+        "station": t.get("station", ""),
+        "timestamp": datetime.now().isoformat(),
+        "date": date.today().isoformat(),
+        "operator": req.operator or "Bakım Operatörü",
+        "notes": req.notes or "Bileme yapıldı / sıfırlandı",
+        "previous_usage": prev_usage,
+        "unit": t.get("metric_unit", "")
+    }
+    d.setdefault("maintenance_history", []).append(log_entry)
+    save_data(d)
+    return {"status": "ok", "message": f"{t.get('name')} başarıyla sıfırlandı.", "log": log_entry}
+
+
+# ── 2. 3D İNTERAKTİF PATLATILMIŞ KARKAS MODELİ (MADDE 2) ─────
+
+COLOR_PALETTE_3D = {
+    "AKÇAAGAÇ": {"hex": "#D4B185", "name": "Akçaağaç"},
+    "TEAK": {"hex": "#8B5226", "name": "Teak"},
+    "B.TEAK": {"hex": "#CBB292", "name": "Beyaz Teak"},
+    "ANTRASİT": {"hex": "#2F3640", "name": "Antrasit"},
+    "K.CEVİZ": {"hex": "#4D3322", "name": "K.Ceviz"},
+    "SOMONO": {"hex": "#CB9D81", "name": "Somono"},
+    "COCO": {"hex": "#533D35", "name": "Coco"},
+    "D.BEYAZ": {"hex": "#F4F6F9", "name": "D.Beyaz"},
+    "STANDART": {"hex": "#E2E8F0", "name": "Standart"}
+}
+
+@app.get("/api/doors/3d-model/{oid}")
+def get_door_3d_model(oid: str):
+    d = load_data()
+    orders = d.get("orders", {})
+    order = orders.get(oid)
+    if not order:
+        found = next((v for k, v in orders.items() if v.get("order_no") == oid or k == oid), None)
+        if found:
+            order = found
+            oid = order.get("id", oid)
+        elif orders:
+            oid = list(orders.keys())[0]
+            order = orders[oid]
+        else:
+            order = {
+                "id": "DEMO-01", "order_no": "DEMO-2026", "customer": "Örnek Müşteri",
+                "model": "ER100 KANAT AKÇAAGAÇ KOM.SEREN STRAFOR 800X2020X40", "qty": 10
+            }
+            
+    specs = parse_door_specs(order.get("model", ""), custom_color=order.get("color"))
+    w = specs["width"]
+    h = specs["height"]
+    th = specs["thickness"]
+    color_key = specs["color"]
+    color_info = COLOR_PALETTE_3D.get(color_key, COLOR_PALETTE_3D["STANDART"])
+    
+    seren_w = 42 # mm
+    seren_th = 32 # mm
+    panel_th = 4 # mm
+    core_w = max(100, w - (seren_w * 2))
+    core_h = max(100, h - (seren_w * 2))
+    
+    return {
+        "order_id": oid,
+        "order_code": order.get("order_no", oid),
+        "order_no": order.get("order_no", oid),
+        "customer": order.get("customer", ""),
+        "model": order.get("model", ""),
+        "color": color_key,
+        "color_hex": color_info["hex"],
+        "core_type": specs["core_type"],
+        "dimensions": {
+            "width": w,
+            "height": h,
+            "thickness": th,
+            "panel_thickness": panel_th,
+            "carcass_thickness": seren_th,
+            "seren_width": seren_w,
+            "core_width": core_w,
+            "core_height": core_h
+        },
+        "seren_breakdown": {
+            "total_meters": specs["consumptions"]["seren_m"],
+            "boy_count": 3.5,
+            "left_stile": {"len": h, "w": seren_w, "th": seren_th},
+            "right_stile": {"len": h, "w": seren_w, "th": seren_th},
+            "top_rail": {"len": core_w, "w": seren_w, "th": seren_th},
+            "bottom_rail": {"len": core_w, "w": seren_w, "th": seren_th},
+            "mid_rail": {"len": core_w, "w": seren_w, "th": seren_th},
+            "lock_reinforcement": {"len": 1150, "w": seren_w, "th": seren_th, "pos_y": 1000}
+        },
+        "takozlar": [
+            {"name": "Kilit Takviye Takozu", "w": 80, "h": 250, "th": seren_th, "side": "right", "pos_y": 1000},
+            {"name": "Kol Takviye Takozu", "w": 80, "h": 120, "th": seren_th, "side": "right", "pos_y": 1050}
+        ],
+        "pvc_edge": {
+            "thickness": 1.0,
+            "width": 45.0,
+            "total_meters": specs["consumptions"]["pvc_m"]
+        }
+    }
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
