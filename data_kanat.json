@@ -3141,13 +3141,13 @@
     },
     "MAT_PETEK_KRAFT": {
       "id": "MAT_PETEK_KRAFT",
-      "name": "Kraft Kağıt Petek Dolgu",
+      "name": "Petek Dolgu Levhası",
       "category": "Dolgu Malzemeleri",
       "unit": "Adet",
       "current_stock": 1200.0,
       "min_stock": 500.0,
       "unit_price": 40.0,
-      "notes": "Hafif kanat içi petek dolgu malzemesi"
+      "notes": "Kanat içi petek dolgu malzemesi"
     },
     "MAT_MDF_TEAK": {
       "id": "MAT_MDF_TEAK",
@@ -3941,11 +3941,11 @@
     },
     "REC_KANAT_PETEK": {
       "id": "REC_KANAT_PETEK",
-      "name": "Kraft Petek Dolgulu Kanat Kapı",
+      "name": "Petek Dolgulu Kanat Kapı",
       "code": "KANAT-PETEK",
       "model_pattern": "PETEK",
       "is_default": false,
-      "description": "Kraft kağıt petek dolgulu hafif ve mukavemetli iç oda kapı kanadı.",
+      "description": "Petek dolgulu hafif ve mukavemetli iç oda kapı kanadı.",
       "items": [
         {
           "material_id": "MAT_SEREN_KOMP",
@@ -3980,7 +3980,7 @@
           "qty": 1.0,
           "unit": "Adet",
           "waste_pct": 0.0,
-          "notes": "Kraft petek iç dolgu"
+          "notes": "Petek iç dolgu"
         },
         {
           "material_id": "MAT_MDF_STD",

@@ -34,13 +34,13 @@ def get_default_materials():
         },
         "MAT_PETEK_KRAFT": {
             "id": "MAT_PETEK_KRAFT",
-            "name": "Kraft Kağıt Petek Dolgu",
+            "name": "Petek Dolgu Levhası",
             "category": "Dolgu Malzemeleri",
             "unit": "Adet",
             "current_stock": 1200.0,
             "min_stock": 500.0,
             "unit_price": 40.0,
-            "notes": "Hafif kanat içi petek dolgu malzemesi"
+            "notes": "Kanat içi petek dolgu malzemesi"
         },
         "MAT_MDF_TEAK": {
             "id": "MAT_MDF_TEAK",
@@ -264,17 +264,17 @@ def get_default_recipes():
         },
         "REC_KANAT_PETEK": {
             "id": "REC_KANAT_PETEK",
-            "name": "Kraft Petek Dolgulu Kanat Kapı",
+            "name": "Petek Dolgulu Kanat Kapı",
             "code": "KANAT-PETEK",
             "model_pattern": "PETEK",
             "is_default": False,
-            "description": "Kraft kağıt petek dolgulu hafif ve mukavemetli iç oda kapı kanadı.",
+            "description": "Petek dolgulu hafif ve mukavemetli iç oda kapı kanadı.",
             "items": [
                 {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
-                {"material_id": "MAT_PETEK_KRAFT", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kraft petek iç dolgu"},
+                {"material_id": "MAT_PETEK_KRAFT", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Petek iç dolgu"},
                 {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Standart WPC kompozit yüzey levhası (2 adet)"}
             ]
         },
