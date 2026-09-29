@@ -608,7 +608,7 @@ def get_barcode_label(oid: str):
             else:
                 raise HTTPException(404, "Sipariş bulunamadı")
                 
-    fac_name = "Üst Tesis (Ana Fabrika)" if order.get("facility_id") == "fac1" else "Alt Tesis (2. Fabrika)"
+    fac_name = "ERGÜNBAŞ Kanat Fabrikası"
     return {
         "order_id": oid,
         "order_code": order.get("order_no", oid),
@@ -863,28 +863,18 @@ def delete_scrap(sid: str):
 # ── 6. ÇİZELGELEME & KAPASİTE SİMÜLASYONU (MADDE 6) ────────
 
 @app.get("/api/scheduling/simulate")
-def simulate_schedule(target_qty: Optional[int] = 1000, facility_id: Optional[str] = "all", shifts_per_day: Optional[int] = 1):
+def simulate_schedule(target_qty: Optional[int] = 1000, facility_id: Optional[str] = "all", shifts_per_day: Optional[int] = 1, hours_per_day: Optional[float] = 9, efficiency: Optional[float] = 0.85):
     d = load_data()
     orders = d.get("orders", {})
     daily = d.get("daily_entries", {})
     
-    # Calculate daily bottleneck production capacity:
-    # Üst Tesis Pres: 30 doors/hr x 8 hrs = 240 doors/day
-    # Alt Tesis ETA/Pres: 25 doors/hr x 8 hrs = 200 doors/day
+    # Tek Fabrika Birleşik Darboğaz Kapasitesi (Pres & Homag Hatları):
+    # Günlük ~440 kapı (1 vardiya)
     shifts = max(1, min(shifts_per_day or 1, 3))
-    
-    if facility_id == "fac1":
-        daily_capacity = 240 * shifts
-        fac_name = "Üst Tesis (Ana Fabrika)"
-        bottleneck = "Sıcak Pres Hattı 1 (30 adet/saat)"
-    elif facility_id == "fac2":
-        daily_capacity = 200 * shifts
-        fac_name = "Alt Tesis (2. Fabrika)"
-        bottleneck = "ETA / Homag Hattı (25 adet/saat)"
-    else:
-        daily_capacity = 440 * shifts
-        fac_name = "Konsolide Çift Tesis (Üst + Alt)"
-        bottleneck = "Sıcak Presler & Ebatlama Hatları (55 adet/saat)"
+    eff = float(efficiency or 0.85)
+    daily_capacity = int(480 * shifts * eff)
+    fac_name = "ERGÜNBAŞ Kanat Fabrikası (Entegre Tesis)"
+    bottleneck = "Sıcak Presler & Ebatlama Hatları (~50 kapı/saat)"
 
     # Total remaining open workload in factory
     open_orders = []
@@ -1256,27 +1246,28 @@ def dashboard(facility_id: Optional[str] = "all", period: Optional[str] = "weekl
     total_orders = 0
     open_orders = 0
     done_orders = 0
+    open_doors_total = 0
     sarkan = []
     
     for oid, o in orders.items():
-        if facility_id and facility_id != "all" and o.get("facility_id") != facility_id:
-            continue
-            
         total_orders += 1
-        if o.get("status") == "open": open_orders += 1
+        is_open = o.get("status") == "open"
+        if is_open: open_orders += 1
         else: done_orders += 1
         
-        if o.get("status") == "open":
+        t_out = sum(oe.get("output_qty",0) for dd in daily.values() for oe in dd.get("order_entries",[]) if oe.get("order_id") == oid)
+        kalan = max(0, o.get("qty",0) - t_out)
+        
+        if is_open:
+            open_doors_total += kalan
             try:
                 deliv_dt = date.fromisoformat(o["delivery_date"])
                 days_rem = (deliv_dt - today_dt).days
                 if days_rem <= 7:
-                    t_out = sum(oe.get("output_qty",0) for dd in daily.values() for oe in dd.get("order_entries",[]) if oe.get("order_id") == oid)
-                    kalan = max(0, o.get("qty",0) - t_out)
                     sarkan.append({
                         "id": oid,
                         "order_no": o.get("order_no", ""),
-                        "facility_name": o.get("facility_id", ""),
+                        "facility_name": "ERGÜNBAŞ Fabrika",
                         "customer": o.get("customer", ""),
                         "model": o.get("model", ""),
                         "qty": o.get("qty", 0),
@@ -1289,31 +1280,17 @@ def dashboard(facility_id: Optional[str] = "all", period: Optional[str] = "weekl
             except: pass
                 
     total_out_period = 0
-    fac1_out = 0
-    fac2_out = 0
-    
     for dk, dd in daily.items():
         if not in_range(dk): continue
         for oe in dd.get("order_entries", []):
-            oid = oe.get("order_id")
-            o = orders.get(oid, {})
-            f_id = o.get("facility_id")
-            if facility_id and facility_id != "all" and f_id != facility_id: continue
-            qty = oe.get("output_qty", 0)
-            total_out_period += qty
-            if f_id == "fac1": fac1_out += qty
-            elif f_id == "fac2": fac2_out += qty
+            total_out_period += oe.get("output_qty", 0)
 
     days_arr = []
     curr = start_dt
     while curr <= end_dt:
         ds = curr.isoformat()
         dd = daily.get(ds, {})
-        d_out = 0
-        for oe in dd.get("order_entries", []):
-            o = orders.get(oe.get("order_id"), {})
-            if facility_id and facility_id != "all" and o.get("facility_id") != facility_id: continue
-            d_out += oe.get("output_qty", 0)
+        d_out = sum(oe.get("output_qty", 0) for oe in dd.get("order_entries", []))
         days_arr.append({
             "date": ds,
             "day_name": ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"][curr.weekday()] if period == "weekly" else str(curr.day),
@@ -1328,8 +1305,6 @@ def dashboard(facility_id: Optional[str] = "all", period: Optional[str] = "weekl
     
     today_data = daily.get(today_str, {})
     for me in today_data.get("machine_entries", []):
-        m = machines.get(me.get("machine_id"), {})
-        if facility_id and facility_id != "all" and m.get("facility_id") != facility_id: continue
         today_active_workers += int(me.get("worker_count", 1) or 1)
         
     for dk, dd in daily.items():
@@ -1337,13 +1312,14 @@ def dashboard(facility_id: Optional[str] = "all", period: Optional[str] = "weekl
         for me in dd.get("machine_entries", []):
             mid = me.get("machine_id")
             m = machines.get(mid, {})
-            if facility_id and facility_id != "all" and m.get("facility_id") != facility_id: continue
             
             if mid not in mach_stats:
                 mach_stats[mid] = {
                     "id": mid,
                     "name": m.get("name", mid),
-                    "facility_id": m.get("facility_id", "fac1"),
+                    "stage": m.get("stage", "Üretim"),
+                    "facility_id": "main",
+                    "facility_name": "ERGÜNBAŞ Fabrika",
                     "output": 0,
                     "hours": 0.0,
                     "worker_count": 0,
@@ -1373,23 +1349,19 @@ def dashboard(facility_id: Optional[str] = "all", period: Optional[str] = "weekl
         
     ms_list.sort(key=lambda x: x["output"], reverse=True)
 
-    # Scraps summary for dashboard
     scraps = d.get("scraps", {})
-    total_scraps = sum(s.get("qty", 0) for s in scraps.values())
-    
-    # Shipments active count
+    total_scraps = sum(s.get("qty", s.get("scrap_qty", 0)) for s in scraps.values())
     shipments = d.get("shipments", {})
-    active_shipments = len([s for s in shipments.values() if s.get("status") in ["preparing", "loaded"]])
+    active_shipments = len([s for s in shipments.values() if s.get("status") in ["preparing", "Hazırlanıyor", "Yolda"]])
 
     return {
-        "orders": {"total": total_orders, "open": open_orders, "done": done_orders},
+        "orders": {"total": total_orders, "open": open_orders, "done": done_orders, "open_doors_total": open_doors_total},
         "period_summary": {
             "start_date": start_dt.isoformat(),
             "end_date": end_dt.isoformat(),
             "total_output": total_out_period,
+            "open_doors_total": open_doors_total,
             "days": days_arr,
-            "fac1_output": fac1_out,
-            "fac2_output": fac2_out,
             "today_active_workers": today_active_workers,
             "period_man_hours": round(period_man_hours, 1),
             "total_scraps": total_scraps,

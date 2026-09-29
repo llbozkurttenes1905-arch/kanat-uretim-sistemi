@@ -51,7 +51,7 @@ async function loadStages() {
                             <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:8px; padding:12px; box-shadow:0 1px 3px rgba(15,23,42,0.05); transition:transform 0.15s;" class="hover:border-slate-400">
                                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                                     <span style="font-weight:900; font-size:13px; color:#0F172A; font-family:monospace;">${o.order_code || o.order_id}</span>
-                                    <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:${o.facility==='fac1'?'#FEF2F2':'#F0F9FF'}; color:${o.facility==='fac1'?'#B91C1C':'#0369A1'};">${o.facility==='fac1'?'ÜST':'ALT'}</span>
+                                    <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:#F1F5F9; color:#475569;">FABRİKA</span>
                                 </div>
                                 <div style="font-weight:700; font-size:12px; color:#334155; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.customer || ''}">${o.customer || 'İsimsiz Müşteri'}</div>
                                 <div style="font-size:11px; color:#64748B; margin-top:2px;">${o.model || 'Model'} • <strong>${o.total_doors || o.doors || 0}</strong> kapı</div>
@@ -217,7 +217,7 @@ async function loadShipments() {
                 <tr>
                     <td style="font-weight:800; font-family:monospace; color:#0F172A;">${s.shipment_code}</td>
                     <td style="font-weight:700; color:#1E293B;">${s.customer || '—'}</td>
-                    <td><span class="badge ${s.facility==='fac1'?'badge-red':'badge-blue'}">${s.facility==='fac1'?'Üst Tesis':'Alt Tesis'}</span></td>
+                    
                     <td>
                         <div style="font-weight:700; color:#0F172A;">${s.plate || '—'}</div>
                         <div style="font-size:11px; color:#64748B;">${s.driver || '—'}</div>
@@ -333,7 +333,7 @@ function viewPackingList(sid) {
     document.getElementById('pk-code').innerText = s.shipment_code;
     document.getElementById('pk-date').innerText = `Tarih: ${s.shipment_date || new Date().toISOString().split('T')[0]}`;
     document.getElementById('pk-customer').innerText = s.customer || '—';
-    document.getElementById('pk-facility').innerText = `Tesis: ${s.facility === 'fac2' ? 'Alt Tesis (Tesis 2)' : 'Üst Tesis (Tesis 1)'}`;
+    document.getElementById('pk-facility').innerText = `Çıkış: ERGÜNBAŞ KANAT FABRİKASI`;
     document.getElementById('pk-notes').innerText = `Not / Adres: ${s.notes || 'Standart Fabrika Teslimi'}`;
     document.getElementById('pk-plate').innerText = s.plate || '—';
     document.getElementById('pk-driver').innerText = s.driver || '—';
@@ -1414,10 +1414,7 @@ function printElementContent(elementId) {
                 </svg>
             </div>
 
-            <button class="btn-settings" onclick="openFacilityModal()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                Tesis İsimleri
-            </button>
+            
 
             <div class="user-pill">
                 <div class="user-dot"></div>
@@ -1429,19 +1426,16 @@ function printElementContent(elementId) {
     </div>
 </header>
 
-<!-- FACILITY SWITCHER BAR -->
+<!-- FABRİKA DURUM & DÖNEM SEÇİM BARI -->
 <div class="facility-bar">
     <div class="facility-bar-inner">
-        <div class="fac-btns">
-            <button class="fac-btn active-all" id="fac-btn-all" onclick="goToFacilityOrders('all')">
-                <span>🏢 TÜM SİPARİŞLER</span> <span id="cnt-all" style="font-weight:600;opacity:.85;">(0)</span>
-            </button>
-            <button class="fac-btn" id="fac-btn-fac1" onclick="goToFacilityOrders('fac1')">
-                <span id="fac1-btn-label">ÜST TESİS</span> <span id="cnt-fac1" style="font-weight:600;opacity:.85;">(0)</span>
-            </button>
-            <button class="fac-btn" id="fac-btn-fac2" onclick="goToFacilityOrders('fac2')">
-                <span id="fac2-btn-label">ALT TESİS</span> <span id="cnt-fac2" style="font-weight:600;opacity:.85;">(0)</span>
-            </button>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:8px; padding:7px 16px; background:#0F172A; color:#FFFFFF; border-radius:9px; font-weight:800; font-size:13px; letter-spacing:0.3px; box-shadow:0 2px 6px rgba(15,23,42,0.12);">
+                <span>🏢</span> ERGÜNBAŞ KANAT FABRİKASI
+            </div>
+            <div style="font-size:12.5px; color:#475569; font-weight:700;">
+                <span id="cnt-all" style="color:#E30713; font-weight:900;">(243)</span> Açık Sipariş • Entegre Tek Merkez Üretim
+            </div>
         </div>
 
         <div class="period-group">
@@ -1451,6 +1445,7 @@ function printElementContent(elementId) {
                 <button class="period-btn" id="period-monthly" onclick="setPeriod('monthly')">Aylık</button>
             </div>
             <input type="month" id="month-picker" onchange="loadDashboard()">
+            <button class="btn-secondary" onclick="loadDashboard()" style="padding:6px 12px; font-size:12px;">🔄 Yenile</button>
         </div>
     </div>
 </div>
@@ -1460,7 +1455,7 @@ function printElementContent(elementId) {
 
     <!-- ===== DASHBOARD ===== -->
     <div id="section-dashboard">
-        <!-- Top KPI Row (4 Cards including Workforce) -->
+        <!-- Top KPI Row (Tek Fabrika Entegre Göstergeleri) -->
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;">
             <div class="panel" style="padding:22px 24px;border-top:4px solid #0F172A;">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#64748B;margin-bottom:6px;">Toplam Biten Kapı</div>
@@ -1468,23 +1463,23 @@ function printElementContent(elementId) {
                 <div id="kpi-period-label" style="font-size:12px;color:#94A3B8;margin-top:6px;font-weight:500;">Bu Hafta</div>
             </div>
 
-            <div class="kpi-card" style="--kpi-color:#E30713;" onclick="goToFacilityOrders('fac1')">
-                <div class="kpi-card-label" style="color:#B91C1C;"><span id="kpi-fac1-label">Üst Tesis</span> — Biten Kapı</div>
-                <div class="kpi-card-value" id="kpi-fac1-output">0 <span>kapı</span></div>
-                <div class="kpi-card-meta">Siparişleri Aç →</div>
+            <div class="kpi-card" style="--kpi-color:#E30713;" onclick="switchTab('orders')">
+                <div class="kpi-card-label" style="color:#B91C1C;">Açık Sipariş Kuyruğu</div>
+                <div class="kpi-card-value" id="kpi-open-orders">0 <span>kapı</span></div>
+                <div class="kpi-card-meta" id="kpi-open-orders-sub">Siparişleri İncele →</div>
             </div>
 
-            <div class="kpi-card" style="--kpi-color:#0284C7;" onclick="goToFacilityOrders('fac2')">
-                <div class="kpi-card-label" style="color:#0369A1;"><span id="kpi-fac2-label">Alt Tesis</span> — Biten Kapı</div>
-                <div class="kpi-card-value" id="kpi-fac2-output">0 <span>kapı</span></div>
-                <div class="kpi-card-meta" style="color:#0284C7;">Siparişleri Aç →</div>
+            <div class="kpi-card" style="--kpi-color:#0284C7;" onclick="switchTab('scheduling')">
+                <div class="kpi-card-label" style="color:#0369A1;">Fabrika Hat Kapasitesi</div>
+                <div class="kpi-card-value" id="kpi-factory-efficiency">400+ <span>kapı/gün</span></div>
+                <div class="kpi-card-meta" style="color:#0284C7;">Çizelge Simülasyonu →</div>
             </div>
 
-            <!-- NEW: WORKFORCE KPI -->
+            <!-- WORKFORCE KPI -->
             <div class="panel" style="padding:22px 24px;border-top:4px solid #16A34A;cursor:pointer;" onclick="switchTab('daily')">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#15803D;margin-bottom:6px;">👥 Bugün Hatlarda Çalışan</div>
                 <div id="kpi-workforce" style="font-size:34px;font-weight:900;color:#0F172A;">0 <span style="font-size:14px;font-weight:600;color:#15803D;">personel</span></div>
-                <div id="kpi-manhours" style="font-size:12px;color:#64748B;margin-top:6px;font-weight:500;">0 Adam-Saat</div>
+                <div id="kpi-manhours" style="font-size:12px;color:#64748B;margin-top:6px;font-weight:500;">0 Adam-Saat İş Gücü</div>
             </div>
         </div>
 
@@ -1551,7 +1546,6 @@ function printElementContent(elementId) {
                     <thead>
                         <tr>
                             <th>Makine / Hat Adı</th>
-                            <th>Tesis</th>
                             <th style="text-align:center;color:#0F172A;">Hatta Çalışan</th>
                             <th style="text-align:center;">Çalışma Süresi (sa)</th>
                             <th style="text-align:center;color:#0284C7;">Toplam Adam-Saat</th>
@@ -1573,7 +1567,7 @@ function printElementContent(elementId) {
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;">
             <div>
                 <div style="font-size:20px;font-weight:900;color:#0F172A;letter-spacing:-0.3px;">Sipariş Yönetimi</div>
-                <div id="orders-sub-label" style="font-size:12px;color:#64748B;margin-top:2px;">Tesis bazında sipariş listesi ve anlık üretim durumu</div>
+                <div id="orders-sub-label" style="font-size:12px;color:#64748B;margin-top:2px;">Tüm sipariş listesi ve anlık fabrika üretim durumu</div>
             </div>
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                 <input type="text" id="order-search" oninput="filterOrders()" placeholder="Ara: sipariş, müşteri, model..." class="form-input" style="width:260px;padding:8px 14px;font-size:12.5px;">
@@ -1586,7 +1580,6 @@ function printElementContent(elementId) {
                     <thead>
                         <tr>
                             <th>Sipariş No</th>
-                            <th>Tesis</th>
                             <th>Müşteri</th>
                             <th>Model</th>
                             <th style="text-align:center;">Hedef</th>
@@ -1751,7 +1744,7 @@ function printElementContent(elementId) {
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;">
             <div>
                 <div style="font-size:20px;font-weight:900;color:#0F172A;letter-spacing:-0.3px;">Makine ve İstasyon Yönetimi</div>
-                <div style="font-size:12px;color:#64748B;margin-top:2px;">Tesis bazında tanımlı makineler, standart çalışan personel sayıları ve kapasite limitleri</div>
+                <div style="font-size:12px;color:#64748B;margin-top:2px;">Fabrikada tanımlı makineler, standart çalışan personel sayıları ve kapasite limitleri</div>
             </div>
             <button class="btn-primary" onclick="openMachineModal()">+ Yeni Makine Ekle</button>
         </div>
@@ -1761,7 +1754,6 @@ function printElementContent(elementId) {
                     <thead>
                         <tr>
                             <th>Makine / Hat Adı</th>
-                            <th>Tesis</th>
                             <th>Bölüm / Aşama</th>
                             <th style="text-align:center;">Standart Çalışan</th>
                             <th style="text-align:center;">Kapasite (adet/sa)</th>
@@ -1810,11 +1802,7 @@ function printElementContent(elementId) {
                         <option value="critical">Kritik / Geciken Siparişler</option>
                     </select>
 
-                    <select id="mrp-facility-select" onchange="loadMRP()" class="form-select" style="width:180px;padding:6px 12px;font-size:12.5px;font-weight:600;">
-                        <option value="all">Tüm Tesisler</option>
-                        <option value="fac1">Yalnızca Üst Tesis</option>
-                        <option value="fac2">Yalnızca Alt Tesis</option>
-                    </select>
+                    
                 </div>
 
                 <div style="display:flex;align-items:center;gap:8px;">
@@ -2041,7 +2029,6 @@ function printElementContent(elementId) {
                         <tr>
                             <th>Sevkiyat Kodu</th>
                             <th>Müşteri / Proje</th>
-                            <th>Tesis</th>
                             <th>Araç Plakası &amp; Şoför</th>
                             <th style="text-align:center;">Kapı Adedi</th>
                             <th>Sevk Tarihi</th>
@@ -2224,13 +2211,8 @@ function printElementContent(elementId) {
         <div class="modal-body">
             <form id="order-form" onsubmit="handleOrderSubmit(event)" style="display:flex;flex-direction:column;gap:16px;">
                 <input type="hidden" id="order-edit-id">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-                    <div>
-                        <label class="form-label">Tesis *</label>
-                        <select id="o-facility" class="form-select"></select>
-                    </div>
-                    <div>
-                        <label class="form-label">Sipariş No *</label>
+                <div>
+                    <label class="form-label">Sipariş No *</label>
                         <input type="text" id="o-no" required class="form-input" placeholder="Örn: 2026-001">
                     </div>
                 </div>
@@ -2277,10 +2259,7 @@ function printElementContent(elementId) {
         <div class="modal-body">
             <form id="machine-form" onsubmit="handleMachineSubmit(event)" style="display:flex;flex-direction:column;gap:16px;">
                 <input type="hidden" id="machine-edit-id">
-                <div>
-                    <label class="form-label">Tesis *</label>
-                    <select id="m-facility" class="form-select"></select>
-                </div>
+                
                 <div>
                     <label class="form-label">Makine / Hat Adı *</label>
                     <input type="text" id="m-name" required class="form-input" placeholder="Örn: Homag Ebatlama">
@@ -2419,31 +2398,7 @@ function printElementContent(elementId) {
     </div>
 </div>
 
-<!-- MODAL: FACILITY NAMES -->
-<div class="modal-overlay" id="modal-facility">
-    <div class="modal-box">
-        <div class="modal-header">
-            <div class="modal-title">Tesis İsimlerini Düzenle</div>
-            <button class="btn-icon" onclick="closeModal('modal-facility')">✕</button>
-        </div>
-        <div class="modal-body">
-            <form id="facility-form" onsubmit="handleFacilitySubmit(event)" style="display:flex;flex-direction:column;gap:16px;">
-                <div>
-                    <label class="form-label">1. Tesis Adı (Üst Tesis)</label>
-                    <input type="text" id="f-fac1" class="form-input" required>
-                </div>
-                <div>
-                    <label class="form-label">2. Tesis Adı (Alt Tesis)</label>
-                    <input type="text" id="f-fac2" class="form-input" required>
-                </div>
-                <div class="modal-footer" style="padding:0;border:none;">
-                    <button type="button" class="btn-secondary" onclick="closeModal('modal-facility')">İptal</button>
-                    <button type="submit" class="btn-primary">Kaydet</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 <!-- MODAL: USER -->
 <div class="modal-overlay" id="modal-user">
@@ -2501,7 +2456,7 @@ function printElementContent(elementId) {
                         <div style="font-size:11px; font-weight:700; color:#475569; text-transform:uppercase;">Kanat Üretim &amp; Takip Kimlik Kartı</div>
                     </div>
                     <div style="text-align:right;">
-                        <span id="lbl-facility-badge" style="display:inline-block; padding:4px 10px; background:#0F172A; color:#FFFFFF; font-size:11px; font-weight:800; border-radius:6px;">ÜST TESİS</span>
+                        <span id="lbl-facility-badge" style="display:inline-block; padding:4px 10px; background:#0F172A; color:#FFFFFF; font-size:11px; font-weight:800; border-radius:6px;">ERGÜNBAŞ FABRİKASI</span>
                     </div>
                 </div>
 
@@ -2611,13 +2566,7 @@ function printElementContent(elementId) {
                         <label class="form-label">Müşteri / Proje</label>
                         <input type="text" id="sh-customer" required class="form-input" placeholder="Müşteri Adı">
                     </div>
-                    <div>
-                        <label class="form-label">Tesis</label>
-                        <select id="sh-facility" class="form-select">
-                            <option value="fac1">Üst Tesis</option>
-                            <option value="fac2">Alt Tesis</option>
-                        </select>
-                    </div>
+                    
                 </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
                     <div>
@@ -2847,7 +2796,6 @@ function bootApp() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('user-display-name').textContent = currentUser.name;
     if(currentUser.role === 'admin') document.getElementById('tab-users').classList.remove('hidden');
-    loadFacilities();
     loadDashboard();
     loadOrders();
     loadMachines();
@@ -2887,62 +2835,7 @@ function switchTab(id) {
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-function goToFacilityOrders(fid) { selectFacility(fid); switchTab('orders'); }
 
-function selectFacility(fid) {
-    currentFacility = fid;
-    ['all','fac1','fac2'].forEach(x => {
-        const b = document.getElementById(`fac-btn-${x}`);
-        if(b) {
-            b.className = 'fac-btn';
-            if(x === fid) b.classList.add(`active-${x}`);
-        }
-    });
-    loadOrders();
-    loadMachines();
-    loadDashboard();
-}
-
-async function loadFacilities() {
-    try {
-        const r = await fetch('/api/facilities');
-        allFacilities = await r.json();
-        updateFacilityTexts();
-    } catch(e) {}
-}
-
-function updateFacilityTexts() {
-    const f1 = allFacilities.find(f=>f.id==='fac1') || {name:'Üst Tesis'};
-    const f2 = allFacilities.find(f=>f.id==='fac2') || {name:'Alt Tesis'};
-
-    document.getElementById('fac1-btn-label').textContent = f1.name.toUpperCase();
-    document.getElementById('fac2-btn-label').textContent = f2.name.toUpperCase();
-    document.getElementById('kpi-fac1-label').textContent = f1.name;
-    document.getElementById('kpi-fac2-label').textContent = f2.name;
-
-    const facOptions = `<option value="fac1">${f1.name}</option><option value="fac2">${f2.name}</option>`;
-    ['o-facility','m-facility'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.innerHTML = facOptions;
-    });
-}
-
-function openFacilityModal() {
-    const f1 = allFacilities.find(f=>f.id==='fac1') || {name:'Üst Tesis'};
-    const f2 = allFacilities.find(f=>f.id==='fac2') || {name:'Alt Tesis'};
-    document.getElementById('f-fac1').value = f1.name;
-    document.getElementById('f-fac2').value = f2.name;
-    openModal('modal-facility');
-}
-
-async function handleFacilitySubmit(e) {
-    e.preventDefault();
-    await fetch('/api/facilities/fac1', { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name: document.getElementById('f-fac1').value.trim()}) });
-    await fetch('/api/facilities/fac2', { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name: document.getElementById('f-fac2').value.trim()}) });
-    toast('Tesis isimleri güncellendi!');
-    closeModal('modal-facility');
-    await loadFacilities();
-}
 
 function setPeriod(p) {
     currentPeriod = p;
@@ -2960,12 +2853,19 @@ async function loadDashboard() {
         const r = await fetch(url);
         const d = await r.json();
 
-        // Top KPIs
+        // Top KPIs (Single Factory)
         const psum = d.period_summary || {};
+        const ords = d.orders || {};
         document.getElementById('kpi-total-output').innerHTML = `${(psum.total_output||0).toLocaleString('tr-TR')} <span style="font-size:14px;font-weight:500;color:#64748B;">kapı</span>`;
         document.getElementById('kpi-period-label').textContent = currentPeriod === 'daily' ? 'Bugün' : (currentPeriod === 'weekly' ? 'Bu Hafta' : 'Bu Ay');
-        document.getElementById('kpi-fac1-output').innerHTML = `${(psum.fac1_output||0).toLocaleString('tr-TR')} <span>kapı</span>`;
-        document.getElementById('kpi-fac2-output').innerHTML = `${(psum.fac2_output||0).toLocaleString('tr-TR')} <span>kapı</span>`;
+        
+        const openDoors = psum.open_doors_total || ords.open_doors_total || 0;
+        const openCnt = ords.open || 0;
+        document.getElementById('kpi-open-orders').innerHTML = `${openDoors.toLocaleString('tr-TR')} <span>kapı</span>`;
+        document.getElementById('kpi-open-orders-sub').textContent = `${openCnt} Açık Sipariş Bekliyor →`;
+
+        const cntAllEl = document.getElementById('cnt-all');
+        if(cntAllEl) cntAllEl.textContent = `(${openCnt})`;
 
         // Workforce KPI
         document.getElementById('kpi-workforce').innerHTML = `${psum.today_active_workers || 0} <span style="font-size:14px;font-weight:600;color:#15803D;">personel</span>`;
@@ -3028,11 +2928,9 @@ async function loadDashboard() {
         document.getElementById('dashboard-machines-tbody').innerHTML = mstats.length === 0
             ? `<tr><td colspan="8" style="text-align:center;padding:24px;color:#64748B;">Bu dönemde makine çalışma kaydı yok.</td></tr>`
             : mstats.map(m => {
-                const isFac2 = m.facility_id === 'fac2';
-                const facName = isFac2 ? 'Alt Tesis' : 'Üst Tesis';
                 return `<tr>
                     <td style="font-weight:700;color:#0F172A;">${m.name}</td>
-                    <td><span class="badge ${isFac2?'badge-sky':'badge-red'}">${facName}</span></td>
+                    <td><span class="badge badge-slate">${m.stage || 'Hat'}</span></td>
                     <td style="text-align:center;font-weight:800;color:#E30713;">
                         <span class="px-2.5 py-1 bg-red-50 text-red-700 rounded-lg border border-red-200">${m.worker_count||1} Kişi</span>
                     </td>
@@ -3054,15 +2952,10 @@ async function loadDashboard() {
 // ── ORDERS ────────────────────────────────────────────────
 async function loadOrders() {
     try {
-        const r = await fetch(`/api/orders?facility_id=${currentFacility}`);
+        const r = await fetch('/api/orders');
         allOrders = await r.json();
-
-        const allR = await fetch('/api/orders?facility_id=all');
-        const allO = await allR.json();
-        document.getElementById('cnt-all').textContent = `(${allO.length})`;
-        document.getElementById('cnt-fac1').textContent = `(${allO.filter(o=>o.facility_id==='fac1').length})`;
-        document.getElementById('cnt-fac2').textContent = `(${allO.filter(o=>o.facility_id==='fac2').length})`;
-
+        const cntEl = document.getElementById('cnt-all');
+        if(cntEl) cntEl.textContent = `(${allOrders.filter(o=>o.status==='open').length})`;
         renderOrdersTable(allOrders);
         populateDailyOrderSelect();
     } catch(e) {}
@@ -3083,11 +2976,8 @@ function renderOrdersTable(orders) {
     if(!orders.length) { tb.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:#64748B;">Sipariş yok.</td></tr>`; return; }
     tb.innerHTML = orders.map(o => {
         const isDone = o.status==='done';
-        const isFac2 = o.facility_id==='fac2';
-        const facName = isFac2 ? 'Alt Tesis' : 'Üst Tesis';
         return `<tr>
             <td class="font-mono font-bold" style="font-size:12.5px;color:#0F172A;">${o.order_no}</td>
-            <td><span class="badge ${isFac2?'badge-sky':'badge-red'}">${facName}</span></td>
             <td style="font-weight:600;color:#0F172A;">${o.customer}</td>
             <td style="color:#64748B;font-size:11.5px;">${o.model}</td>
             <td style="text-align:center;font-weight:700;color:#0F172A;">${o.qty}</td>
@@ -3118,7 +3008,7 @@ function openOrderModal() {
 async function handleOrderSubmit(e) {
     e.preventDefault();
     const payload = {
-        facility_id: document.getElementById('o-facility').value,
+        facility_id: 'main',
         order_no: document.getElementById('o-no').value.trim(),
         customer: document.getElementById('o-customer').value.trim(),
         model: document.getElementById('o-model').value.trim(),
@@ -3312,11 +3202,8 @@ async function loadMachines() {
         const tb = document.getElementById('machines-tbody');
         if(!allMachines.length) { tb.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:32px;color:#64748B;">Makine kaydı yok.</td></tr>`; return; }
         tb.innerHTML = allMachines.map(m => {
-            const isFac2 = m.facility_id==='fac2';
-            const facName = isFac2 ? 'Alt Tesis' : 'Üst Tesis';
             return `<tr>
                 <td style="font-weight:700;color:#0F172A;">${m.name}</td>
-                <td><span class="badge ${isFac2?'badge-sky':'badge-red'}">${facName}</span></td>
                 <td style="color:#475569;font-weight:600;">${m.stage}</td>
                 <td style="text-align:center;font-weight:800;color:#E30713;">
                     <span class="px-2.5 py-0.5 bg-red-50 text-red-700 rounded-md border border-red-200">${m.default_workers||1} Kişi</span>
@@ -3343,7 +3230,7 @@ function openMachineModal() {
 async function handleMachineSubmit(e) {
     e.preventDefault();
     const payload = {
-        facility_id: document.getElementById('m-facility').value,
+        facility_id: 'main',
         name: document.getElementById('m-name').value.trim(),
         stage: document.getElementById('m-stage').value.trim(),
         default_workers: parseInt(document.getElementById('m-workers').value) || 1,
@@ -3684,7 +3571,7 @@ async function loadStages() {
                             <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:8px; padding:12px; box-shadow:0 1px 3px rgba(15,23,42,0.05); transition:transform 0.15s;" class="hover:border-slate-400">
                                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                                     <span style="font-weight:900; font-size:13px; color:#0F172A; font-family:monospace;">${o.order_code || o.order_id}</span>
-                                    <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:${o.facility==='fac1'?'#FEF2F2':'#F0F9FF'}; color:${o.facility==='fac1'?'#B91C1C':'#0369A1'};">${o.facility==='fac1'?'ÜST':'ALT'}</span>
+                                    <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:#F1F5F9; color:#475569;">FABRİKA</span>
                                 </div>
                                 <div style="font-weight:700; font-size:12px; color:#334155; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.customer || ''}">${o.customer || 'İsimsiz Müşteri'}</div>
                                 <div style="font-size:11px; color:#64748B; margin-top:2px;">${o.model || 'Model'} • <strong>${o.total_doors || o.doors || 0}</strong> kapı</div>
@@ -3850,7 +3737,7 @@ async function loadShipments() {
                 <tr>
                     <td style="font-weight:800; font-family:monospace; color:#0F172A;">${s.shipment_code}</td>
                     <td style="font-weight:700; color:#1E293B;">${s.customer || '—'}</td>
-                    <td><span class="badge ${s.facility==='fac1'?'badge-red':'badge-blue'}">${s.facility==='fac1'?'Üst Tesis':'Alt Tesis'}</span></td>
+                    
                     <td>
                         <div style="font-weight:700; color:#0F172A;">${s.plate || '—'}</div>
                         <div style="font-size:11px; color:#64748B;">${s.driver || '—'}</div>
@@ -3966,7 +3853,7 @@ function viewPackingList(sid) {
     document.getElementById('pk-code').innerText = s.shipment_code;
     document.getElementById('pk-date').innerText = `Tarih: ${s.shipment_date || new Date().toISOString().split('T')[0]}`;
     document.getElementById('pk-customer').innerText = s.customer || '—';
-    document.getElementById('pk-facility').innerText = `Tesis: ${s.facility === 'fac2' ? 'Alt Tesis (Tesis 2)' : 'Üst Tesis (Tesis 1)'}`;
+    document.getElementById('pk-facility').innerText = `Çıkış: ERGÜNBAŞ KANAT FABRİKASI`;
     document.getElementById('pk-notes').innerText = `Not / Adres: ${s.notes || 'Standart Fabrika Teslimi'}`;
     document.getElementById('pk-plate').innerText = s.plate || '—';
     document.getElementById('pk-driver').innerText = s.driver || '—';
