@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
-import json, os, uuid, math
+import json, os, uuid, math, re
 from datetime import datetime, date, timedelta
 
 app = FastAPI(title="ERGUNBAS Kanat Uretim, MRP & MES Sistemi")
@@ -101,6 +101,36 @@ def get_default_materials():
             "min_stock": 800.0,
             "unit_price": 170.0,
             "notes": "Standart WPC kompozit kaplama paneli (2 adet/kanat)"
+        },
+        "MAT_MDF_KCEVIZ": {
+            "id": "MAT_MDF_KCEVIZ",
+            "name": "WPC/Kompozit Yüzey Levhası - K.Ceviz (4mm)",
+            "category": "Yüzey Levhaları",
+            "unit": "Adet",
+            "current_stock": 2400.0,
+            "min_stock": 1000.0,
+            "unit_price": 185.0,
+            "notes": "Koyu ceviz desenli WPC kompozit yüzey paneli (2 adet/kanat)"
+        },
+        "MAT_MDF_COCO": {
+            "id": "MAT_MDF_COCO",
+            "name": "WPC/Kompozit Yüzey Levhası - Coco (4mm)",
+            "category": "Yüzey Levhaları",
+            "unit": "Adet",
+            "current_stock": 1800.0,
+            "min_stock": 800.0,
+            "unit_price": 180.0,
+            "notes": "Coco desenli WPC kompozit yüzey paneli (2 adet/kanat)"
+        },
+        "MAT_MDF_AKCAAGAC": {
+            "id": "MAT_MDF_AKCAAGAC",
+            "name": "WPC/Kompozit Yüzey Levhası - Akçaağaç (4mm)",
+            "category": "Yüzey Levhaları",
+            "unit": "Adet",
+            "current_stock": 1200.0,
+            "min_stock": 500.0,
+            "unit_price": 175.0,
+            "notes": "Akçaağaç desenli WPC kompozit yüzey paneli (2 adet/kanat)"
         },
         "MAT_KENAR_BANDI": {
             "id": "MAT_KENAR_BANDI",
@@ -531,6 +561,144 @@ def update_facility(fid: str, payload: dict):
     save_data(d)
     return {"status": "ok"}
 
+# ── PARAMETRIC SPECIFICATIONS & DYNAMIC ROUTING ───────────
+
+def parse_door_specs(model_str: str) -> dict:
+    m = (model_str or "").strip()
+    m_up = m.upper()
+
+    # 1. Parse Dimensions (En x Boy x Kalınlık)
+    dim_match = re.search(r'(\d{3,4})\s*[xX*]\s*(\d{3,4})(?:\s*[xX*]\s*(\d{2}))?', m)
+    if dim_match:
+        width = int(dim_match.group(1))
+        height = int(dim_match.group(2))
+        thick = int(dim_match.group(3)) if dim_match.group(3) else 40
+    else:
+        width, height, thick = 800, 2020, 40
+
+    # 2. Parse Model Code
+    parts = m.split()
+    model_code = parts[0] if parts else "ER100"
+
+    # 3. Determine if CNC / Fuga is required
+    flat_models = {"ER100", "ER200", "ER102", "ER103", "ER201", "ER210"}
+    has_fuga = (model_code not in flat_models) or ("FUGA" in m_up) or ("DERZ" in m_up)
+    has_cam = ("CAM" in m_up) or ("CAMLI" in m_up)
+
+    # 4. Parse Surface Color
+    color = "D.BEYAZ"
+    surface_mat_id = "MAT_MDF_BEYAZ"
+    if "K.CEVIZ" in m_up or "K. CEVIZ" in m_up or "CEVIZ" in m_up:
+        color = "K.CEVIZ"
+        surface_mat_id = "MAT_MDF_KCEVIZ"
+    elif "B.TEAK" in m_up or "B. TEAK" in m_up:
+        color = "B.TEAK"
+        surface_mat_id = "MAT_MDF_BTEAK"
+    elif "TEAK" in m_up:
+        color = "TEAK"
+        surface_mat_id = "MAT_MDF_TEAK"
+    elif "ANTRAS" in m_up:
+        color = "ANTRASİT"
+        surface_mat_id = "MAT_MDF_ANTRASIT"
+    elif "SOMONO" in m_up:
+        color = "SOMONO"
+        surface_mat_id = "MAT_MDF_SOMONO"
+    elif "COCO" in m_up:
+        color = "COCO"
+        surface_mat_id = "MAT_MDF_COCO"
+    elif "AKÇAAGAÇ" in m_up or "AKCAAGAC" in m_up:
+        color = "AKÇAAGAÇ"
+        surface_mat_id = "MAT_MDF_AKCAAGAC"
+    elif "D.BEYAZ" in m_up or "BEYAZ" in m_up:
+        color = "D.BEYAZ"
+        surface_mat_id = "MAT_MDF_BEYAZ"
+    else:
+        color = "STANDART"
+        surface_mat_id = "MAT_MDF_STD"
+
+    # 5. Core Type (Dolgu)
+    if "PETEK" in m_up:
+        core_type = "PETEK"
+        core_mat_id = "MAT_PETEK_KRAFT"
+    else:
+        core_type = "STRAFOR"
+        core_mat_id = "MAT_STRAFOR_EPS"
+
+    # 6. Parametric Calculations (Per Door)
+    boy_seren_m = (2.0 * height) / 1000.0
+    en_seren_m = (3.0 * max(100, width - 84)) / 1000.0
+    total_seren_m = round((boy_seren_m + en_seren_m) * 1.03, 2)
+    total_pvc_m = round((2.0 * (height + width) / 1000.0) * 1.02, 2)
+    door_area_m2 = (width / 1000.0) * (height / 1000.0)
+    total_glue_kg = round(2.0 * door_area_m2 * 0.22, 2)
+
+    # 7. Dynamic Routing Steps
+    routing_steps = [
+        {"step": 1, "station": "Seren Kesim", "machine": "Seren Kesim Tezgahı", "desc": f"Kompozit Seren Boy ({boy_seren_m:.2f}m) ve En ({en_seren_m:.2f}m) ebatlama ({total_seren_m}m)"},
+        {"step": 2, "station": "CNC Strafor / Dolgu", "machine": "CNC Strafor Kesim Makinesi", "desc": f"{core_type} iç dolgu net kesim ({width-84}x{height-84}mm)"},
+        {"step": 3, "station": "Pres", "machine": "Sıcak Pres Hattı", "desc": f"WPC Levha ({color}) ve kompozit seren karkas sıcak presleme"}
+    ]
+
+    current_step = 4
+    if has_fuga:
+        routing_steps.append({
+            "step": current_step,
+            "station": "CNC Yüzey Freze / Fuga",
+            "machine": "CNC Yüzey İşleme Merkezi",
+            "desc": f"Model {model_code} özel desen ve fuga kanal frezeleme"
+        })
+        current_step += 1
+
+    if has_cam:
+        routing_steps.append({
+            "step": current_step,
+            "station": "Cam Yeri Boşaltma",
+            "machine": "Torwegge Freze Tezgahı",
+            "desc": "Cam boşaltma alanı ve çıta frezeleme"
+        })
+        current_step += 1
+
+    routing_steps.append({
+        "step": current_step,
+        "station": "Homag",
+        "machine": "Homag Ebatlama & Kenar",
+        "desc": f"4 kenar kalibre ve PVC kenar bantlama ({total_pvc_m}m)"
+    })
+    current_step += 1
+
+    routing_steps.append({
+        "step": current_step,
+        "station": "Paketleme",
+        "machine": "Paketleme & Sevkiyat Hattı",
+        "desc": "Son kalite kontrol, koruma kartonu ve shrink paketleme"
+    })
+
+    return {
+        "model_code": model_code,
+        "has_fuga": has_fuga,
+        "has_cam": has_cam,
+        "color": color,
+        "surface_mat_id": surface_mat_id,
+        "core_type": core_type,
+        "core_mat_id": core_mat_id,
+        "width": width,
+        "height": height,
+        "thickness": thick,
+        "dim_str": f"{width}x{height}x{thick}",
+        "consumptions": {
+            "seren_m": total_seren_m,
+            "boy_seren_m": round(boy_seren_m, 2),
+            "en_seren_m": round(en_seren_m, 2),
+            "pvc_m": total_pvc_m,
+            "glue_kg": total_glue_kg,
+            "surface_qty": 2,
+            "core_qty": 1,
+            "takoz_qty": 2
+        },
+        "routing": routing_steps,
+        "routing_summary": " -> ".join(s["station"] for s in routing_steps)
+    }
+
 # ── ORDERS ────────────────────────────────────────────────
 
 @app.get("/api/orders")
@@ -579,10 +747,24 @@ def list_orders(facility_id: Optional[str] = None):
             order["spillover_status"] = "unknown"
             order["delay_days"] = 0
             
+        # Add parametric specifications and routing
+        order["specs"] = parse_door_specs(order.get("model", ""))
         res.append(order)
             
     res.sort(key=lambda x: x.get("created_at", ""), reverse=True)
     return res
+
+@app.get("/api/orders/{oid}/routing")
+def get_order_routing(oid: str):
+    d = load_data()
+    if oid not in d.get("orders", {}):
+        raise HTTPException(404, "Sipariş bulunamadı")
+    order = d["orders"][oid]
+    specs = parse_door_specs(order.get("model", ""))
+    return {
+        "order": order,
+        "specs": specs
+    }
 
 @app.post("/api/orders")
 def create_order(req: OrderCreate):
@@ -1332,11 +1514,36 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
 
     recipe_usage = {rid: {"id": rid, "name": r.get("name"), "doors": 0, "orders": 0} for rid, r in recipes.items()}
     
+    total_seren_needed = 0.0
+    total_pvc_needed = 0.0
+    cnc_doors_count = 0
+    flat_doors_count = 0
+    colors_agg = {}
+    dims_agg = {}
+
     for o in selected_orders:
         ono = o.get("order_no", o.get("id"))
         rem = o.get("remaining_qty", 0)
         m = (o.get("model") or "").upper()
         
+        # Parametric door specifications
+        specs = parse_door_specs(m)
+        seren_per_door = specs["consumptions"]["seren_m"]
+        pvc_per_door = specs["consumptions"]["pvc_m"]
+        glue_per_door = specs["consumptions"]["glue_kg"]
+        surface_mid = specs["surface_mat_id"]
+        core_mid = specs["core_mat_id"]
+
+        total_seren_needed += rem * seren_per_door
+        total_pvc_needed += rem * pvc_per_door
+        c_name = specs["color"]
+        colors_agg[c_name] = colors_agg.get(c_name, 0) + rem
+        d_name = specs["dim_str"]
+        dims_agg[d_name] = dims_agg.get(d_name, 0) + rem
+        
+        if specs["has_fuga"]: cnc_doors_count += rem
+        else: flat_doors_count += rem
+
         # Match to a dynamic recipe
         matched_recipe = None
         for r in patterned_recipes:
@@ -1354,20 +1561,53 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
                 recipe_usage[m_rid]["doors"] += rem
                 recipe_usage[m_rid]["orders"] += 1
                 
-            for item in matched_recipe.get("items", []):
-                mid = item.get("material_id")
-                qty = float(item.get("qty", 0.0))
-                waste = float(item.get("waste_pct", 0.0))
-                eff_qty = qty * (1.0 + (waste / 100.0))
-                total_item_needed = rem * eff_qty
-                
-                if mid in gross_req:
-                    gross_req[mid] += total_item_needed
-                    if ono not in affected_orders[mid]:
-                        affected_orders[mid].append(ono)
-                else:
-                    gross_req[mid] = total_item_needed
-                    affected_orders[mid] = [ono]
+        # 1. Kompozit Seren (Parametrik Boy/En Hesaplı)
+        if "MAT_SEREN_KOMP" in gross_req:
+            gross_req["MAT_SEREN_KOMP"] += rem * seren_per_door
+            if ono not in affected_orders["MAT_SEREN_KOMP"]: affected_orders["MAT_SEREN_KOMP"].append(ono)
+        else:
+            gross_req["MAT_SEREN_KOMP"] = rem * seren_per_door
+            affected_orders["MAT_SEREN_KOMP"] = [ono]
+
+        # 2. PVC Kenar Bandı (Parametrik Çevre Hesaplı)
+        if "MAT_KENAR_BANDI" in gross_req:
+            gross_req["MAT_KENAR_BANDI"] += rem * pvc_per_door
+            if ono not in affected_orders["MAT_KENAR_BANDI"]: affected_orders["MAT_KENAR_BANDI"].append(ono)
+        else:
+            gross_req["MAT_KENAR_BANDI"] = rem * pvc_per_door
+            affected_orders["MAT_KENAR_BANDI"] = [ono]
+
+        # 3. Poliüretan Pres Tutkalı (Alan Hesaplı)
+        if "MAT_TUTKAL_PRES" in gross_req:
+            gross_req["MAT_TUTKAL_PRES"] += rem * glue_per_door
+            if ono not in affected_orders["MAT_TUTKAL_PRES"]: affected_orders["MAT_TUTKAL_PRES"].append(ono)
+        else:
+            gross_req["MAT_TUTKAL_PRES"] = rem * glue_per_door
+            affected_orders["MAT_TUTKAL_PRES"] = [ono]
+
+        # 4. Kilit Destek Takozu (2 adet/kanat)
+        if "MAT_KILIT_TAKOZ" in gross_req:
+            gross_req["MAT_KILIT_TAKOZ"] += rem * 2.0
+            if ono not in affected_orders["MAT_KILIT_TAKOZ"]: affected_orders["MAT_KILIT_TAKOZ"].append(ono)
+        else:
+            gross_req["MAT_KILIT_TAKOZ"] = rem * 2.0
+            affected_orders["MAT_KILIT_TAKOZ"] = [ono]
+
+        # 5. İç Dolgu (Strafor veya Petek)
+        if core_mid in gross_req:
+            gross_req[core_mid] += rem * 1.0
+            if ono not in affected_orders[core_mid]: affected_orders[core_mid].append(ono)
+        else:
+            gross_req[core_mid] = rem * 1.0
+            affected_orders[core_mid] = [ono]
+
+        # 6. Yüzey Levhası (Sipariş Rengine Göre 2 Adet WPC/Kompozit Panel)
+        if surface_mid in gross_req:
+            gross_req[surface_mid] += rem * 2.0
+            if ono not in affected_orders[surface_mid]: affected_orders[surface_mid].append(ono)
+        else:
+            gross_req[surface_mid] = rem * 2.0
+            affected_orders[surface_mid] = [ono]
             
     requirements = []
     purchase_advice = []
@@ -1436,7 +1676,13 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
             "shortage_count": shortage_count,
             "critical_count": critical_count,
             "fulfillment_rate": fulfillment_rate,
-            "total_purchase_cost": round(total_purchase_cost, 2)
+            "total_purchase_cost": round(total_purchase_cost, 2),
+            "total_seren_meters": round(total_seren_needed, 1),
+            "total_pvc_meters": round(total_pvc_needed, 1),
+            "cnc_doors_count": cnc_doors_count,
+            "flat_doors_count": flat_doors_count,
+            "colors_breakdown": dict(sorted(colors_agg.items(), key=lambda x: -x[1])[:8]),
+            "dims_breakdown": dict(sorted(dims_agg.items(), key=lambda x: -x[1])[:8])
         },
         "requirements": requirements,
         "purchase_advice": purchase_advice,
