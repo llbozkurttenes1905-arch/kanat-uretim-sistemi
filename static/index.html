@@ -3162,7 +3162,8 @@ function openRecipeModal(rid = null) {
                 const mat = allMaterials.find(m => m.id === mid);
                 if(mat) {
                     let qty = 1;
-                    if(mid === 'MAT_SEREN_KOMP' || mid === 'MAT_KENAR_BANDI') qty = 5.8;
+                    if(mid === 'MAT_SEREN_KOMP') qty = 7.1; // 3.5 boy seren
+                    else if(mid === 'MAT_KENAR_BANDI') qty = 5.8;
                     else if(mid === 'MAT_TUTKAL_PRES') qty = 0.35;
                     else if(mid === 'MAT_KILIT_TAKOZ' || mid.startsWith('MAT_MDF')) qty = 2;
                     addRecipeItemRow({ material_id: mid, qty: qty, waste_pct: 0, notes: '' });

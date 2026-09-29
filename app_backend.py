@@ -20,7 +20,7 @@ def get_default_materials():
             "current_stock": 45000.0,
             "min_stock": 10000.0,
             "unit_price": 45.0,
-            "notes": "Boy ve En seren imalatında kullanılan karkas profili (1 kanat ≈ 5.8m)"
+            "notes": "Boy ve En seren imalatında kullanılan karkas profili (1 kanat = 3.5 boy seren ≈ 7.1m)"
         },
         "MAT_STRAFOR_EPS": {
             "id": "MAT_STRAFOR_EPS",
@@ -174,7 +174,7 @@ def get_default_recipes():
             "is_default": True,
             "description": "30 DNS EPS dolgulu, kompozit serenli norm kompozit kanat kapı.",
             "items": [
-                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres ve vakum tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol kompozit takviye takozları"},
@@ -190,7 +190,7 @@ def get_default_recipes():
             "is_default": False,
             "description": "Düz/lake beyaz preslenmiş MDF yüzey levhalı modern kanat kapı.",
             "items": [
-                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
@@ -206,7 +206,7 @@ def get_default_recipes():
             "is_default": False,
             "description": "Beyaz Teak preslenmiş yüzey kaplama panelli kanat kapı.",
             "items": [
-                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
@@ -222,7 +222,7 @@ def get_default_recipes():
             "is_default": False,
             "description": "Teak desenli WPC kompozit panelli kanat kapı.",
             "items": [
-                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
@@ -238,7 +238,7 @@ def get_default_recipes():
             "is_default": False,
             "description": "Antrasit mat yüzey kaplama panelli modern kanat kapı.",
             "items": [
-                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
@@ -254,7 +254,7 @@ def get_default_recipes():
             "is_default": False,
             "description": "Somono desenli özel dokulu yüzey kaplama panelli kanat kapı.",
             "items": [
-                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
@@ -270,7 +270,7 @@ def get_default_recipes():
             "is_default": False,
             "description": "Kraft kağıt petek dolgulu hafif ve mukavemetli iç oda kapı kanadı.",
             "items": [
-                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
@@ -632,16 +632,18 @@ def parse_door_specs(model_str: str, custom_color: str = None) -> dict:
         core_mat_id = "MAT_STRAFOR_EPS"
 
     # 6. Parametric Calculations (Per Door)
-    boy_seren_m = (2.0 * height) / 1000.0
-    en_seren_m = (3.0 * max(100, width - 84)) / 1000.0
-    total_seren_m = round((boy_seren_m + en_seren_m) * 1.03, 2)
+    seren_boy_count = 3.5  # Fabrika kuralı: Kapı başına 3.5 boy seren verilir
+    boy_m = height / 1000.0
+    total_seren_m = round(seren_boy_count * boy_m, 2)
+    boy_seren_m = round(2.0 * boy_m, 2)
+    en_seren_m = round(1.5 * boy_m, 2)
     total_pvc_m = round((2.0 * (height + width) / 1000.0) * 1.02, 2)
     door_area_m2 = (width / 1000.0) * (height / 1000.0)
     total_glue_kg = round(2.0 * door_area_m2 * 0.22, 2)
 
     # 7. Dynamic Routing Steps
     routing_steps = [
-        {"step": 1, "station": "Seren Kesim", "machine": "Seren Kesim Tezgahı", "desc": f"Kompozit Seren Boy ({boy_seren_m:.2f}m) ve En ({en_seren_m:.2f}m) ebatlama ({total_seren_m}m)"},
+        {"step": 1, "station": "Seren Kesim", "machine": "Seren Kesim Tezgahı", "desc": f"3.5 Boy Kompozit Seren ({total_seren_m}m) karkas ve en seren ebatlama"},
         {"step": 2, "station": "CNC Strafor / Dolgu", "machine": "CNC Strafor Kesim Makinesi", "desc": f"{core_type} iç dolgu net kesim ({width-84}x{height-84}mm)"},
         {"step": 3, "station": "Pres", "machine": "Sıcak Pres Hattı", "desc": f"WPC Levha ({color}) ve kompozit seren karkas sıcak presleme"}
     ]
@@ -693,6 +695,7 @@ def parse_door_specs(model_str: str, custom_color: str = None) -> dict:
         "thickness": thick,
         "dim_str": f"{width}x{height}x{thick}",
         "consumptions": {
+            "seren_boy_adet": 3.5,
             "seren_m": total_seren_m,
             "boy_seren_m": round(boy_seren_m, 2),
             "en_seren_m": round(en_seren_m, 2),
@@ -1726,7 +1729,7 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
         "recipes": all_recipes_list,
         "recipe_usage": recipe_usage,
         "bom_standards": [
-            {"component": "Seren & Karkas", "spec": "5.8 Metre / Kapı (Boy ve En Seren profili)"},
+            {"component": "Seren & Karkas", "spec": "3.5 Boy Seren / Kapı (~7.1 Metre Kompozit Seren)"},
             {"component": "İç Dolgu", "spec": "1 Adet EPS Strafor (veya Petek Kağıt Dolgu)"},
             {"component": "Yüzey Levhası", "spec": "2 Adet (Ön ve Arka Yüz MDF/WPC 4mm Levha)"},
             {"component": "PVC Kenar Bandı", "spec": "5.8 Metre / Kapı (1mm x 45mm Ebatlama Bandı)"},
