@@ -378,10 +378,7 @@ def delete_user(uid: str):
 
 @app.get("/api/facilities")
 def get_facilities():
-    d = load_data()
-    f1 = d.get("facilities", {}).get("fac1", {"id": "fac1", "name": "Üst Tesis (Ana Fabrika)"})
-    f2 = d.get("facilities", {}).get("fac2", {"id": "fac2", "name": "Alt Tesis (2. Fabrika)"})
-    return [f1, f2]
+    return [{"id": "main", "name": "ERGÜNBAŞ Kanat Fabrikası"}]
 
 @app.put("/api/facilities/{fid}")
 def update_facility(fid: str, payload: dict):

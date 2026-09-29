@@ -88,13 +88,13 @@
     },
     "MCH_ALT_4": {
       "id": "MCH_ALT_4",
-      "name": "Hızlı Paketleme Hattı",
+      "name": "Hızlı Paketleme Hattı 2",
       "facility_id": "main",
       "stage": "Paketleme",
       "capacity_per_hour": 40.0,
       "default_workers": 2,
       "status": "active",
-      "notes": "Alt tesis son kontrol ve paketleme"
+      "notes": "Son kalite kontrol ve shrink paketleme hattı"
     }
   },
   "orders": {
@@ -2585,7 +2585,7 @@
     "SIP-ALT-0208": {
       "id": "SIP-ALT-0208",
       "order_no": "689",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "DOĞUKAP ORMAN ÜRÜNLERİ SAN. TİC.",
       "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
       "qty": 50,
       "facility_id": "main",
@@ -2597,7 +2597,7 @@
     "SIP-ALT-0209": {
       "id": "SIP-ALT-0209",
       "order_no": "689",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "DOĞUKAP ORMAN ÜRÜNLERİ SAN. TİC.",
       "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 750X2020X40",
       "qty": 97,
       "facility_id": "main",
@@ -2609,7 +2609,7 @@
     "SIP-ALT-0210": {
       "id": "SIP-ALT-0210",
       "order_no": "689",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "DOĞUKAP ORMAN ÜRÜNLERİ SAN. TİC.",
       "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
       "qty": 87,
       "facility_id": "main",
@@ -2621,7 +2621,7 @@
     "SIP-ALT-0211": {
       "id": "SIP-ALT-0211",
       "order_no": "731",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "FAS PROJE & YAPI",
       "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 800X2050X40",
       "qty": 15,
       "facility_id": "main",
@@ -2633,7 +2633,7 @@
     "SIP-ALT-0212": {
       "id": "SIP-ALT-0212",
       "order_no": "1115",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "MEKADOOR KAPI SİSTEMLERİ",
       "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 800X2050X40",
       "qty": 1099,
       "facility_id": "main",
@@ -2645,7 +2645,7 @@
     "SIP-ALT-0213": {
       "id": "SIP-ALT-0213",
       "order_no": "1115",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "MEKADOOR KAPI SİSTEMLERİ",
       "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 800X2050X40",
       "qty": 1099,
       "facility_id": "main",
@@ -2657,7 +2657,7 @@
     "SIP-ALT-0214": {
       "id": "SIP-ALT-0214",
       "order_no": "1115",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "MEKADOOR KAPI SİSTEMLERİ",
       "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 900X2050X40",
       "qty": 200,
       "facility_id": "main",
@@ -2669,7 +2669,7 @@
     "SIP-ALT-0215": {
       "id": "SIP-ALT-0215",
       "order_no": "1115",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "MEKADOOR KAPI SİSTEMLERİ",
       "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 800X2050X40",
       "qty": 1470,
       "facility_id": "main",
@@ -2681,7 +2681,7 @@
     "SIP-ALT-0216": {
       "id": "SIP-ALT-0216",
       "order_no": "1115",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "MEKADOOR KAPI SİSTEMLERİ",
       "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 900X2050X40",
       "qty": 200,
       "facility_id": "main",
@@ -2693,7 +2693,7 @@
     "SIP-ALT-0217": {
       "id": "SIP-ALT-0217",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT B.TEAK KOM.SEREN STRAFOR 700X2050X40",
       "qty": 600,
       "facility_id": "main",
@@ -2705,7 +2705,7 @@
     "SIP-ALT-0218": {
       "id": "SIP-ALT-0218",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR 700X2050X",
       "qty": 537,
       "facility_id": "main",
@@ -2717,7 +2717,7 @@
     "SIP-ALT-0219": {
       "id": "SIP-ALT-0219",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 700X2050X40",
       "qty": 820,
       "facility_id": "main",
@@ -2729,7 +2729,7 @@
     "SIP-ALT-0220": {
       "id": "SIP-ALT-0220",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 700X2050X40",
       "qty": 410,
       "facility_id": "main",
@@ -2741,7 +2741,7 @@
     "SIP-ALT-0221": {
       "id": "SIP-ALT-0221",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT MIX TEAK KOM.SEREN STRAFOR 700X2050X40",
       "qty": 410,
       "facility_id": "main",
@@ -2753,7 +2753,7 @@
     "SIP-ALT-0222": {
       "id": "SIP-ALT-0222",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2050X40",
       "qty": 846,
       "facility_id": "main",
@@ -2765,7 +2765,7 @@
     "SIP-ALT-0223": {
       "id": "SIP-ALT-0223",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2050X40",
       "qty": 423,
       "facility_id": "main",
@@ -2777,7 +2777,7 @@
     "SIP-ALT-0224": {
       "id": "SIP-ALT-0224",
       "order_no": "1117",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "ÇAĞSAN PVC & KAPI SAN. TİC.",
       "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2050X40",
       "qty": 423,
       "facility_id": "main",
@@ -2789,7 +2789,7 @@
     "SIP-ALT-0225": {
       "id": "SIP-ALT-0225",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT B.TEAK KOM.SEREN STRAFOR 900X2050X40",
       "qty": 100,
       "facility_id": "main",
@@ -2801,7 +2801,7 @@
     "SIP-ALT-0226": {
       "id": "SIP-ALT-0226",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT M.B.TEAK KOM.SEREN STRAFOR 900X2050X40",
       "qty": 100,
       "facility_id": "main",
@@ -2813,7 +2813,7 @@
     "SIP-ALT-0227": {
       "id": "SIP-ALT-0227",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2050X4",
       "qty": 272,
       "facility_id": "main",
@@ -2825,7 +2825,7 @@
     "SIP-ALT-0228": {
       "id": "SIP-ALT-0228",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2050X4",
       "qty": 500,
       "facility_id": "main",
@@ -2837,7 +2837,7 @@
     "SIP-ALT-0229": {
       "id": "SIP-ALT-0229",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 700X2050X40",
       "qty": 506,
       "facility_id": "main",
@@ -2849,7 +2849,7 @@
     "SIP-ALT-0230": {
       "id": "SIP-ALT-0230",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 800X2050X40",
       "qty": 200,
       "facility_id": "main",
@@ -2861,7 +2861,7 @@
     "SIP-ALT-0231": {
       "id": "SIP-ALT-0231",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 800X2050X40",
       "qty": 600,
       "facility_id": "main",
@@ -2873,7 +2873,7 @@
     "SIP-ALT-0232": {
       "id": "SIP-ALT-0232",
       "order_no": "1118",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "BERAT YAPI & MİMARLIK",
       "model": "ER100 KANAT SOMONO KOM.SEREN STRAFOR 900X2050X40",
       "qty": 100,
       "facility_id": "main",
@@ -2885,7 +2885,7 @@
     "SIP-ALT-0233": {
       "id": "SIP-ALT-0233",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT AKÇAAGAÇ KOM.SEREN STRAFOR 700X2020X40",
       "qty": 4,
       "facility_id": "main",
@@ -2897,7 +2897,7 @@
     "SIP-ALT-0234": {
       "id": "SIP-ALT-0234",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT COCO KOM.SEREN STRAFOR 700X2020X40",
       "qty": 17,
       "facility_id": "main",
@@ -2909,7 +2909,7 @@
     "SIP-ALT-0235": {
       "id": "SIP-ALT-0235",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT COCO KOM.SEREN STRAFOR 900X2020X40",
       "qty": 10,
       "facility_id": "main",
@@ -2921,7 +2921,7 @@
     "SIP-ALT-0236": {
       "id": "SIP-ALT-0236",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 700X2020X40",
       "qty": 1,
       "facility_id": "main",
@@ -2933,7 +2933,7 @@
     "SIP-ALT-0237": {
       "id": "SIP-ALT-0237",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 700X2020X40",
       "qty": 12,
       "facility_id": "main",
@@ -2945,7 +2945,7 @@
     "SIP-ALT-0238": {
       "id": "SIP-ALT-0238",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 800X2020X40",
       "qty": 6,
       "facility_id": "main",
@@ -2957,7 +2957,7 @@
     "SIP-ALT-0239": {
       "id": "SIP-ALT-0239",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 900X2020X40",
       "qty": 10,
       "facility_id": "main",
@@ -2969,7 +2969,7 @@
     "SIP-ALT-0240": {
       "id": "SIP-ALT-0240",
       "order_no": "2060",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "OMAR ABU KALAM",
       "model": "ER100 KANAT TEAK KOM.SEREN STRAFOR 700X2020X40",
       "qty": 4,
       "facility_id": "main",
@@ -2981,7 +2981,7 @@
     "SIP-ALT-0241": {
       "id": "SIP-ALT-0241",
       "order_no": "2895",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
       "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR 900X2020x",
       "qty": 12,
       "facility_id": "main",
@@ -2993,7 +2993,7 @@
     "SIP-ALT-0242": {
       "id": "SIP-ALT-0242",
       "order_no": "2895",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
       "model": "ER100 KANAT MIX B.TEAK KOM.SEREN STRAFOR800X2020X4",
       "qty": 17,
       "facility_id": "main",
@@ -3005,7 +3005,7 @@
     "SIP-ALT-0243": {
       "id": "SIP-ALT-0243",
       "order_no": "2895",
-      "customer": "Alt Tesis Müşterisi",
+      "customer": "RAINBOW OFİS MOBİLYA VE İNŞAAT A.Ş.",
       "model": "ER100 KANAT MIX B.TEAK KOM.SERENSTRAFOR 700X2020X4",
       "qty": 2,
       "facility_id": "main",
@@ -3105,7 +3105,7 @@
           "work_hours": 7.5,
           "worker_count": 2,
           "operator": "Kanat Operatörü 1",
-          "notes": "Alt tesis paket"
+          "notes": "Paketleme tamamlandı"
         }
       ],
       "downtimes": [
@@ -3319,7 +3319,7 @@
       "machine_id": "",
       "machine_name": "Vakum Pres",
       "station": "Vakum Pres",
-      "facility_id": "fac1",
+      "facility_id": "main",
       "reason": "Yüzey Baloncuk / Folyo Hatası",
       "qty": 2,
       "scrap_qty": 2,
@@ -3336,13 +3336,30 @@
       "machine_id": "",
       "machine_name": "Vakum Pres",
       "station": "Vakum Pres",
-      "facility_id": "fac1",
+      "facility_id": "main",
       "reason": "Yüzey Baloncuk / Folyo Hatası",
       "qty": 2,
       "scrap_qty": 2,
       "operator": "Test Operator",
       "notes": "Test aciklama",
       "created_at": "2026-09-29T11:55:54.669787"
+    },
+    "SCR-20260929-125644": {
+      "id": "SCR-20260929-125644",
+      "date": "2026-09-29",
+      "order_id": "",
+      "order_code": "2026-TEST",
+      "order_no": "2026-TEST",
+      "machine_id": "",
+      "machine_name": "Vakum Pres",
+      "station": "Vakum Pres",
+      "facility_id": "fac1",
+      "reason": "Yüzey Baloncuk / Folyo Hatası",
+      "qty": 2,
+      "scrap_qty": 2,
+      "operator": "Test Operator",
+      "notes": "Test aciklama",
+      "created_at": "2026-09-29T12:56:44.440751"
     }
   },
   "shipments": {
@@ -3431,8 +3448,8 @@
       "destination": "",
       "ship_date": "2026-09-30",
       "shipment_date": "2026-09-30",
-      "facility": "fac1",
-      "facility_id": "fac1",
+      "facility": "main",
+      "facility_id": "main",
       "status": "Hazırlanıyor",
       "items": [],
       "doors": 25,
@@ -3454,6 +3471,29 @@
       "destination": "",
       "ship_date": "2026-09-30",
       "shipment_date": "2026-09-30",
+      "facility": "main",
+      "facility_id": "main",
+      "status": "Hazırlanıyor",
+      "items": [],
+      "doors": 25,
+      "total_doors": 25,
+      "notes": "Test sevk notu",
+      "created_at": "2026-09-29T11:55:54.608943"
+    },
+    "SEVK-20260929-1256": {
+      "id": "SEVK-20260929-1256",
+      "shipment_code": "SEVK-20260929-1256",
+      "shipment_no": "SEVK-20260929-1256",
+      "customer": "Test Musteri",
+      "order_id": "SIP-UST-0001",
+      "plate": "34 TEST 123",
+      "plate_no": "34 TEST 123",
+      "driver": "Ali Usta",
+      "driver_name": "Ali Usta",
+      "driver_phone": "",
+      "destination": "",
+      "ship_date": "2026-09-30",
+      "shipment_date": "2026-09-30",
       "facility": "fac1",
       "facility_id": "fac1",
       "status": "Hazırlanıyor",
@@ -3461,13 +3501,13 @@
       "doors": 25,
       "total_doors": 25,
       "notes": "Test sevk notu",
-      "created_at": "2026-09-29T11:55:54.608943"
+      "created_at": "2026-09-29T12:56:44.379120"
     }
   },
   "order_stages": {
     "SIP-UST-0001": {
       "order_id": "SIP-UST-0001",
-      "current_stage": "pres",
+      "current_stage": "homag",
       "qty_completed_in_stage": 0,
       "last_updated": "2026-09-29",
       "operator": "Operatör",
@@ -3492,6 +3532,14 @@
           "timestamp": "2026-09-29T11:55:54.529324",
           "stage": "pres",
           "stage_name": "Sıcak Pres Hattı",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        },
+        {
+          "timestamp": "2026-09-29T12:56:44.299138",
+          "stage": "homag",
+          "stage_name": "Homag Ebatlama & Kenar",
           "qty": 0,
           "operator": "",
           "notes": ""
