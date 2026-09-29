@@ -134,17 +134,135 @@ def get_default_materials():
         }
     }
 
+def get_default_recipes():
+    return {
+        "REC_KANAT_STRAFOR": {
+            "id": "REC_KANAT_STRAFOR",
+            "name": "Standart Straforlu Kanat Kapı",
+            "code": "KANAT-STRAFOR",
+            "model_pattern": "",
+            "is_default": True,
+            "description": "30 DNS EPS dolgulu, ladin serenli ve standart yüzeyli norm ahşap kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres ve vakum tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol ahşap takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Ön ve arka standart ahşap MDF yüzey levhaları"}
+            ]
+        },
+        "REC_KANAT_BEYAZ": {
+            "id": "REC_KANAT_BEYAZ",
+            "name": "D.Beyaz Lake Yüzeyli Kanat Kapı",
+            "code": "KANAT-BEYAZ",
+            "model_pattern": "BEYAZ",
+            "is_default": False,
+            "description": "Düz/lake beyaz preslenmiş MDF yüzey levhalı modern kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_BEYAZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "D.Beyaz lake yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_BTEAK": {
+            "id": "REC_KANAT_BTEAK",
+            "name": "Beyaz Teak Yüzeyli Kanat Kapı",
+            "code": "KANAT-BTEAK",
+            "model_pattern": "B.TEAK",
+            "is_default": False,
+            "description": "Beyaz Teak preslenmiş yüzey kaplama panelli kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_BTEAK", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "B.Teak yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_TEAK": {
+            "id": "REC_KANAT_TEAK",
+            "name": "Teak Ahşap Yüzeyli Kanat Kapı",
+            "code": "KANAT-TEAK",
+            "model_pattern": "TEAK",
+            "is_default": False,
+            "description": "Teak ahşap desenli kaplama panelli kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_TEAK", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Teak yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_ANTRASIT": {
+            "id": "REC_KANAT_ANTRASIT",
+            "name": "Antrasit Mat Kanat Kapı",
+            "code": "KANAT-ANTRASIT",
+            "model_pattern": "ANTRAS",
+            "is_default": False,
+            "description": "Antrasit mat yüzey kaplama panelli modern kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_ANTRASIT", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Antrasit mat yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_SOMONO": {
+            "id": "REC_KANAT_SOMONO",
+            "name": "Somono Desenli Kanat Kapı",
+            "code": "KANAT-SOMONO",
+            "model_pattern": "SOMONO",
+            "is_default": False,
+            "description": "Somono desenli özel dokulu yüzey kaplama panelli kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_SOMONO", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Somono desenli yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_PETEK": {
+            "id": "REC_KANAT_PETEK",
+            "name": "Kraft Petek Dolgulu Kanat Kapı",
+            "code": "KANAT-PETEK",
+            "model_pattern": "PETEK",
+            "is_default": False,
+            "description": "Kraft kağıt petek dolgulu hafif ve mukavemetli iç oda kapı kanadı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_PETEK_KRAFT", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kraft petek iç dolgu"},
+                {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Standart ahşap yüzey levhası (2 adet)"}
+            ]
+        }
+    }
+
 def load_data():
     if not os.path.exists(DATA_FILE):
         return {
             "orders": {}, "machines": {}, "daily_entries": {},
-            "materials": get_default_materials(), "scraps": {},
-            "shipments": {}, "order_stages": {}
+            "materials": get_default_materials(), "recipes": get_default_recipes(),
+            "scraps": {}, "shipments": {}, "order_stages": {}
         }
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         d = json.load(f)
         if "materials" not in d or not d["materials"]:
             d["materials"] = get_default_materials()
+        if "recipes" not in d or not d["recipes"]:
+            d["recipes"] = get_default_recipes()
         if "scraps" not in d: d["scraps"] = {}
         if "shipments" not in d: d["shipments"] = {}
         if "order_stages" not in d: d["order_stages"] = {}
@@ -260,6 +378,30 @@ class StockAdjustment(BaseModel):
     change_qty: float
     operation: str = "in"
     notes: Optional[str] = ""
+
+class RecipeItem(BaseModel):
+    material_id: str
+    qty: float
+    unit: Optional[str] = None
+    waste_pct: Optional[float] = 0.0
+    notes: Optional[str] = ""
+
+class RecipeCreate(BaseModel):
+    id: Optional[str] = None
+    name: str
+    code: Optional[str] = None
+    model_pattern: Optional[str] = ""
+    is_default: Optional[bool] = False
+    description: Optional[str] = ""
+    items: List[RecipeItem] = []
+
+class RecipeUpdate(BaseModel):
+    name: Optional[str] = None
+    code: Optional[str] = None
+    model_pattern: Optional[str] = None
+    is_default: Optional[bool] = None
+    description: Optional[str] = None
+    items: Optional[List[RecipeItem]] = None
 
 # NEW MODELS: Quality, Shipment, Stage, Schedule
 class ScrapCreate(BaseModel):
@@ -1039,6 +1181,93 @@ def adjust_stock(mid: str, req: StockAdjustment):
     save_data(d)
     return {"status": "ok", "current_stock": m["current_stock"]}
 
+# ── PRODUCT RECIPES (BOM) ─────────────────────────────────
+
+@app.get("/api/mrp/recipes")
+def list_recipes():
+    d = load_data()
+    recipes = d.get("recipes", {})
+    materials = d.get("materials", {})
+    res = []
+    for rid, r in recipes.items():
+        r_copy = dict(r)
+        total_unit_cost = 0.0
+        enriched_items = []
+        for item in r.get("items", []):
+            mid = item.get("material_id")
+            mat = materials.get(mid, {})
+            uprice = float(mat.get("unit_price", 0.0))
+            qty = float(item.get("qty", 0.0))
+            waste = float(item.get("waste_pct", 0.0))
+            eff_qty = qty * (1.0 + (waste / 100.0))
+            item_cost = round(eff_qty * uprice, 2)
+            total_unit_cost += item_cost
+            enriched_items.append({
+                "material_id": mid,
+                "material_name": mat.get("name", mid),
+                "unit": item.get("unit") or mat.get("unit", "Adet"),
+                "qty": qty,
+                "waste_pct": waste,
+                "effective_qty": round(eff_qty, 3),
+                "unit_price": uprice,
+                "total_cost": item_cost,
+                "notes": item.get("notes", "")
+            })
+        r_copy["items"] = enriched_items
+        r_copy["unit_cost"] = round(total_unit_cost, 2)
+        res.append(r_copy)
+    res.sort(key=lambda x: (not x.get("is_default", False), x.get("name", "")))
+    return res
+
+@app.post("/api/mrp/recipes")
+def create_recipe(req: RecipeCreate):
+    d = load_data()
+    rid = req.id or ("REC_" + str(uuid.uuid4())[:8].upper())
+    if "recipes" not in d: d["recipes"] = {}
+    if rid in d["recipes"]: raise HTTPException(400, "Bu ürün/reçete kodu zaten mevcut")
+    
+    if req.is_default:
+        for r in d["recipes"].values():
+            r["is_default"] = False
+            
+    d["recipes"][rid] = {
+        "id": rid,
+        "name": req.name,
+        "code": req.code or rid,
+        "model_pattern": req.model_pattern or "",
+        "is_default": bool(req.is_default),
+        "description": req.description or "",
+        "items": [item.dict() for item in req.items]
+    }
+    save_data(d)
+    return {"id": rid, "status": "ok"}
+
+@app.put("/api/mrp/recipes/{rid}")
+def update_recipe(rid: str, req: RecipeUpdate):
+    d = load_data()
+    if rid not in d.get("recipes", {}): raise HTTPException(404, "Ürün/reçete bulunamadı")
+    if req.is_default:
+        for other_id, r in d["recipes"].items():
+            if other_id != rid:
+                r["is_default"] = False
+    target = d["recipes"][rid]
+    update_data = req.dict(exclude_none=True)
+    if "items" in update_data:
+        update_data["items"] = [it if isinstance(it, dict) else it.dict() for it in req.items]
+    target.update(update_data)
+    save_data(d)
+    return {"status": "ok"}
+
+@app.delete("/api/mrp/recipes/{rid}")
+def delete_recipe(rid: str):
+    d = load_data()
+    if rid not in d.get("recipes", {}): raise HTTPException(404, "Ürün/reçete bulunamadı")
+    if len(d["recipes"]) <= 1:
+        raise HTTPException(400, "Sistemde en az 1 adet ürün reçetesi bulunmalıdır.")
+    del d["recipes"][rid]
+    save_data(d)
+    return {"status": "ok"}
+
 @app.get("/api/mrp/requirements")
 def mrp_requirements_alias(facility_id: Optional[str] = "all", time_scope: Optional[str] = "all_open"):
     return calculate_mrp(facility_id=facility_id, time_scope=time_scope)
@@ -1049,6 +1278,10 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
     orders = d.get("orders", {})
     daily = d.get("daily_entries", {})
     materials = d.get("materials", {})
+    recipes = d.get("recipes", {})
+    if not recipes:
+        recipes = get_default_recipes()
+
     today_dt = date.today()
     
     selected_orders = []
@@ -1083,47 +1316,58 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
     
     gross_req = {mid: 0.0 for mid in materials.keys()}
     affected_orders = {mid: [] for mid in materials.keys()}
+
+    # Identify default recipe
+    default_recipe = None
+    for r in recipes.values():
+        if r.get("is_default"):
+            default_recipe = r
+            break
+    if not default_recipe and recipes:
+        default_recipe = next(iter(recipes.values()))
+
+    # Sort patterned recipes by pattern length descending for most specific matching
+    patterned_recipes = [r for r in recipes.values() if r.get("model_pattern", "").strip()]
+    patterned_recipes.sort(key=lambda x: len(x.get("model_pattern", "")), reverse=True)
+
+    recipe_usage = {rid: {"id": rid, "name": r.get("name"), "doors": 0, "orders": 0} for rid, r in recipes.items()}
     
     for o in selected_orders:
         ono = o.get("order_no", o.get("id"))
         rem = o.get("remaining_qty", 0)
-        m = o.get("model", "").upper()
+        m = (o.get("model") or "").upper()
         
-        if "MAT_SEREN_KOMP" in gross_req:
-            gross_req["MAT_SEREN_KOMP"] += rem * 5.8
-            affected_orders["MAT_SEREN_KOMP"].append(ono)
-        if "MAT_KENAR_BANDI" in gross_req:
-            gross_req["MAT_KENAR_BANDI"] += rem * 5.8
-            affected_orders["MAT_KENAR_BANDI"].append(ono)
-        if "MAT_TUTKAL_PRES" in gross_req:
-            gross_req["MAT_TUTKAL_PRES"] += rem * 0.35
-            affected_orders["MAT_TUTKAL_PRES"].append(ono)
-        if "MAT_KILIT_TAKOZ" in gross_req:
-            gross_req["MAT_KILIT_TAKOZ"] += rem * 2
-            affected_orders["MAT_KILIT_TAKOZ"].append(ono)
+        # Match to a dynamic recipe
+        matched_recipe = None
+        for r in patterned_recipes:
+            pat = r.get("model_pattern", "").upper()
+            if pat and pat in m:
+                matched_recipe = r
+                break
         
-        if "PETEK" in m:
-            if "MAT_PETEK_KRAFT" in gross_req:
-                gross_req["MAT_PETEK_KRAFT"] += rem * 1
-                affected_orders["MAT_PETEK_KRAFT"].append(ono)
-        else:
-            if "MAT_STRAFOR_EPS" in gross_req:
-                gross_req["MAT_STRAFOR_EPS"] += rem * 1
-                affected_orders["MAT_STRAFOR_EPS"].append(ono)
-            
-        skin_mat = "MAT_MDF_STD"
-        if "B.TEAK" in m or "B. TEAK" in m: skin_mat = "MAT_MDF_BTEAK"
-        elif "TEAK" in m: skin_mat = "MAT_MDF_TEAK"
-        elif "BEYAZ" in m: skin_mat = "MAT_MDF_BEYAZ"
-        elif "ANTRAS" in m: skin_mat = "MAT_MDF_ANTRASIT"
-        elif "SOMONO" in m: skin_mat = "MAT_MDF_SOMONO"
-            
-        if skin_mat in gross_req:
-            gross_req[skin_mat] += rem * 2
-            affected_orders[skin_mat].append(ono)
-        elif "MAT_MDF_STD" in gross_req:
-            gross_req["MAT_MDF_STD"] += rem * 2
-            affected_orders["MAT_MDF_STD"].append(ono)
+        if not matched_recipe:
+            matched_recipe = default_recipe
+
+        if matched_recipe:
+            m_rid = matched_recipe.get("id")
+            if m_rid in recipe_usage:
+                recipe_usage[m_rid]["doors"] += rem
+                recipe_usage[m_rid]["orders"] += 1
+                
+            for item in matched_recipe.get("items", []):
+                mid = item.get("material_id")
+                qty = float(item.get("qty", 0.0))
+                waste = float(item.get("waste_pct", 0.0))
+                eff_qty = qty * (1.0 + (waste / 100.0))
+                total_item_needed = rem * eff_qty
+                
+                if mid in gross_req:
+                    gross_req[mid] += total_item_needed
+                    if ono not in affected_orders[mid]:
+                        affected_orders[mid].append(ono)
+                else:
+                    gross_req[mid] = total_item_needed
+                    affected_orders[mid] = [ono]
             
     requirements = []
     purchase_advice = []
@@ -1179,6 +1423,9 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
     
     fulfillment_rate = round(((len(requirements) - shortage_count) / len(requirements) * 100), 1) if requirements else 100.0
     
+    # Calculate enriched recipes for response
+    all_recipes_list = list_recipes()
+
     return {
         "summary": {
             "facility_id": facility_id,
@@ -1193,6 +1440,8 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
         },
         "requirements": requirements,
         "purchase_advice": purchase_advice,
+        "recipes": all_recipes_list,
+        "recipe_usage": recipe_usage,
         "bom_standards": [
             {"component": "Seren & Karkas", "spec": "5.8 Metre / Kapı (Boy ve En Seren profili)"},
             {"component": "İç Dolgu", "spec": "1 Adet EPS Strafor (veya Petek Kağıt Dolgu)"},

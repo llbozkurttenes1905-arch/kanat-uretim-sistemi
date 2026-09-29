@@ -3595,5 +3595,371 @@
       "last_updated": "2026-09-29",
       "operator": "Kanat Operatörü 1"
     }
+  },
+  "recipes": {
+    "REC_KANAT_STRAFOR": {
+      "id": "REC_KANAT_STRAFOR",
+      "name": "Standart Straforlu Kanat Kapı",
+      "code": "KANAT-STRAFOR",
+      "model_pattern": "",
+      "is_default": true,
+      "description": "30 DNS EPS dolgulu, ladin serenli ve standart yüzeyli norm ahşap kanat kapı.",
+      "items": [
+        {
+          "material_id": "MAT_SEREN_KOMP",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "Boy ve En seren çerçevesi"
+        },
+        {
+          "material_id": "MAT_KENAR_BANDI",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "4 kenar PVC koruma bandı"
+        },
+        {
+          "material_id": "MAT_TUTKAL_PRES",
+          "qty": 0.35,
+          "unit": "Kg",
+          "waste_pct": 0.0,
+          "notes": "Sıcak pres ve vakum tutkalı"
+        },
+        {
+          "material_id": "MAT_KILIT_TAKOZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kilit ve kol ahşap takviye takozları"
+        },
+        {
+          "material_id": "MAT_STRAFOR_EPS",
+          "qty": 1.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "30 DNS EPS dolgu straforu"
+        },
+        {
+          "material_id": "MAT_MDF_STD",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Ön ve arka standart ahşap MDF yüzey levhaları"
+        }
+      ]
+    },
+    "REC_KANAT_BEYAZ": {
+      "id": "REC_KANAT_BEYAZ",
+      "name": "D.Beyaz Lake Yüzeyli Kanat Kapı",
+      "code": "KANAT-BEYAZ",
+      "model_pattern": "BEYAZ",
+      "is_default": false,
+      "description": "Düz/lake beyaz preslenmiş MDF yüzey levhalı modern kanat kapı.",
+      "items": [
+        {
+          "material_id": "MAT_SEREN_KOMP",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "Boy ve En seren çerçevesi"
+        },
+        {
+          "material_id": "MAT_KENAR_BANDI",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "4 kenar PVC koruma bandı"
+        },
+        {
+          "material_id": "MAT_TUTKAL_PRES",
+          "qty": 0.35,
+          "unit": "Kg",
+          "waste_pct": 0.0,
+          "notes": "Sıcak pres tutkalı"
+        },
+        {
+          "material_id": "MAT_KILIT_TAKOZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kilit ve kol takviye takozları"
+        },
+        {
+          "material_id": "MAT_STRAFOR_EPS",
+          "qty": 1.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "30 DNS EPS dolgu straforu"
+        },
+        {
+          "material_id": "MAT_MDF_BEYAZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "D.Beyaz lake yüzey levhası (2 adet)"
+        }
+      ]
+    },
+    "REC_KANAT_BTEAK": {
+      "id": "REC_KANAT_BTEAK",
+      "name": "Beyaz Teak Yüzeyli Kanat Kapı",
+      "code": "KANAT-BTEAK",
+      "model_pattern": "B.TEAK",
+      "is_default": false,
+      "description": "Beyaz Teak preslenmiş yüzey kaplama panelli kanat kapı.",
+      "items": [
+        {
+          "material_id": "MAT_SEREN_KOMP",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "Boy ve En seren çerçevesi"
+        },
+        {
+          "material_id": "MAT_KENAR_BANDI",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "4 kenar PVC koruma bandı"
+        },
+        {
+          "material_id": "MAT_TUTKAL_PRES",
+          "qty": 0.35,
+          "unit": "Kg",
+          "waste_pct": 0.0,
+          "notes": "Sıcak pres tutkalı"
+        },
+        {
+          "material_id": "MAT_KILIT_TAKOZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kilit ve kol takviye takozları"
+        },
+        {
+          "material_id": "MAT_STRAFOR_EPS",
+          "qty": 1.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "30 DNS EPS dolgu straforu"
+        },
+        {
+          "material_id": "MAT_MDF_BTEAK",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "B.Teak yüzey levhası (2 adet)"
+        }
+      ]
+    },
+    "REC_KANAT_TEAK": {
+      "id": "REC_KANAT_TEAK",
+      "name": "Teak Ahşap Yüzeyli Kanat Kapı",
+      "code": "KANAT-TEAK",
+      "model_pattern": "TEAK",
+      "is_default": false,
+      "description": "Teak ahşap desenli kaplama panelli kanat kapı.",
+      "items": [
+        {
+          "material_id": "MAT_SEREN_KOMP",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "Boy ve En seren çerçevesi"
+        },
+        {
+          "material_id": "MAT_KENAR_BANDI",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "4 kenar PVC koruma bandı"
+        },
+        {
+          "material_id": "MAT_TUTKAL_PRES",
+          "qty": 0.35,
+          "unit": "Kg",
+          "waste_pct": 0.0,
+          "notes": "Sıcak pres tutkalı"
+        },
+        {
+          "material_id": "MAT_KILIT_TAKOZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kilit ve kol takviye takozları"
+        },
+        {
+          "material_id": "MAT_STRAFOR_EPS",
+          "qty": 1.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "30 DNS EPS dolgu straforu"
+        },
+        {
+          "material_id": "MAT_MDF_TEAK",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Teak yüzey levhası (2 adet)"
+        }
+      ]
+    },
+    "REC_KANAT_ANTRASIT": {
+      "id": "REC_KANAT_ANTRASIT",
+      "name": "Antrasit Mat Kanat Kapı",
+      "code": "KANAT-ANTRASIT",
+      "model_pattern": "ANTRAS",
+      "is_default": false,
+      "description": "Antrasit mat yüzey kaplama panelli modern kanat kapı.",
+      "items": [
+        {
+          "material_id": "MAT_SEREN_KOMP",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "Boy ve En seren çerçevesi"
+        },
+        {
+          "material_id": "MAT_KENAR_BANDI",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "4 kenar PVC koruma bandı"
+        },
+        {
+          "material_id": "MAT_TUTKAL_PRES",
+          "qty": 0.35,
+          "unit": "Kg",
+          "waste_pct": 0.0,
+          "notes": "Sıcak pres tutkalı"
+        },
+        {
+          "material_id": "MAT_KILIT_TAKOZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kilit ve kol takviye takozları"
+        },
+        {
+          "material_id": "MAT_STRAFOR_EPS",
+          "qty": 1.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "30 DNS EPS dolgu straforu"
+        },
+        {
+          "material_id": "MAT_MDF_ANTRASIT",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Antrasit mat yüzey levhası (2 adet)"
+        }
+      ]
+    },
+    "REC_KANAT_SOMONO": {
+      "id": "REC_KANAT_SOMONO",
+      "name": "Somono Desenli Kanat Kapı",
+      "code": "KANAT-SOMONO",
+      "model_pattern": "SOMONO",
+      "is_default": false,
+      "description": "Somono desenli özel dokulu yüzey kaplama panelli kanat kapı.",
+      "items": [
+        {
+          "material_id": "MAT_SEREN_KOMP",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "Boy ve En seren çerçevesi"
+        },
+        {
+          "material_id": "MAT_KENAR_BANDI",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "4 kenar PVC koruma bandı"
+        },
+        {
+          "material_id": "MAT_TUTKAL_PRES",
+          "qty": 0.35,
+          "unit": "Kg",
+          "waste_pct": 0.0,
+          "notes": "Sıcak pres tutkalı"
+        },
+        {
+          "material_id": "MAT_KILIT_TAKOZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kilit ve kol takviye takozları"
+        },
+        {
+          "material_id": "MAT_STRAFOR_EPS",
+          "qty": 1.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "30 DNS EPS dolgu straforu"
+        },
+        {
+          "material_id": "MAT_MDF_SOMONO",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Somono desenli yüzey levhası (2 adet)"
+        }
+      ]
+    },
+    "REC_KANAT_PETEK": {
+      "id": "REC_KANAT_PETEK",
+      "name": "Kraft Petek Dolgulu Kanat Kapı",
+      "code": "KANAT-PETEK",
+      "model_pattern": "PETEK",
+      "is_default": false,
+      "description": "Kraft kağıt petek dolgulu hafif ve mukavemetli iç oda kapı kanadı.",
+      "items": [
+        {
+          "material_id": "MAT_SEREN_KOMP",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "Boy ve En seren çerçevesi"
+        },
+        {
+          "material_id": "MAT_KENAR_BANDI",
+          "qty": 5.8,
+          "unit": "Metre",
+          "waste_pct": 0.0,
+          "notes": "4 kenar PVC koruma bandı"
+        },
+        {
+          "material_id": "MAT_TUTKAL_PRES",
+          "qty": 0.35,
+          "unit": "Kg",
+          "waste_pct": 0.0,
+          "notes": "Sıcak pres tutkalı"
+        },
+        {
+          "material_id": "MAT_KILIT_TAKOZ",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kilit ve kol takviye takozları"
+        },
+        {
+          "material_id": "MAT_PETEK_KRAFT",
+          "qty": 1.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Kraft petek iç dolgu"
+        },
+        {
+          "material_id": "MAT_MDF_STD",
+          "qty": 2.0,
+          "unit": "Adet",
+          "waste_pct": 0.0,
+          "notes": "Standart ahşap yüzey levhası (2 adet)"
+        }
+      ]
+    }
   }
 }
