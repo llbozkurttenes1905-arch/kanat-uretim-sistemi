@@ -1073,6 +1073,25 @@ def advance_stage(req: StageAdvance):
         "notes": req.notes
     })
     
+    # Eğer son aşamaya (Paketleme) ulaştıysa, Günlük Giriş sekmesine otomatik üretim kaydı düş
+    if target == "paket":
+        order = d["orders"].get(oid, {})
+        today_str = date.today().isoformat()
+        if today_str not in d.setdefault("daily_entries", {}):
+            d["daily_entries"][today_str] = {"date": today_str, "order_entries": [], "machine_entries": [], "downtimes": []}
+        
+        existing = next((oe for oe in d["daily_entries"][today_str]["order_entries"] if oe.get("order_id") == oid), None)
+        if not existing:
+            d["daily_entries"][today_str]["order_entries"].append({
+                "order_id": oid,
+                "order_no": order.get("order_no", oid),
+                "customer": order.get("customer", ""),
+                "model": order.get("model", ""),
+                "output_qty": order.get("qty", 0),
+                "shift": "Gündüz",
+                "notes": "QR/Barkod ile otomatik tamamlandı"
+            })
+    
     save_data(d)
     return {"status": "ok", "success": True, "new_stage": target, "new_stage_name": STAGE_NAMES.get(target, target)}
 
