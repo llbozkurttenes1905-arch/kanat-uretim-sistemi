@@ -709,6 +709,78 @@ def update_facility(fid: str, payload: dict):
     save_data(d)
     return {"status": "ok"}
 
+# ── ERDOOR RESMİ KAPI MODELLERİ & RENKLERİ KATALOĞU ───────────
+# Kaynak: "ERDOOR ÜRETİLEN KAPILAR 24.06.2026 (1).docx" - Hazırlayan: Üretim Yönetmeni Ufuk Duman
+
+ERDOOR_MODELS_CATALOG = [
+    # DAPHNE SERİSİ
+    {"code": "ER100", "name": "ER100 Düz Kanat", "series": "Daphne Serisi", "has_fuga": False, "has_cam": False},
+    {"code": "ER101", "name": "ER101 Camlı Model", "series": "Daphne Serisi", "has_fuga": False, "has_cam": True},
+    {"code": "ER102", "name": "ER102 Çift Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER103", "name": "ER103 3 Camlı Model", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER200", "name": "ER200 Düz Model", "series": "Daphne Serisi", "has_fuga": False, "has_cam": False},
+    {"code": "ER201", "name": "ER201 Camlı Model", "series": "Daphne Serisi", "has_fuga": False, "has_cam": True},
+    {"code": "ER210", "name": "ER210 Yatay Çizgili", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER220", "name": "ER220 Desenli Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER230", "name": "ER230 Modern Çizgi", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER250", "name": "ER250 CNC İşlemeli", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER260", "name": "ER260 Yatay Eşit Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER261", "name": "ER261 Camlı Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER280", "name": "ER280 Özel CNC Hatlı", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER300", "name": "ER300 Geniş Fuga Çizgili", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER301", "name": "ER301 Camlı Geniş Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER330", "name": "ER330 Özel Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER400", "name": "ER400 CNC Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER500", "name": "ER500 Blok CNC", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER510", "name": "ER510 3 Yatay Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER511", "name": "ER511 3 Camlı Model", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER600", "name": "ER600 Çoklu Çizgi Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER601", "name": "ER601 Boy Camlı Model", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER602", "name": "ER602 İkili Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER610", "name": "ER610 Dikey Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER620", "name": "ER620 Yatay-Dikey Kesişen", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER700", "name": "ER700 Çerçeve Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER800", "name": "ER800 Modern Çift Hat", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER900", "name": "ER900 Geometrik CNC", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER901", "name": "ER901 Camlı Geometrik", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER930", "name": "ER930 Asimetrik Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER931", "name": "ER931 Camlı Asimetrik", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER940", "name": "ER940 4 Yatay Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER941", "name": "ER941 Camlı 4 Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER950", "name": "ER950 5 Yatay Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER951", "name": "ER951 Camlı 5 Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    {"code": "ER960", "name": "ER960 Blok Fuga", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1004", "name": "ER1004 Daphne Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1005", "name": "ER1005 Daphne Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1006", "name": "ER1006 Daphne Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1007", "name": "ER1007 Daphne Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1008", "name": "ER1008 Daphne Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1012", "name": "ER1012 Daphne Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1014", "name": "ER1014 Daphne Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER1014 ÖZEL", "name": "ER1014 ÖZEL Tasarım", "series": "Daphne Serisi", "has_fuga": True, "has_cam": True},
+    # DAPHNE ÖZEL MODELLER
+    {"code": "ER520", "name": "ER520 (Eski EROZL020)", "series": "Daphne Özel Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER540", "name": "ER540 (Eski EROZL011)", "series": "Daphne Özel Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER550", "name": "ER550 (Eski EROZL001)", "series": "Daphne Özel Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER560", "name": "ER560 (Eski EROZL013)", "series": "Daphne Özel Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER570", "name": "ER570 (Eski EROZL017)", "series": "Daphne Özel Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER590", "name": "ER590 (Eski EROZL009)", "series": "Daphne Özel Serisi", "has_fuga": True, "has_cam": False},
+    # TITUS SERİSİ
+    {"code": "ER5000", "name": "ER5000 Titus Standart", "series": "Titus Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER5012", "name": "ER5012 Titus CNC", "series": "Titus Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER5014", "name": "ER5014 Titus CNC", "series": "Titus Serisi", "has_fuga": True, "has_cam": False},
+    {"code": "ER5020", "name": "ER5020 Titus CNC", "series": "Titus Serisi", "has_fuga": True, "has_cam": False}
+]
+
+ERDOOR_COLORS_CATALOG = {
+    "KOYU CEVİZ": {"hex": "#4D3322", "name": "Koyu Ceviz", "code": "K.CEVİZ"},
+    "AKÇAAĞAÇ": {"hex": "#D4B185", "name": "Akçaağaç", "code": "AKÇAAĞAÇ"},
+    "DİŞBUDAK BEYAZ": {"hex": "#F1F5F9", "name": "Dişbudak Beyaz", "code": "D.BEYAZ"},
+    "TİK BEYAZ": {"hex": "#E2D9CC", "name": "Tik Beyaz / Beyaz Tik", "code": "B.TEAK"},
+    "TİK ANTRASİT": {"hex": "#2F3640", "name": "Tik Antrasit / Antrasit", "code": "ANTRASİT"},
+    "COCO MAURON": {"hex": "#3E2723", "name": "Coco Mauron", "code": "COCO"}
+}
+
 # ── PARAMETRIC SPECIFICATIONS & DYNAMIC ROUTING ───────────
 
 def parse_door_specs(model_str: str, custom_color: str = None) -> dict:
@@ -727,48 +799,44 @@ def parse_door_specs(model_str: str, custom_color: str = None) -> dict:
     # 2. Parse Model Code
     parts = m.split()
     model_code = parts[0] if parts else "ER100"
+    cat_match = next((item for item in ERDOOR_MODELS_CATALOG if item["code"] == model_code), None)
 
     # 3. Determine if CNC / Fuga is required
-    flat_models = {"ER100", "ER200", "ER102", "ER103", "ER201", "ER210"}
-    has_fuga = (model_code not in flat_models) or ("FUGA" in m_up) or ("DERZ" in m_up)
-    has_cam = ("CAM" in m_up) or ("CAMLI" in m_up)
+    flat_models = {"ER100", "ER200"}
+    if cat_match:
+        has_fuga = cat_match["has_fuga"] or ("FUGA" in m_up) or ("DERZ" in m_up)
+        has_cam = cat_match["has_cam"] or ("CAM" in m_up) or ("CAMLI" in m_up)
+    else:
+        has_fuga = (model_code not in flat_models) or ("FUGA" in m_up) or ("DERZ" in m_up)
+        has_cam = ("CAM" in m_up) or ("CAMLI" in m_up)
 
-    # 4. Parse Surface Color
+    # 4. Parse Surface Color (Erdoor Resmi Renkleri)
     if custom_color and custom_color.strip():
         color = custom_color.strip().upper()
         surface_mat_id = "MAT_MDF_STD"
-    elif "K.CEVIZ" in m_up or "K. CEVIZ" in m_up or "K.CEVİZ" in m_up or "CEVIZ" in m_up or "CEVİZ" in m_up:
-        color = "K.CEVİZ"
+    elif any(k in m_up for k in ["K.CEVIZ", "K. CEVIZ", "K.CEVİZ", "KOYU CEVIZ", "KOYU CEVİZ", "CEVIZ", "CEVİZ"]):
+        color = "KOYU CEVİZ"
         surface_mat_id = "MAT_MDF_KCEVIZ"
-    elif "B.TEAK" in m_up or "B. TEAK" in m_up:
-        color = "B.TEAK"
-        surface_mat_id = "MAT_MDF_BTEAK"
-    elif "TEAK" in m_up or "TİK" in m_up or "TIK" in m_up:
-        color = "TEAK"
-        surface_mat_id = "MAT_MDF_TEAK"
-    elif "ANTRAS" in m_up:
-        color = "ANTRASİT"
-        surface_mat_id = "MAT_MDF_ANTRASIT"
-    elif "SOMONO" in m_up or "SOMON" in m_up:
-        color = "SOMONO"
-        surface_mat_id = "MAT_MDF_SOMONO"
-    elif "COCO" in m_up or "KOKO" in m_up:
-        color = "COCO"
-        surface_mat_id = "MAT_MDF_COCO"
-    elif any(k in m_up for k in ["AKÇAAGAÇ", "AKCAAGAC", "AKÇAAĞAÇ", "AKCAAĞAC"]):
-        color = "AKÇAAGAÇ"
-        surface_mat_id = "MAT_MDF_AKCAAGAC"
-    elif "MEŞE" in m_up or "MESE" in m_up:
-        color = "MEŞE"
-        surface_mat_id = "MAT_MDF_STD"
-    elif "BAMBU" in m_up or "BAMBOO" in m_up:
-        color = "BAMBU"
-        surface_mat_id = "MAT_MDF_STD"
-    elif "D.BEYAZ" in m_up or "BEYAZ" in m_up:
-        color = "D.BEYAZ"
+    elif any(k in m_up for k in ["DİŞBUDAK", "DISBUDAK", "D.BEYAZ", "DISBUDAK BEYAZ", "DİŞBUDAK BEYAZ"]):
+        color = "DİŞBUDAK BEYAZ"
         surface_mat_id = "MAT_MDF_BEYAZ"
+    elif any(k in m_up for k in ["TİK BEYAZ", "TIK BEYAZ", "BEYAZ TİK", "BEYAZ TIK", "B.TEAK", "B. TEAK"]):
+        color = "TİK BEYAZ"
+        surface_mat_id = "MAT_MDF_BTEAK"
+    elif any(k in m_up for k in ["TİK ANTRASİT", "TIK ANTRASIT", "ANTRASİT TİK", "ANTRASIT TIK", "ANTRASİT", "ANTRASIT", "ANTRAS"]):
+        color = "TİK ANTRASİT"
+        surface_mat_id = "MAT_MDF_ANTRASIT"
+    elif any(k in m_up for k in ["TİK", "TIK", "TEAK"]):
+        color = "TİK BEYAZ"
+        surface_mat_id = "MAT_MDF_TEAK"
+    elif any(k in m_up for k in ["COCO", "MAURON", "KOKO"]):
+        color = "COCO MAURON"
+        surface_mat_id = "MAT_MDF_COCO"
+    elif any(k in m_up for k in ["AKÇAAGAÇ", "AKCAAGAC", "AKÇAAĞAÇ", "AKCAAĞAC", "AKCAA"]):
+        color = "AKÇAAĞAÇ"
+        surface_mat_id = "MAT_MDF_AKCAAGAC"
     else:
-        color = "STANDART"
+        color = "DİŞBUDAK BEYAZ"
         surface_mat_id = "MAT_MDF_STD"
 
     # 5. Core Type (Dolgu)
@@ -2140,16 +2208,27 @@ def service_maintenance_tool(tool_id: str, req: ToolServiceRequest):
 # ── 2. 3D İNTERAKTİF PATLATILMIŞ KARKAS MODELİ (MADDE 2) ─────
 
 COLOR_PALETTE_3D = {
+    "AKÇAAĞAÇ": {"hex": "#D4B185", "name": "Akçaağaç"},
     "AKÇAAGAÇ": {"hex": "#D4B185", "name": "Akçaağaç"},
-    "TEAK": {"hex": "#8B5226", "name": "Teak"},
-    "B.TEAK": {"hex": "#CBB292", "name": "Beyaz Teak"},
-    "ANTRASİT": {"hex": "#2F3640", "name": "Antrasit"},
-    "K.CEVİZ": {"hex": "#4D3322", "name": "K.Ceviz"},
-    "SOMONO": {"hex": "#CB9D81", "name": "Somono"},
-    "COCO": {"hex": "#533D35", "name": "Coco"},
-    "D.BEYAZ": {"hex": "#F4F6F9", "name": "D.Beyaz"},
+    "KOYU CEVİZ": {"hex": "#4D3322", "name": "Koyu Ceviz"},
+    "K.CEVİZ": {"hex": "#4D3322", "name": "Koyu Ceviz"},
+    "DİŞBUDAK BEYAZ": {"hex": "#F1F5F9", "name": "Dişbudak Beyaz"},
+    "D.BEYAZ": {"hex": "#F1F5F9", "name": "Dişbudak Beyaz"},
+    "TİK BEYAZ": {"hex": "#E2D9CC", "name": "Tik Beyaz"},
+    "B.TEAK": {"hex": "#E2D9CC", "name": "Tik Beyaz"},
+    "TİK ANTRASİT": {"hex": "#2F3640", "name": "Tik Antrasit"},
+    "ANTRASİT": {"hex": "#2F3640", "name": "Tik Antrasit"},
+    "COCO MAURON": {"hex": "#3E2723", "name": "Coco Mauron"},
+    "COCO": {"hex": "#3E2723", "name": "Coco Mauron"},
     "STANDART": {"hex": "#E2E8F0", "name": "Standart"}
 }
+
+@app.get("/api/door-models")
+def get_door_models():
+    return {
+        "models": ERDOOR_MODELS_CATALOG,
+        "colors": ERDOOR_COLORS_CATALOG
+    }
 
 @app.get("/api/doors/3d-model/{oid}")
 def get_door_3d_model(oid: str):
@@ -2161,27 +2240,37 @@ def get_door_3d_model(oid: str):
         if found:
             order = found
             oid = order.get("id", oid)
-        elif orders:
-            oid = list(orders.keys())[0]
-            order = orders[oid]
         else:
-            order = {
-                "id": "DEMO-01", "order_no": "DEMO-2026", "customer": "Örnek Müşteri",
-                "model": "ER100 KANAT AKÇAAGAÇ KOM.SEREN STRAFOR 800X2020X40", "qty": 10
-            }
+            cat_m = next((m for m in ERDOOR_MODELS_CATALOG if m["code"] == oid.upper()), None)
+            if cat_m:
+                order = {
+                    "id": oid,
+                    "order_no": oid,
+                    "customer": f"Erdoor {cat_m['series']}",
+                    "model": f"{cat_m['code']} KANAT AKÇAAĞAÇ KOM.SEREN STRAFOR 800X2020X40",
+                    "color": "AKÇAAĞAÇ"
+                }
+            elif orders:
+                oid = list(orders.keys())[0]
+                order = orders[oid]
+            else:
+                order = {
+                    "id": "DEMO-01", "order_no": "DEMO-2026", "customer": "Örnek Müşteri",
+                    "model": "ER100 KANAT AKÇAAĞAÇ KOM.SEREN STRAFOR 800X2020X40", "qty": 10
+                }
             
     specs = parse_door_specs(order.get("model", ""), custom_color=order.get("color"))
     w = specs["width"]
     h = specs["height"]
     th = specs["thickness"]
     color_key = specs["color"]
-    color_info = COLOR_PALETTE_3D.get(color_key, COLOR_PALETTE_3D["STANDART"])
+    color_info = ERDOOR_COLORS_CATALOG.get(color_key, COLOR_PALETTE_3D.get(color_key, {"hex": "#D4B185", "name": color_key}))
     
     seren_w = 42 # mm
     seren_th = 32 # mm
     panel_th = 4 # mm
-    core_w = max(100, w - (seren_w * 2))
-    core_h = max(100, h - (seren_w * 2))
+    core_w = max(100, w - (seren_w * 2)) # 716 mm
+    core_h = max(100, h - (seren_w * 2)) # 1936 mm
     
     return {
         "order_id": oid,
@@ -2189,9 +2278,11 @@ def get_door_3d_model(oid: str):
         "order_no": order.get("order_no", oid),
         "customer": order.get("customer", ""),
         "model": order.get("model", ""),
+        "model_code": specs.get("model_code", "ER100"),
         "color": color_key,
         "color_hex": color_info["hex"],
         "core_type": specs["core_type"],
+        "is_single_piece_core": True,  # Tek parça yekpare EPS dolgu köpüğü
         "dimensions": {
             "width": w,
             "height": h,
@@ -2209,18 +2300,65 @@ def get_door_3d_model(oid: str):
             "right_stile": {"len": h, "w": seren_w, "th": seren_th},
             "top_rail": {"len": core_w, "w": seren_w, "th": seren_th},
             "bottom_rail": {"len": core_w, "w": seren_w, "th": seren_th},
-            "mid_rail": {"len": core_w, "w": seren_w, "th": seren_th},
             "lock_reinforcement": {"len": 1150, "w": seren_w, "th": seren_th, "pos_y": 1000}
         },
+        "corner_wedges": [
+            {"id": "top_left", "name": "Sol Üst Plastik Köşe Takozu", "w": 70, "h": 70, "th": 30},
+            {"id": "top_right", "name": "Sağ Üst Plastik Köşe Takozu", "w": 70, "h": 70, "th": 30},
+            {"id": "bottom_left", "name": "Sol Alt Plastik Köşe Takozu", "w": 70, "h": 70, "th": 30},
+            {"id": "bottom_right", "name": "Sağ Alt Plastik Köşe Takozu", "w": 70, "h": 70, "th": 30}
+        ],
         "takozlar": [
-            {"name": "Kilit Takviye Takozu", "w": 80, "h": 250, "th": seren_th, "side": "right", "pos_y": 1000},
-            {"name": "Kol Takviye Takozu", "w": 80, "h": 120, "th": seren_th, "side": "right", "pos_y": 1050}
+            {"name": "Masif Ahşap Kilit Takozu", "w": 80, "h": 250, "th": seren_th, "side": "right", "pos_y": 1000},
+            {"name": "Masif Ahşap Kol Takozu", "w": 80, "h": 120, "th": seren_th, "side": "right", "pos_y": 1050}
         ],
         "pvc_edge": {
             "thickness": 1.0,
             "width": 45.0,
             "total_meters": specs["consumptions"]["pvc_m"]
-        }
+        },
+        "assembly_steps": [
+            {
+                "step": 1,
+                "title": "Adım 1: 4 Seren & Plastik Köşe Takozları ile Karkas Çatma",
+                "station": "Seren Çatma Masası",
+                "badge": "1. ÇATI KARKASI",
+                "desc": "Sol ve sağ boy serenler ile alt ve üst başlık serenleri 4 köşedeki mukavemetli Plastik Köşe Takozları ile birleştirilerek gönyeli çatı karkası oluşturulur.",
+                "parts": ["Sol Boy Seren (2020mm)", "Sağ Boy Seren (2020mm)", "Üst En Seren", "Alt En Seren", "4 Adet Plastik Köşe Takozu"]
+            },
+            {
+                "step": 2,
+                "title": "Adım 2: Kilit Takviye Sereni & Masif Ahşap Takozlar",
+                "station": "Kilit Takoz İstasyonu",
+                "badge": "2. KİLİT TAKVİYESİ",
+                "desc": "3.5 boy seren standardına göre kilit aksına 1150 mm kilit takviye sereni ve masif ahşap kilit & kol montaj takozları monte edilir.",
+                "parts": ["1150 mm Kilit Takviye Sereni", "Masif Ahşap Kilit Takozu (80x250mm)", "Masif Ahşap Kol Takozu (80x120mm)"]
+            },
+            {
+                "step": 3,
+                "title": "Adım 3: Tek Parça EPS Dolgu Köpüğünün Yerleştirilmesi",
+                "station": "CNC Dolgu Hattı",
+                "badge": "3. TEK PARÇA KÖPÜK",
+                "desc": "2 ayrı parça yerine tam net ebatlanmış yekpare TEK PARÇA EPS strafor dolgu köpüğü karkas boşluğuna yerleştirilir.",
+                "parts": ["Yekpare Tek Parça EPS Strafor Blok (32mm)"]
+            },
+            {
+                "step": 4,
+                "title": "Adım 4: Tutkallama & WPC Kompozit Panellerin Preslenmesi",
+                "station": "Sıcak Pres Hattı",
+                "badge": "4. SICAK PRES",
+                "desc": "Tutkallanan karkasın alt ve üst yüzeyine 4 mm kalınlığında WPC kompozit kapı panelleri yüksek basınç ve sıcaklık altında preslenir.",
+                "parts": ["Arka WPC Panel (4 mm)", "Ön WPC Panel (4 mm)"]
+            },
+            {
+                "step": 5,
+                "title": "Adım 5: CNC Ebatlama & 4 Kenar PVC Kenar Bandı",
+                "station": "Homag Kenar Bantlama & CNC",
+                "badge": "5. NİHAİ KANAT",
+                "desc": "Homag makinesinde 4 kenara 45x1 mm PVC bant çekilir ve CNC istasyonunda kilit/kol yerleri ile model deseni açılarak kanat tamamlanır.",
+                "parts": ["4 Kenar PVC Kenar Bandı", "CNC Fuga & Kilit Boşaltmaları"]
+            }
+        ]
     }
 
 

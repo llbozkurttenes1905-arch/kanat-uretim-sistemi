@@ -1720,8 +1720,10 @@
                     </div>
                 </div>
                 <div>
-                    <label class="form-label">Model &amp; Ebat *</label>
-                    <input type="text" id="o-model" required class="form-input" placeholder="Örn: ER100 KANAT AKÇAAGAÇ KOM.SEREN STRAFOR 700X2020X40">
+                    <label class="form-label">Model &amp; Ebat * (Erdoor Kataloğu)</label>
+                    <input type="text" id="o-model" list="erdoor-models-datalist" required class="form-input" placeholder="Örn: ER100 KANAT AKÇAAĞAÇ KOM.SEREN STRAFOR 700X2020X40">
+                    <datalist id="erdoor-models-datalist">
+                    </datalist>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                     <div>
@@ -2151,21 +2153,54 @@
 </div>
 
 <!-- MODAL: 3D İNTERAKTİF PATLATILMIŞ KARKAS GÖRÜNÜMÜ (MADDE 2) -->
+<!-- MODAL: 3D İNTERAKTİF PATLATILMIŞ KARKAS GÖRÜNÜMÜ & ADIM ADIM MONTAJ SİMÜLATÖRÜ (MADDE 2) -->
+<style>
+.step-pill {
+    padding: 5px 11px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94A3B8;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+.step-pill:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.12);
+}
+.step-pill.active {
+    color: #FFFFFF;
+    background: #0284C7;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4);
+}
+</style>
+
 <div class="modal-overlay" id="modal-3d-door">
-    <div class="modal-box" style="max-width:1150px; width:95%; height:90vh; display:flex; flex-direction:column; padding:0; overflow:hidden;">
-        <div class="modal-header" style="padding:14px 20px; border-bottom:1px solid #E2E8F0; background:#FFFFFF;">
+    <div class="modal-box" style="max-width:1200px; width:96%; height:92vh; display:flex; flex-direction:column; padding:0; overflow:hidden;">
+        <div class="modal-header" style="padding:12px 20px; border-bottom:1px solid #E2E8F0; background:#FFFFFF;">
             <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; flex:1;">
                 <div>
                     <div class="modal-title" style="display:flex; align-items:center; gap:8px;">
                         <span>🧊 3D İnteraktif Kapı &amp; Karkas Simülatörü</span>
+                        <span class="badge badge-blue" id="d3-badge-series" style="font-size:10.5px;">DAPHNE SERİSİ</span>
                         <span class="badge badge-slate" id="d3-badge-model" style="font-size:11px;">ER100</span>
                     </div>
-                    <div style="font-size:11.5px; color:#64748B;">3.5 Boy Kompozit Seren Karkası, Kilit Takozu ve Strafor/Petek Katmanları</div>
+                    <div style="font-size:11.5px; color:#64748B;">4 Seren &amp; Plastik Köşe Takozları ile Karkas Çatma, Yekpare Tek Parça Köpük, Sıcak Pres</div>
                 </div>
-                <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
-                    <label style="font-size:11px; font-weight:700; color:#475569;">Sipariş Seç:</label>
-                    <select id="door-3d-order-select" class="form-select" style="font-size:12px; width:220px; padding:4px 8px;" onchange="load3DDoorFromSelect()">
-                    </select>
+                <div style="margin-left:auto; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <label style="font-size:11px; font-weight:700; color:#475569;">Model Seç:</label>
+                        <select id="door-3d-model-select" class="form-select" style="font-size:11.5px; width:180px; padding:4px 8px;" onchange="load3DDoorFromModelSelect(this.value)">
+                        </select>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <label style="font-size:11px; font-weight:700; color:#475569;">Sipariş:</label>
+                        <select id="door-3d-order-select" class="form-select" style="font-size:11.5px; width:180px; padding:4px 8px;" onchange="load3DDoorFromSelect()">
+                        </select>
+                    </div>
                 </div>
             </div>
             <button class="btn-icon" onclick="closeModal('modal-3d-door')" style="margin-left:10px;">✕</button>
@@ -2176,11 +2211,47 @@
             <div style="position:relative; width:100%; height:100%; background:radial-gradient(circle at center, #1E293B 0%, #0B0F19 100%);">
                 <div id="door-3d-canvas-container" style="width:100%; height:100%; display:block;"></div>
                 
-                <!-- Floating Toolbar On 3D Scene -->
+                <!-- TOP ASSEMBLY STEP NAVIGATION BAR -->
+                <div style="position:absolute; top:12px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:center; z-index:10; pointer-events:auto; gap:10px; flex-wrap:wrap;">
+                    <!-- Step Pills -->
+                    <div style="display:flex; gap:3px; background:rgba(15, 23, 42, 0.88); backdrop-filter:blur(8px); padding:4px 6px; border-radius:8px; border:1px solid rgba(255,255,255,0.14);">
+                        <button class="step-pill active" id="btn-step-1" onclick="set3DAssemblyStep(1)">1. Çatı &amp; Köşe Takozları</button>
+                        <button class="step-pill" id="btn-step-2" onclick="set3DAssemblyStep(2)">2. Kilit Takviyesi</button>
+                        <button class="step-pill" id="btn-step-3" onclick="set3DAssemblyStep(3)">3. Tek Parça Köpük</button>
+                        <button class="step-pill" id="btn-step-4" onclick="set3DAssemblyStep(4)">4. WPC Pres</button>
+                        <button class="step-pill" id="btn-step-5" onclick="set3DAssemblyStep(5)">5. PVC &amp; Bitiş</button>
+                        <button class="step-pill" id="btn-step-0" onclick="set3DAssemblyStep(0)">💥 Serbest Patlat</button>
+                    </div>
+                    
+                    <!-- Play / Next / Prev Stepper -->
+                    <div style="display:flex; gap:6px; background:rgba(15, 23, 42, 0.88); backdrop-filter:blur(8px); padding:4px 8px; border-radius:8px; border:1px solid rgba(255,255,255,0.14);">
+                        <button class="btn-secondary" style="padding:4px 8px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" onclick="set3DAssemblyStep(1)" title="Başa Sar">⏮️</button>
+                        <button class="btn-secondary" style="padding:4px 9px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" onclick="prev3DStep()" title="Önceki Adım">◀ Önceki</button>
+                        <button class="btn-primary" id="btn-3d-play-sim" style="padding:4px 12px; font-size:11px; background:#0284C7;" onclick="toggle3DPlaySimulation()">▶️ Otomatik Oynat</button>
+                        <button class="btn-secondary" style="padding:4px 9px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" onclick="next3DStep()" title="Sonraki Adım">Sonraki ▶</button>
+                    </div>
+                </div>
+
+                <!-- HUD STEP INFORMATION CARD (Overlay Top-Right) -->
+                <div id="d3-hud-info" style="position:absolute; top:62px; right:16px; width:340px; background:rgba(15, 23, 42, 0.90); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.16); border-radius:10px; padding:12px 14px; color:#FFFFFF; z-index:10; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <span class="badge" id="d3-hud-badge" style="background:#0284C7; color:#FFF; font-size:10px; font-weight:800;">1. ÇATI KARKASI</span>
+                        <span id="d3-hud-station" style="font-size:10.5px; color:#94A3B8;">📍 Seren Çatma Masası</span>
+                    </div>
+                    <div id="d3-hud-title" style="font-size:13px; font-weight:800; color:#F8FAFC; margin-bottom:4px;">1. Adım: 4 Seren &amp; Plastik Köşe Takozları ile Karkas Çatma</div>
+                    <div id="d3-hud-desc" style="font-size:11px; color:#CBD5E1; line-height:1.4; margin-bottom:8px;">
+                        Sol ve sağ boy serenler ile alt ve üst başlık serenleri 4 köşedeki mukavemetli Plastik Köşe Takozları ile birleştirilerek gönyeli çatı karkası oluşturulur.
+                    </div>
+                    <div id="d3-hud-parts" style="font-size:10.5px; color:#38BDF8; font-weight:700; background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.25); padding:4px 8px; border-radius:5px;">
+                        🪵 4x Seren • 🧩 4x Plastik Köşe Takozu
+                    </div>
+                </div>
+
+                <!-- Floating Toolbar On 3D Scene Bottom -->
                 <div style="position:absolute; bottom:16px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:center; background:rgba(15, 23, 42, 0.85); backdrop-filter:blur(8px); padding:10px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); color:#FFFFFF; gap:16px; flex-wrap:wrap;">
                     <!-- Exploded Slider -->
-                    <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:260px;">
-                        <span style="font-size:12px; font-weight:800; color:#93C5FD; white-space:nowrap;">💥 Katmanları Patlat:</span>
+                    <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:240px;">
+                        <span style="font-size:12px; font-weight:800; color:#93C5FD; white-space:nowrap;">💥 Katman Patlatma:</span>
                         <input type="range" id="door-3d-explode-slider" min="0" max="100" value="0" oninput="update3DExplode(this.value)" style="flex:1; accent-color:#38BDF8; cursor:pointer;">
                         <span id="door-3d-explode-val" style="font-size:12px; font-family:monospace; font-weight:800; width:40px; text-align:right;">0%</span>
                     </div>
@@ -2195,7 +2266,7 @@
                     </div>
                 </div>
 
-                <div style="position:absolute; top:14px; left:16px; font-size:11px; color:#94A3B8; background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px; pointer-events:none;">
+                <div style="position:absolute; bottom:64px; left:16px; font-size:11px; color:#94A3B8; background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px; pointer-events:none;">
                     💡 Sol Tık: Döndür • Sağ Tık: Kaydır • Tekerlek: Yakınlaştır
                 </div>
             </div>
@@ -2214,20 +2285,32 @@
                         <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
                             <input type="checkbox" id="layer-seren" checked onchange="toggle3DLayer('seren', this.checked)">
                             <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#78716C;"></span>
-                            <span style="font-weight:700;">3.5 Boy Kompozit Seren</span>
+                            <span style="font-weight:700;">4 Adet Kompozit Seren</span>
                             <span style="margin-left:auto; font-size:10px; color:#64748B;">42x32 mm</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-corner-takoz" checked onchange="toggle3DLayer('cornerTakoz', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#0F172A; border:1px solid #334155;"></span>
+                            <span style="font-weight:700; color:#0F172A;">4x Plastik Köşe Takozu</span>
+                            <span style="margin-left:auto; font-size:10px; color:#0284C7; font-weight:700;">Gönyeli</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-lock-stile" checked onchange="toggle3DLayer('lockStile', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#57534E;"></span>
+                            <span style="font-weight:700;">Kilit Takviye Sereni</span>
+                            <span style="margin-left:auto; font-size:10px; color:#64748B;">1150 mm</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-takoz" checked onchange="toggle3DLayer('takoz', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#D97706;"></span>
+                            <span style="font-weight:700;">Kilit &amp; Kol Masif Takozu</span>
+                            <span style="margin-left:auto; font-size:10px; color:#64748B;">2 Adet</span>
                         </label>
                         <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
                             <input type="checkbox" id="layer-core" checked onchange="toggle3DLayer('core', this.checked)">
                             <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#38BDF8;" id="legend-core-box"></span>
-                            <span style="font-weight:700;" id="legend-core-name">EPS Strafor Dolgu</span>
-                            <span style="margin-left:auto; font-size:10px; color:#64748B;">32 mm</span>
-                        </label>
-                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
-                            <input type="checkbox" id="layer-takoz" checked onchange="toggle3DLayer('takoz', this.checked)">
-                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#44403C;"></span>
-                            <span style="font-weight:700;">Kilit &amp; Kol Destek Takozu</span>
-                            <span style="margin-left:auto; font-size:10px; color:#64748B;">2 Adet</span>
+                            <span style="font-weight:700;" id="legend-core-name">Tek Parça EPS Köpük</span>
+                            <span style="margin-left:auto; font-size:10px; color:#059669; font-weight:800;">Yekpare</span>
                         </label>
                         <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
                             <input type="checkbox" id="layer-back-panel" checked onchange="toggle3DLayer('back', this.checked)">
@@ -2245,11 +2328,11 @@
                 </div>
 
                 <div style="border-top:1px solid #E2E8F0; padding-top:14px;">
-                    <div style="font-size:11px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:8px;">TEKNİK KARKAS &amp; KESİM REÇETESİ</div>
+                    <div style="font-size:11px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:8px;">ERDOOR TEKNİK KARKAS REÇETESİ</div>
                     
                     <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px; font-size:12px; display:flex; flex-direction:column; gap:6px;">
                         <div style="display:flex; justify-content:space-between;">
-                            <span style="color:#64748B;">Model / Kod:</span>
+                            <span style="color:#64748B;">Model / Seri:</span>
                             <span style="font-weight:800; color:#0F172A;" id="d3-info-model">—</span>
                         </div>
                         <div style="display:flex; justify-content:space-between;">
@@ -2261,8 +2344,8 @@
                             <span style="font-weight:800; font-family:monospace; color:#0F172A;" id="d3-info-dims">—</span>
                         </div>
                         <div style="display:flex; justify-content:space-between;">
-                            <span style="color:#64748B;">Dolgu Cinsi:</span>
-                            <span style="font-weight:800; color:#0284C7;" id="d3-info-core-type">STRAFOR</span>
+                            <span style="color:#64748B;">İç Dolgu Yapısı:</span>
+                            <span style="font-weight:800; color:#0284C7;" id="d3-info-core-type">TEK PARÇA YEKPARE EPS</span>
                         </div>
                     </div>
 
@@ -2272,25 +2355,33 @@
                             <span style="color:#E30713; font-weight:900;" id="d3-info-seren-total">—</span>
                         </div>
                         <div style="color:#475569; padding-left:10px; font-size:11px; display:flex; flex-direction:column; gap:2px;">
-                            <div>• Sol &amp; Sağ Boy: <strong id="d3-info-seren-boy">2 x 2020 mm</strong></div>
-                            <div>• Alt, Üst, Orta En: <strong id="d3-info-seren-en">3 x 616 mm</strong></div>
-                            <div>• Kilit Takviyesi: <strong id="d3-info-seren-takviye">1 x 1150 mm</strong></div>
+                            <div>• Sol &amp; Sağ Boy Seren: <strong id="d3-info-seren-boy">2 x 2020 mm</strong></div>
+                            <div>• Alt &amp; Üst En Başlık Sereni: <strong id="d3-info-seren-en">2 x 716 mm</strong></div>
+                            <div>• Kilit Takviye Boy Sereni: <strong id="d3-info-seren-takviye">1 x 1150 mm</strong></div>
                         </div>
 
                         <div style="font-weight:800; color:#0F172A; margin-top:6px; display:flex; justify-content:space-between;">
-                            <span>📦 İç Dolgu Net Kesim:</span>
-                            <span style="font-family:monospace;" id="d3-info-core-dim">—</span>
+                            <span>🧩 Plastik Köşe Takozu:</span>
+                            <span style="color:#0284C7; font-weight:800;">4 Adet (4 Köşe)</span>
                         </div>
                         <div style="font-size:11px; color:#64748B; padding-left:10px;">
-                            (Seren karkas payı 84 mm düşülerek net ebatlandı)
+                            90° rijit gönyeleme ve karkas çatma takozu
                         </div>
 
                         <div style="font-weight:800; color:#0F172A; margin-top:6px; display:flex; justify-content:space-between;">
-                            <span>🔒 Kilit &amp; Kol Takozu:</span>
+                            <span>📦 Yekpare Köpük Net Kesim:</span>
+                            <span style="font-family:monospace; color:#059669; font-weight:800;" id="d3-info-core-dim">—</span>
+                        </div>
+                        <div style="font-size:11px; color:#64748B; padding-left:10px;">
+                            (2 ayrı parça değil, tek parça yekpare EPS blok)
+                        </div>
+
+                        <div style="font-weight:800; color:#0F172A; margin-top:6px; display:flex; justify-content:space-between;">
+                            <span>🔒 Masif Kilit &amp; Kol Takozu:</span>
                             <span>2 Adet</span>
                         </div>
                         <div style="font-size:11px; color:#64748B; padding-left:10px;">
-                            Yerden 1000 mm kilit aks yüksekliği
+                            80x250 mm kilit + 80x120 mm kol takozu
                         </div>
                     </div>
                 </div>
@@ -2592,6 +2683,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     document.getElementById('daily-date').value = now.toISOString().split('T')[0];
     document.getElementById('month-picker').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    loadDoorModelsCatalog();
 
     const stored = localStorage.getItem('kanat_user');
     if(stored) { try { currentUser = JSON.parse(stored); bootApp(); } catch(e) {} }
@@ -4467,8 +4559,50 @@ async function handleToolServiceSubmit(e) {
 }
 
 // ════════════════════════════════════════════════════════════
-// MADDE 2: 3D İNTERAKTİF PATLATILMIŞ KARKAS GÖRÜNÜMÜ (THREE.JS)
+// MADDE 2: 3D İNTERAKTİF PATLATILMIŞ KARKAS & ADIM ADIM MONTAJ SİMÜLASYONU (THREE.JS)
 // ════════════════════════════════════════════════════════════
+let doorModelsList = [];
+let doorColorsList = {};
+
+async function loadDoorModelsCatalog() {
+    try {
+        const r = await fetch('/api/door-models');
+        if (!r.ok) return;
+        const data = await r.json();
+        doorModelsList = data.models || [];
+        doorColorsList = data.colors || {};
+
+        // 1. Populate Datalist in Order Modal
+        const datalist = document.getElementById('erdoor-models-datalist');
+        if (datalist) {
+            datalist.innerHTML = doorModelsList.map(m => `
+                <option value="${m.code} KANAT AKÇAAĞAÇ KOM.SEREN STRAFOR 800X2020X40">${m.name} (${m.series})</option>
+            `).join('');
+        }
+
+        // 2. Populate 3D Modal Model Dropdown
+        const modelSel = document.getElementById('door-3d-model-select');
+        if (modelSel) {
+            const seriesMap = {};
+            doorModelsList.forEach(m => {
+                const s = m.series || 'Daphne Serisi';
+                if (!seriesMap[s]) seriesMap[s] = [];
+                seriesMap[s].push(m);
+            });
+
+            modelSel.innerHTML = Object.keys(seriesMap).map(sName => `
+                <optgroup label="${sName}">
+                    ${seriesMap[sName].map(m => `
+                        <option value="${m.code}">${m.code} - ${m.name}</option>
+                    `).join('')}
+                </optgroup>
+            `).join('');
+        }
+    } catch (e) {
+        console.error('loadDoorModelsCatalog error:', e);
+    }
+}
+
 let three3D = {
     initialized: false,
     scene: null,
@@ -4478,20 +4612,27 @@ let three3D = {
     doorGroup: null,
     meshes: {},
     currentData: null,
+    currentStep: 1, // 1: 4 Seren & Plastik Takoz, 2: Kilit Takviye, 3: Tek Parça EPS Köpük, 4: WPC Pres, 5: PVC Bitiş, 0: Serbest
+    isPlaying: false,
+    playInterval: null,
     isXRay: false,
     isAutoRotate: false,
     explodeVal: 0,
     animId: null
 };
 
-async function open3DDoorModal(orderId) {
+async function open3DDoorModal(orderIdOrModel) {
     openModal('modal-3d-door');
     
+    if (doorModelsList.length === 0) {
+        await loadDoorModelsCatalog();
+    }
+
     // Populate dropdown with all available orders
     const sel = document.getElementById('door-3d-order-select');
     if (sel && typeof allOrders !== 'undefined' && allOrders.length > 0) {
         sel.innerHTML = allOrders.map(o => `
-            <option value="${o.id}" ${o.id === orderId ? 'selected' : ''}>${o.order_no} - ${o.customer || 'Müşteri'} (${o.model || 'Model'})</option>
+            <option value="${o.id}" ${o.id === orderIdOrModel ? 'selected' : ''}>${o.order_no} - ${o.customer || 'Müşteri'} (${o.model || 'Model'})</option>
         `).join('');
     }
 
@@ -4501,7 +4642,7 @@ async function open3DDoorModal(orderId) {
     
     setTimeout(() => {
         on3DResize();
-        fetchAndRender3DDoor(orderId);
+        fetchAndRender3DDoor(orderIdOrModel || 'any');
     }, 60);
 }
 
@@ -4512,6 +4653,11 @@ function load3DDoorFromSelect() {
     }
 }
 
+function load3DDoorFromModelSelect(modelCode) {
+    if (!modelCode) return;
+    fetchAndRender3DDoor(modelCode);
+}
+
 function init3DScene() {
     const container = document.getElementById('door-3d-canvas-container');
     if (!container) return;
@@ -4520,11 +4666,11 @@ function init3DScene() {
     const height = container.clientHeight || 550;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0F172A);
+    scene.background = new THREE.Color(0x0B0F19);
 
     // Camera
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(1.5, 0.8, 2.2);
+    camera.position.set(1.4, 0.8, 2.2);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -4547,14 +4693,14 @@ function init3DScene() {
     }
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.75);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+    const dirLight1 = new THREE.DirectionalLight(0xFFFFFF, 0.85);
     dirLight1.position.set(3, 5, 4);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0x93C5FD, 0.4);
+    const dirLight2 = new THREE.DirectionalLight(0x93C5FD, 0.45);
     dirLight2.position.set(-3, -2, -3);
     scene.add(dirLight2);
 
@@ -4570,7 +4716,7 @@ function init3DScene() {
     three3D.initialized = true;
     three3D.scene = scene;
     three3D.camera = camera;
-    renderer.setClearColor(0x0F172A, 1);
+    renderer.setClearColor(0x0B0F19, 1);
     three3D.renderer = renderer;
     three3D.controls = controls;
     three3D.doorGroup = doorGroup;
@@ -4602,13 +4748,16 @@ function on3DResize() {
     three3D.renderer.setSize(w, h);
 }
 
-async function fetchAndRender3DDoor(orderId) {
+async function fetchAndRender3DDoor(orderIdOrModel) {
     try {
-        const r = await fetch(`/api/doors/3d-model/${orderId}`);
+        const r = await fetch(`/api/doors/3d-model/${orderIdOrModel}`);
         const data = await r.json();
         three3D.currentData = data;
         render3DDoorModel(data);
         populate3DSidebar(data);
+        
+        // Start simulation at Step 1 (or current step)
+        set3DAssemblyStep(three3D.currentStep || 1);
     } catch (e) {
         console.error('fetchAndRender3DDoor error:', e);
     }
@@ -4619,16 +4768,23 @@ function populate3DSidebar(data) {
     const brk = data.seren_breakdown || {};
     
     const setT = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    setT('d3-badge-model', data.model?.substring(0, 14) || 'ER100');
-    setT('d3-info-model', data.model?.split(' ')[0] || 'ER100');
-    setT('d3-info-color', data.color || 'Standart');
+    const mCode = data.model_code || 'ER100';
+    setT('d3-badge-model', mCode);
+    
+    // Find series
+    const cat = doorModelsList.find(m => m.code === mCode);
+    const seriesName = cat?.series || 'Daphne Serisi';
+    setT('d3-badge-series', seriesName.toUpperCase());
+    
+    setT('d3-info-model', `${mCode} (${seriesName})`);
+    setT('d3-info-color', data.color || 'Akçaağaç');
     setT('d3-info-dims', `${d.width} x ${d.height} x ${d.thickness} mm`);
-    setT('d3-info-core-type', data.core_type || 'STRAFOR');
+    setT('d3-info-core-type', 'TEK PARÇA YEKPARE EPS');
     setT('d3-info-seren-total', `${brk.total_meters || 6.2} Metre (3.5 Boy)`);
     setT('d3-info-seren-boy', `2 x ${brk.left_stile?.len || d.height} mm`);
-    setT('d3-info-seren-en', `3 x ${brk.top_rail?.len || (d.width - 84)} mm`);
+    setT('d3-info-seren-en', `2 x ${brk.top_rail?.len || (d.width - 84)} mm`);
     setT('d3-info-seren-takviye', `1 x ${brk.lock_reinforcement?.len || 1150} mm`);
-    setT('d3-info-core-dim', `${d.core_width} x ${d.core_height} x 32 mm`);
+    setT('d3-info-core-dim', `${d.core_width || (d.width - 84)} x ${d.core_height || (d.height - 84)} x 32 mm`);
 
     // Legend color swatches
     const colorHex = data.color_hex || '#D4B185';
@@ -4640,13 +4796,14 @@ function populate3DSidebar(data) {
     const coreSwatch = document.getElementById('legend-core-box');
     const coreName = document.getElementById('legend-core-name');
     if (coreSwatch && coreName) {
-        if (data.core_type === 'PETEK') {
-            coreSwatch.style.background = '#D97706';
-            coreName.textContent = 'Kraft Petek Dolgu';
-        } else {
-            coreSwatch.style.background = '#38BDF8';
-            coreName.textContent = 'EPS Strafor Dolgu';
-        }
+        coreSwatch.style.background = '#38BDF8';
+        coreName.textContent = 'Tek Parça EPS Köpük';
+    }
+
+    // Set model dropdown value if matches
+    const modelSel = document.getElementById('door-3d-model-select');
+    if (modelSel && mCode) {
+        modelSel.value = mCode;
     }
 }
 
@@ -4661,7 +4818,7 @@ function render3DDoorModel(data) {
     three3D.meshes = {};
 
     const S = 0.001; // mm to meters
-    const d = data.dimensions;
+    const d = data.dimensions || { width: 800, height: 2020, thickness: 40, seren_width: 42, carcass_thickness: 32, panel_thickness: 4 };
     const W = d.width * S;
     const H = d.height * S;
     const TH = d.thickness * S;
@@ -4674,7 +4831,7 @@ function render3DDoorModel(data) {
     const colorHex = parseInt((data.color_hex || '#D4B185').replace('#', '0x'), 16);
 
     // Helpers to create edged box
-    function makeBox(w, h, depth, mat) {
+    function makeBox(w, h, depth, mat, edgeColor = 0x000000, edgeOpacity = 0.25) {
         const group = new THREE.Group();
         const geo = new THREE.BoxGeometry(w, h, depth);
         const mesh = new THREE.Mesh(geo, mat);
@@ -4683,38 +4840,14 @@ function render3DDoorModel(data) {
         group.add(mesh);
         
         const edges = new THREE.EdgesGeometry(geo);
-        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 1, transparent: true, opacity: 0.25 }));
+        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: edgeColor, linewidth: 1, transparent: true, opacity: edgeOpacity }));
         group.add(line);
         return { group, mesh, geo, mat };
     }
 
-    // 1. FRONT PANEL (WPC / Melamin)
-    const frontMat = new THREE.MeshStandardMaterial({
-        color: colorHex,
-        roughness: 0.35,
-        metalness: 0.1,
-        transparent: true,
-        opacity: three3D.isXRay ? 0.25 : 1.0
-    });
-    const frontBox = makeBox(W, H, PTH, frontMat);
-    three3D.meshes.front = frontBox;
-    three3D.doorGroup.add(frontBox.group);
-
-    // 2. BACK PANEL
-    const backMat = new THREE.MeshStandardMaterial({
-        color: colorHex,
-        roughness: 0.35,
-        metalness: 0.1,
-        transparent: true,
-        opacity: three3D.isXRay ? 0.25 : 1.0
-    });
-    const backBox = makeBox(W, H, PTH, backMat);
-    three3D.meshes.back = backBox;
-    three3D.doorGroup.add(backBox.group);
-
-    // 3. 3.5 BOY KOMPOZİT SEREN KARKAS
+    // ── 1. 4 ADET KOMPOZİT SEREN (KARKAS ÇERÇEVESİ) ──
     const serenMat = new THREE.MeshStandardMaterial({
-        color: 0x78716C, // dark wood / composite
+        color: 0x78716C, // Kompozit ahşap seren dokusu
         roughness: 0.75,
         metalness: 0.05
     });
@@ -4730,77 +4863,137 @@ function render3DDoorModel(data) {
     rightStile.group.position.set(W/2 - SW/2, 0, 0);
     serenGroup.add(rightStile.group);
 
-    // Üst Başlık Sereni
+    // Üst En Başlık Sereni
     const topRail = makeBox(CW, SW, STH, serenMat);
     topRail.group.position.set(0, H/2 - SW/2, 0);
     serenGroup.add(topRail.group);
 
-    // Alt Başlık Sereni
+    // Alt En Başlık Sereni
     const botRail = makeBox(CW, SW, STH, serenMat);
     botRail.group.position.set(0, -H/2 + SW/2, 0);
     serenGroup.add(botRail.group);
 
-    // Orta Kuşak Sereni
-    const midRail = makeBox(CW, SW, STH, serenMat);
-    midRail.group.position.set(0, 0, 0);
-    serenGroup.add(midRail.group);
+    three3D.meshes.seren = {
+        group: serenGroup,
+        leftStile: leftStile.group,
+        rightStile: rightStile.group,
+        topRail: topRail.group,
+        botRail: botRail.group
+    };
+    three3D.doorGroup.add(serenGroup);
 
-    // Kilit Takviye Boy Sereni (3.5 boy seren karkas mantığı!)
+    // ── 2. 4 ADET PLASTİK KÖŞE TAKOZU (L-TAKVIYE GÖNYE TAKOZLARI) ──
+    const plasticMat = new THREE.MeshStandardMaterial({
+        color: 0x1E293B, // Sert siyah mühendislik plastiği
+        roughness: 0.35,
+        metalness: 0.15
+    });
+    const cornerGroup = new THREE.Group();
+    const cW = 0.065; // 65mm
+    const cH = 0.065; // 65mm
+    const cTh = STH * 0.92; // 29.5mm (seren içine tam gömülür)
+
+    function makeCornerTakoz(posX, posY, rotZ) {
+        const takozGrp = new THREE.Group();
+        const leg1 = makeBox(cW, 0.018, cTh, plasticMat, 0x38BDF8, 0.5);
+        leg1.group.position.set(0, 0, 0);
+        takozGrp.add(leg1.group);
+
+        const leg2 = makeBox(0.018, cH, cTh, plasticMat, 0x38BDF8, 0.5);
+        leg2.group.position.set(0, 0, 0);
+        takozGrp.add(leg2.group);
+
+        const gusset = makeBox(0.025, 0.025, cTh, plasticMat, 0x64748B, 0.6);
+        gusset.group.position.set(0, 0, 0);
+        gusset.group.rotation.z = Math.PI / 4;
+        takozGrp.add(gusset.group);
+
+        takozGrp.position.set(posX, posY, 0);
+        takozGrp.rotation.z = rotZ;
+        return takozGrp;
+    }
+
+    // Sol Üst Köşe Takozu
+    const cTL = makeCornerTakoz(-W/2 + SW + cW/2, H/2 - SW - cH/2, 0);
+    cornerGroup.add(cTL);
+
+    // Sağ Üst Köşe Takozu
+    const cTR = makeCornerTakoz(W/2 - SW - cW/2, H/2 - SW - cH/2, Math.PI / 2);
+    cornerGroup.add(cTR);
+
+    // Sol Alt Köşe Takozu
+    const cBL = makeCornerTakoz(-W/2 + SW + cW/2, -H/2 + SW + cH/2, -Math.PI / 2);
+    cornerGroup.add(cBL);
+
+    // Sağ Alt Köşe Takozu
+    const cBR = makeCornerTakoz(W/2 - SW - cW/2, -H/2 + SW + cH/2, Math.PI);
+    cornerGroup.add(cBR);
+
+    three3D.meshes.cornerTakoz = { group: cornerGroup, cTL, cTR, cBL, cBR };
+    three3D.doorGroup.add(cornerGroup);
+
+    // ── 3. KİLİT TAKVİYE BOY SERENİ & MASİF AHŞAP TAKOZLAR (3.5 BOY SEREN) ──
+    const lockGroup = new THREE.Group();
     const lockLen = (data.seren_breakdown?.lock_reinforcement?.len || 1150) * S;
     const lockStile = makeBox(SW, lockLen, STH, serenMat);
     lockStile.group.position.set(W/2 - SW - SW/2, 0, 0);
-    serenGroup.add(lockStile.group);
+    lockGroup.add(lockStile.group);
 
-    three3D.meshes.seren = { group: serenGroup };
-    three3D.doorGroup.add(serenGroup);
-
-    // 4. KİLİT VE KOL TAKVİYE TAKOZLARI (Solid Wood Blocks)
     const takozMat = new THREE.MeshStandardMaterial({
-        color: 0xD97706, // Beech/Pine timber yellow-amber
-        roughness: 0.6
+        color: 0xD97706, // Masif çam/kayın ahşap blok sarı-amber
+        roughness: 0.65
     });
-    const takozGroup = new THREE.Group();
 
-    // Takoz 1: Kilit Takozu (80x250 mm)
-    const t1 = makeBox(0.08, 0.25, STH, takozMat);
+    // Masif Ahşap Kilit Takozu (80x250 mm)
+    const t1 = makeBox(0.08, 0.25, STH, takozMat, 0x78350F, 0.5);
     t1.group.position.set(W/2 - SW - SW - 0.04, 0, 0);
-    takozGroup.add(t1.group);
+    lockGroup.add(t1.group);
 
-    // Takoz 2: Kol Takozu (80x120 mm)
-    const t2 = makeBox(0.08, 0.12, STH, takozMat);
+    // Masif Ahşap Kol Takozu (80x120 mm)
+    const t2 = makeBox(0.08, 0.12, STH, takozMat, 0x78350F, 0.5);
     t2.group.position.set(W/2 - SW - SW - 0.04, 0.06, 0);
-    takozGroup.add(t2.group);
+    lockGroup.add(t2.group);
 
-    three3D.meshes.takoz = { group: takozGroup };
-    three3D.doorGroup.add(takozGroup);
+    three3D.meshes.lockStile = { group: lockGroup };
+    three3D.meshes.takoz = { group: lockGroup };
+    three3D.doorGroup.add(lockGroup);
 
-    // 5. İÇ DOLGU (EPS Strafor veya Petek)
-    const isPetek = data.core_type === 'PETEK';
+    // ── 4. TEK PARÇA YEKPARE EPS STRAFOR DOLGU KÖPÜĞÜ (KULLANICI TALEBİ: 2 AYRI PARÇA DEĞİL, TEK KÖPÜK!) ──
     const coreMat = new THREE.MeshStandardMaterial({
-        color: isPetek ? 0xD97706 : 0x38BDF8,
-        roughness: 0.9,
+        color: 0x38BDF8, // EPS Strafor canlı mavi
+        roughness: 0.90,
+        metalness: 0.0,
         transparent: true,
-        opacity: 0.85
+        opacity: 0.88
     });
     const coreGroup = new THREE.Group();
 
-    // Top Core Cavity (Between Top rail & Mid rail)
-    const cavityH = (H - 3 * SW) / 2;
-    const cavityW_top = CW;
-    const coreTop = makeBox(cavityW_top, cavityH, STH, coreMat);
-    coreTop.group.position.set(0, (H/2 - SW - cavityH/2), 0);
-    coreGroup.add(coreTop.group);
+    // TEK PARÇA YEKPARE BLOK: Net iç boşluk (CW x CH x STH)
+    const singleCore = makeBox(CW - 0.002, CH - 0.002, STH, coreMat, 0x0284C7, 0.6);
+    singleCore.group.position.set(0, 0, 0);
+    coreGroup.add(singleCore.group);
 
-    // Bottom Core Cavity (Between Mid rail & Bottom rail)
-    const cavityW_bot = CW;
-    const coreBot = makeBox(cavityW_bot, cavityH, STH, coreMat);
-    coreBot.group.position.set(0, (-H/2 + SW + cavityH/2), 0);
-    coreGroup.add(coreBot.group);
-
-    three3D.meshes.core = { group: coreGroup };
+    three3D.meshes.core = { group: coreGroup, mesh: singleCore.mesh };
     three3D.doorGroup.add(coreGroup);
 
-    // 6. PVC KENAR BANDI ÇERÇEVESİ
+    // ── 5. ÖN VE ARKA WPC/KOMPOZİT PANELLER ──
+    const panelMat = new THREE.MeshStandardMaterial({
+        color: colorHex,
+        roughness: 0.35,
+        metalness: 0.08,
+        transparent: true,
+        opacity: three3D.isXRay ? 0.22 : 1.0
+    });
+
+    const frontBox = makeBox(W, H, PTH, panelMat);
+    three3D.meshes.front = frontBox;
+    three3D.doorGroup.add(frontBox.group);
+
+    const backBox = makeBox(W, H, PTH, panelMat);
+    three3D.meshes.back = backBox;
+    three3D.doorGroup.add(backBox.group);
+
+    // ── 6. 4 KENAR PVC KENAR BANDI ÇERÇEVESİ ──
     const pvcMat = new THREE.MeshStandardMaterial({
         color: 0x1E293B,
         roughness: 0.4
@@ -4828,8 +5021,217 @@ function render3DDoorModel(data) {
     three3D.meshes.pvc = { group: pvcGroup };
     three3D.doorGroup.add(pvcGroup);
 
-    // Set Initial Position / Explode Value
-    update3DExplode(document.getElementById('door-3d-explode-slider')?.value || 0);
+    // Set Initial Position according to current Step
+    applyStepVisibility(three3D.currentStep || 1);
+}
+
+// ════════════════════════════════════════════════════════════
+// ADIM ADIM MONTAJ SİMÜLASYONU KONTROLCÜSÜ (5 ADIM + SERBEST)
+// ════════════════════════════════════════════════════════════
+function set3DAssemblyStep(step) {
+    three3D.currentStep = step;
+
+    // Update Step Pills active state
+    [0, 1, 2, 3, 4, 5].forEach(s => {
+        const btn = document.getElementById(`btn-step-${s}`);
+        if (btn) btn.classList.toggle('active', s === step);
+    });
+
+    applyStepVisibility(step);
+}
+
+function applyStepVisibility(step) {
+    const d = three3D.currentData?.dimensions;
+    if (!d) return;
+
+    const S = 0.001;
+    const STH = (d.carcass_thickness || 32) * S;
+    const PTH = (d.panel_thickness || 4) * S;
+    const frontBaseZ = (STH / 2) + (PTH / 2);
+    const backBaseZ = -frontBaseZ;
+
+    const setVis = (meshKey, vis) => {
+        if (three3D.meshes[meshKey]?.group) {
+            three3D.meshes[meshKey].group.visible = vis;
+        }
+    };
+
+    // Update HUD texts
+    const hudBadge = document.getElementById('d3-hud-badge');
+    const hudStation = document.getElementById('d3-hud-station');
+    const hudTitle = document.getElementById('d3-hud-title');
+    const hudDesc = document.getElementById('d3-hud-desc');
+    const hudParts = document.getElementById('d3-hud-parts');
+
+    if (step === 1) {
+        // ADIM 1: 4 Seren & Plastik Köşe Takozları ile Karkas Çatma
+        setVis('seren', true);
+        setVis('cornerTakoz', true);
+        setVis('lockStile', false);
+        setVis('core', false);
+        setVis('front', false);
+        setVis('back', false);
+        setVis('pvc', false);
+
+        if (three3D.meshes.seren?.group) three3D.meshes.seren.group.position.set(0, 0, 0);
+        if (three3D.meshes.cornerTakoz?.group) three3D.meshes.cornerTakoz.group.position.set(0, 0, 0);
+
+        if (hudBadge) hudBadge.textContent = '1. ÇATI KARKASI';
+        if (hudStation) hudStation.textContent = '📍 Seren Çatma Masası';
+        if (hudTitle) hudTitle.textContent = '1. Adım: 4 Seren & Plastik Köşe Takozları ile Karkas Çatma';
+        if (hudDesc) hudDesc.textContent = 'Sol/sağ boy serenler ile alt/üst başlık serenleri 4 köşedeki rijit Plastik Köşe Takozları ile birleştirilerek gönyeli çatı karkası oluşturulur.';
+        if (hudParts) hudParts.textContent = '🪵 4x Kompozit Seren • 🧩 4x Plastik Köşe Takozu';
+
+        reset3DCamera('front');
+
+    } else if (step === 2) {
+        // ADIM 2: Kilit Takviye Sereni & Masif Ahşap Takozlar (3.5 Boy Seren)
+        setVis('seren', true);
+        setVis('cornerTakoz', true);
+        setVis('lockStile', true);
+        setVis('core', false);
+        setVis('front', false);
+        setVis('back', false);
+        setVis('pvc', false);
+
+        if (three3D.meshes.lockStile?.group) {
+            three3D.meshes.lockStile.group.position.set(0, 0, 0);
+        }
+
+        if (hudBadge) hudBadge.textContent = '2. KİLİT TAKVİYESİ';
+        if (hudStation) hudStation.textContent = '📍 Kilit Takoz İstasyonu';
+        if (hudTitle) hudTitle.textContent = '2. Adım: Kilit Takviye Sereni & Masif Ahşap Takozlar';
+        if (hudDesc) hudDesc.textContent = '3.5 boy seren standardına göre kilit aksına (yerden 1000 mm) 1150 mm kilit takviye sereni ve masif ahşap kilit & kol montaj takozları sabitlenir.';
+        if (hudParts) hudParts.textContent = '🪵 1150 mm Kilit Sereni • 🔒 2x Masif Ahşap Takoz (Kilit & Kol)';
+
+        reset3DCamera('iso');
+
+    } else if (step === 3) {
+        // ADIM 3: Tek Parça EPS Dolgu Köpüğünün Yerleştirilmesi (TEK YEKPARE KÖPÜK)
+        setVis('seren', true);
+        setVis('cornerTakoz', true);
+        setVis('lockStile', true);
+        setVis('core', true);
+        setVis('front', false);
+        setVis('back', false);
+        setVis('pvc', false);
+
+        if (three3D.meshes.core?.group) {
+            three3D.meshes.core.group.position.set(0, 0, 0);
+        }
+
+        if (hudBadge) hudBadge.textContent = '3. TEK PARÇA KÖPÜK';
+        if (hudStation) hudStation.textContent = '📍 CNC Strafor & Dolgu Hattı';
+        if (hudTitle) hudTitle.textContent = '3. Adım: Tek Parça Yekpare EPS Dolgu Köpüğünün Yerleştirilmesi';
+        if (hudDesc) hudDesc.textContent = '2 ayrı parça yerine tam net ebatlanmış (716x1936 mm) TEK PARÇA YEKPARE EPS strafor köpük karkas boşluğuna yerleştirilir.';
+        if (hudParts) hudParts.textContent = '📦 1x Tek Parça EPS Strafor Dolgu Köpüğü (32 mm)';
+
+        reset3DCamera('iso');
+
+    } else if (step === 4) {
+        // ADIM 4: Tutkallama & WPC Panellerin Preslenmesi
+        setVis('seren', true);
+        setVis('cornerTakoz', true);
+        setVis('lockStile', true);
+        setVis('core', true);
+        setVis('front', true);
+        setVis('back', true);
+        setVis('pvc', false);
+
+        if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
+        if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
+
+        if (hudBadge) hudBadge.textContent = '4. SICAK PRES';
+        if (hudStation) hudStation.textContent = '📍 Sıcak Pres Hattı';
+        if (hudTitle) hudTitle.textContent = '4. Adım: Tutkallama & Ön/Arka WPC Panellerin Preslenmesi';
+        if (hudDesc) hudDesc.textContent = 'Tutkallanan karkas gövdesine ön ve arka 4 mm kalınlığında WPC kompozit yüzey panelleri sıcak pres altında preslenir.';
+        if (hudParts) hudParts.textContent = '🚪 Ön WPC Panel (4 mm) • 🚪 Arka WPC Panel (4 mm)';
+
+        reset3DCamera('iso');
+
+    } else if (step === 5) {
+        // ADIM 5: 4 Kenar PVC Bantlama & Nihai Kanat
+        setVis('seren', true);
+        setVis('cornerTakoz', true);
+        setVis('lockStile', true);
+        setVis('core', true);
+        setVis('front', true);
+        setVis('back', true);
+        setVis('pvc', true);
+
+        if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
+        if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
+        if (three3D.meshes.pvc?.group) three3D.meshes.pvc.group.scale.set(1, 1, 1);
+
+        if (hudBadge) hudBadge.textContent = '5. NİHAİ KANAT';
+        if (hudStation) hudStation.textContent = '📍 Homag Kenar Bantlama & CNC';
+        if (hudTitle) hudTitle.textContent = '5. Adım: CNC Ebatlama & 4 Kenar PVC Kenar Bandı';
+        if (hudDesc) hudDesc.textContent = 'Homag hattında 4 kenar 45x1 mm PVC bantlanır, CNC istasyonunda kilit/kol delikleri ve fuga deseni açılarak kanat tamamlanır.';
+        if (hudParts) hudParts.textContent = '🎯 4 Kenar PVC Bandı • CNC Fuga & Kilit Boşaltmaları Tamamlandı';
+
+        reset3DCamera('iso');
+
+    } else if (step === 0) {
+        // ADIM 0: Serbest Patlatma (Free Exploded View)
+        setVis('seren', true);
+        setVis('cornerTakoz', true);
+        setVis('lockStile', true);
+        setVis('core', true);
+        setVis('front', true);
+        setVis('back', true);
+        setVis('pvc', true);
+
+        if (hudBadge) hudBadge.textContent = '💥 SERBEST PATLATMA';
+        if (hudStation) hudStation.textContent = '📐 3D Katman İnceleme Modu';
+        if (hudTitle) hudTitle.textContent = 'Serbest Patlatma & Röntgen İnceleme';
+        if (hudDesc) hudDesc.textContent = 'Kaydırıcıyı hareket ettirerek kapı katmanlarını birbirinden uzaklaştırabilir, Röntgen moduyla iç yapıyı saydam inceleyebilirsiniz.';
+        if (hudParts) hudParts.textContent = 'Tüm Katmanlar ve Detaylar Canlı İncelemede';
+
+        update3DExplode(document.getElementById('door-3d-explode-slider')?.value || 40);
+    }
+}
+
+function prev3DStep() {
+    let nextS = three3D.currentStep - 1;
+    if (nextS < 1) nextS = 5;
+    set3DAssemblyStep(nextS);
+}
+
+function next3DStep() {
+    let nextS = three3D.currentStep + 1;
+    if (nextS > 5) nextS = 1;
+    set3DAssemblyStep(nextS);
+}
+
+function toggle3DPlaySimulation() {
+    three3D.isPlaying = !three3D.isPlaying;
+    const btn = document.getElementById('btn-3d-play-sim');
+
+    if (three3D.isPlaying) {
+        if (btn) {
+            btn.textContent = '⏸️ Duraklat';
+            btn.style.background = '#DC2626';
+        }
+        if (three3D.currentStep === 0 || three3D.currentStep === 5) {
+            set3DAssemblyStep(1);
+        }
+        three3D.playInterval = setInterval(() => {
+            let s = three3D.currentStep + 1;
+            if (s > 5) {
+                s = 1;
+            }
+            set3DAssemblyStep(s);
+        }, 2600);
+    } else {
+        if (btn) {
+            btn.textContent = '▶️ Otomatik Oynat';
+            btn.style.background = '#0284C7';
+        }
+        if (three3D.playInterval) {
+            clearInterval(three3D.playInterval);
+            three3D.playInterval = null;
+        }
+    }
 }
 
 function update3DExplode(val) {
@@ -4837,18 +5239,34 @@ function update3DExplode(val) {
     const label = document.getElementById('door-3d-explode-val');
     if (label) label.textContent = `${three3D.explodeVal}%`;
 
-    const ratio = three3D.explodeVal / 100; // 0 to 1.0
+    if (three3D.currentStep !== 0 && three3D.explodeVal > 0) {
+        three3D.currentStep = 0;
+        [0, 1, 2, 3, 4, 5].forEach(s => {
+            const btn = document.getElementById(`btn-step-${s}`);
+            if (btn) btn.classList.toggle('active', s === 0);
+        });
+        const setVis = (meshKey, vis) => {
+            if (three3D.meshes[meshKey]?.group) three3D.meshes[meshKey].group.visible = vis;
+        };
+        setVis('seren', true);
+        setVis('cornerTakoz', true);
+        setVis('lockStile', true);
+        setVis('core', true);
+        setVis('front', true);
+        setVis('back', true);
+        setVis('pvc', true);
+    }
+
+    const ratio = three3D.explodeVal / 100;
     const d = three3D.currentData?.dimensions;
     if (!d) return;
 
     const STH = (d.carcass_thickness || 32) * 0.001;
     const PTH = (d.panel_thickness || 4) * 0.001;
 
-    // Base Z coordinates
     const frontBaseZ = (STH / 2) + (PTH / 2);
     const backBaseZ = -frontBaseZ;
 
-    // Max explosion offsets in meters
     const frontShift = ratio * 0.35;
     const backShift = ratio * 0.35;
     const coreShift = ratio * 0.12;
@@ -4865,8 +5283,11 @@ function update3DExplode(val) {
     if (three3D.meshes.seren) {
         three3D.meshes.seren.group.position.z = 0;
     }
-    if (three3D.meshes.takoz) {
-        three3D.meshes.takoz.group.position.z = ratio * 0.04;
+    if (three3D.meshes.cornerTakoz) {
+        three3D.meshes.cornerTakoz.group.position.z = ratio * 0.03;
+    }
+    if (three3D.meshes.lockStile) {
+        three3D.meshes.lockStile.group.position.z = ratio * 0.06;
     }
     if (three3D.meshes.pvc) {
         const scale = 1.0 + (ratio * 0.18);
@@ -4905,7 +5326,7 @@ function toggle3DAutoRotate() {
 function reset3DCamera(view) {
     if (!three3D.camera || !three3D.controls) return;
     if (view === 'iso') {
-        three3D.camera.position.set(1.5, 0.8, 2.2);
+        three3D.camera.position.set(1.4, 0.8, 2.2);
     } else if (view === 'front') {
         three3D.camera.position.set(0, 0, 2.6);
     } else if (view === 'top') {
