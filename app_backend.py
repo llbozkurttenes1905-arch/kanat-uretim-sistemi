@@ -60,17 +60,17 @@ def get_default_materials():
             "current_stock": 6500.0,
             "min_stock": 2000.0,
             "unit_price": 175.0,
-            "notes": "Düz/Lake beyaz preslenmiş yüzey kaplama paneli (2 adet/kanat)"
+            "notes": "D.Beyaz WPC/kompozit yüzey paneli (2 adet/kanat)"
         },
         "MAT_MDF_ANTRASIT": {
             "id": "MAT_MDF_ANTRASIT",
-            "name": "WPC/MDF Yüzey Levhası - Antrasit (4mm)",
+            "name": "WPC/Kompozit Yüzey Levhası - Antrasit (4mm)",
             "category": "Yüzey Levhaları",
             "unit": "Adet",
             "current_stock": 2800.0,
             "min_stock": 1500.0,
             "unit_price": 185.0,
-            "notes": "Antrasit mat preslenmiş yüzey kaplama paneli (2 adet/kanat)"
+            "notes": "Antrasit WPC/kompozit yüzey paneli (2 adet/kanat)"
         },
         "MAT_MDF_SOMONO": {
             "id": "MAT_MDF_SOMONO",
@@ -184,18 +184,18 @@ def get_default_recipes():
         },
         "REC_KANAT_BEYAZ": {
             "id": "REC_KANAT_BEYAZ",
-            "name": "D.Beyaz Lake Yüzeyli Kanat Kapı",
+            "name": "D.Beyaz Kanat Kapı",
             "code": "KANAT-BEYAZ",
             "model_pattern": "BEYAZ",
             "is_default": False,
-            "description": "Düz/lake beyaz preslenmiş MDF yüzey levhalı modern kanat kapı.",
+            "description": "D.Beyaz preslenmiş WPC kompozit yüzey levhalı modern kanat kapı.",
             "items": [
                 {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
                 {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
-                {"material_id": "MAT_MDF_BEYAZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "D.Beyaz lake yüzey levhası (2 adet)"}
+                {"material_id": "MAT_MDF_BEYAZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "D.Beyaz yüzey levhası (2 adet)"}
             ]
         },
         "REC_KANAT_BTEAK": {
@@ -232,18 +232,18 @@ def get_default_recipes():
         },
         "REC_KANAT_ANTRASIT": {
             "id": "REC_KANAT_ANTRASIT",
-            "name": "Antrasit Mat Kanat Kapı",
+            "name": "Antrasit Kanat Kapı",
             "code": "KANAT-ANTRASIT",
             "model_pattern": "ANTRAS",
             "is_default": False,
-            "description": "Antrasit mat yüzey kaplama panelli modern kanat kapı.",
+            "description": "Antrasit WPC kompozit kaplama panelli modern kanat kapı.",
             "items": [
                 {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
                 {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
-                {"material_id": "MAT_MDF_ANTRASIT", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Antrasit mat yüzey levhası (2 adet)"}
+                {"material_id": "MAT_MDF_ANTRASIT", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Antrasit yüzey levhası (2 adet)"}
             ]
         },
         "REC_KANAT_SOMONO": {
@@ -276,6 +276,54 @@ def get_default_recipes():
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
                 {"material_id": "MAT_PETEK_KRAFT", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kraft petek iç dolgu"},
                 {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Standart WPC kompozit yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_AKCAAGAC": {
+            "id": "REC_KANAT_AKCAAGAC",
+            "name": "Akçaağaç Kanat Kapı",
+            "code": "KANAT-AKCAAGAC",
+            "model_pattern": "AKÇAAGAÇ",
+            "is_default": False,
+            "description": "Akçaağaç desenli WPC kompozit yüzey panelli kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_AKCAAGAC", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Akçaağaç yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_KCEVIZ": {
+            "id": "REC_KANAT_KCEVIZ",
+            "name": "K.Ceviz Kanat Kapı",
+            "code": "KANAT-KCEVIZ",
+            "model_pattern": "K.CEVIZ",
+            "is_default": False,
+            "description": "Koyu Ceviz desenli WPC kompozit yüzey panelli kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_KCEVIZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "K.Ceviz yüzey levhası (2 adet)"}
+            ]
+        },
+        "REC_KANAT_COCO": {
+            "id": "REC_KANAT_COCO",
+            "name": "Coco Kanat Kapı",
+            "code": "KANAT-COCO",
+            "model_pattern": "COCO",
+            "is_default": False,
+            "description": "Coco desenli WPC kompozit yüzey panelli kanat kapı.",
+            "items": [
+                {"material_id": "MAT_SEREN_KOMP", "qty": 7.1, "unit": "Metre", "waste_pct": 0.0, "notes": "3.5 Boy Kompozit Seren çerçevesi"},
+                {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
+                {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
+                {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
+                {"material_id": "MAT_MDF_COCO", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Coco yüzey levhası (2 adet)"}
             ]
         }
     }
