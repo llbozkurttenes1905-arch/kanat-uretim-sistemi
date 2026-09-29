@@ -3121,7 +3121,7 @@
   "materials": {
     "MAT_SEREN_KOMP": {
       "id": "MAT_SEREN_KOMP",
-      "name": "Kompozit Ahşap Seren (42x42mm)",
+      "name": "Kompozit Seren (42x42mm)",
       "category": "Seren & Karkas",
       "unit": "Metre",
       "current_stock": 45000.0,
@@ -3201,13 +3201,13 @@
     },
     "MAT_MDF_STD": {
       "id": "MAT_MDF_STD",
-      "name": "WPC/MDF Yüzey Levhası - Standart Ahşap (4mm)",
+      "name": "WPC/Kompozit Yüzey Levhası - Standart (4mm)",
       "category": "Yüzey Levhaları",
       "unit": "Adet",
       "current_stock": 1500.0,
       "min_stock": 800.0,
       "unit_price": 170.0,
-      "notes": "Standart ham veya ahşap desenli kaplama paneli (2 adet/kanat)"
+      "notes": "Standart ham veya desenli kompozit kaplama paneli (2 adet/kanat)"
     },
     "MAT_KENAR_BANDI": {
       "id": "MAT_KENAR_BANDI",
@@ -3231,13 +3231,13 @@
     },
     "MAT_KILIT_TAKOZ": {
       "id": "MAT_KILIT_TAKOZ",
-      "name": "Kilit & Kol Destek Takozu (Ahşap)",
+      "name": "Kilit & Kol Destek Takozu (Kompozit)",
       "category": "Aksesuar & Takviye",
       "unit": "Adet",
       "current_stock": 22000.0,
       "min_stock": 5000.0,
       "unit_price": 12.0,
-      "notes": "Kilit ve kol boşaltmaları için iç takviye ahşap takozu (1 kanat = 2 adet)"
+      "notes": "Kilit ve kol boşaltmaları için iç takviye kompozit takoz (1 kanat = 2 adet)"
     }
   },
   "scraps": {
@@ -3603,7 +3603,7 @@
       "code": "KANAT-STRAFOR",
       "model_pattern": "",
       "is_default": true,
-      "description": "30 DNS EPS dolgulu, ladin serenli ve standart yüzeyli norm ahşap kanat kapı.",
+      "description": "30 DNS EPS dolgulu, kompozit serenli standart norm kompozit kanat kapı.",
       "items": [
         {
           "material_id": "MAT_SEREN_KOMP",
@@ -3631,7 +3631,7 @@
           "qty": 2.0,
           "unit": "Adet",
           "waste_pct": 0.0,
-          "notes": "Kilit ve kol ahşap takviye takozları"
+          "notes": "Kilit ve kol kompozit takviye takozları"
         },
         {
           "material_id": "MAT_STRAFOR_EPS",
@@ -3645,7 +3645,7 @@
           "qty": 2.0,
           "unit": "Adet",
           "waste_pct": 0.0,
-          "notes": "Ön ve arka standart ahşap MDF yüzey levhaları"
+          "notes": "Ön ve arka standart WPC kompozit yüzey levhaları"
         }
       ]
     },
@@ -3755,11 +3755,11 @@
     },
     "REC_KANAT_TEAK": {
       "id": "REC_KANAT_TEAK",
-      "name": "Teak Ahşap Yüzeyli Kanat Kapı",
+      "name": "Teak Desenli Kompozit Kanat Kapı",
       "code": "KANAT-TEAK",
       "model_pattern": "TEAK",
       "is_default": false,
-      "description": "Teak ahşap desenli kaplama panelli kanat kapı.",
+      "description": "Teak desenli kompozit kaplama panelli kanat kapı.",
       "items": [
         {
           "material_id": "MAT_SEREN_KOMP",
@@ -3957,7 +3957,7 @@
           "qty": 2.0,
           "unit": "Adet",
           "waste_pct": 0.0,
-          "notes": "Standart ahşap yüzey levhası (2 adet)"
+          "notes": "Standart WPC kompozit yüzey levhası (2 adet)"
         }
       ]
     }

@@ -1754,7 +1754,7 @@
                 </div>
                 <div>
                     <label class="form-label">Malzeme Adı *</label>
-                    <input type="text" id="mat-name" required class="form-input" placeholder="Örn: Ladin Boy Seren 42x42mm">
+                    <input type="text" id="mat-name" required class="form-input" placeholder="Örn: Kompozit Boy Seren 42x42mm">
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                     <div>
@@ -3480,7 +3480,7 @@ function viewPackingList(sid) {
             <td style="padding:8px 10px;">${idx + 1}</td>
             <td style="padding:8px 10px; font-weight:800; font-family:monospace;">${it.order_code || s.shipment_code}</td>
             <td style="padding:8px 10px; font-weight:600;">${it.model || 'Standart Kanat Kapı'}</td>
-            <td style="padding:8px 10px; color:#475569;">${it.surface || 'Ahşap Desen'}</td>
+            <td style="padding:8px 10px; color:#475569;">${it.surface || 'Kompozit / PVC'}</td>
             <td style="padding:8px 10px; text-align:center; font-weight:800; color:#0F172A;">${it.doors || s.doors} Adet</td>
         </tr>
     `).join('');

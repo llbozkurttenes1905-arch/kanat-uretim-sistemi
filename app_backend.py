@@ -14,7 +14,7 @@ def get_default_materials():
     return {
         "MAT_SEREN_KOMP": {
             "id": "MAT_SEREN_KOMP",
-            "name": "Kompozit Ahşap Seren (42x42mm)",
+            "name": "Kompozit Seren (42x42mm)",
             "category": "Seren & Karkas",
             "unit": "Metre",
             "current_stock": 45000.0,
@@ -94,13 +94,13 @@ def get_default_materials():
         },
         "MAT_MDF_STD": {
             "id": "MAT_MDF_STD",
-            "name": "WPC/MDF Yüzey Levhası - Standart Ahşap (4mm)",
+            "name": "WPC/Kompozit Yüzey Levhası - Standart (4mm)",
             "category": "Yüzey Levhaları",
             "unit": "Adet",
             "current_stock": 1500.0,
             "min_stock": 800.0,
             "unit_price": 170.0,
-            "notes": "Standart ham veya ahşap desenli kaplama paneli (2 adet/kanat)"
+            "notes": "Standart WPC kompozit kaplama paneli (2 adet/kanat)"
         },
         "MAT_KENAR_BANDI": {
             "id": "MAT_KENAR_BANDI",
@@ -124,13 +124,13 @@ def get_default_materials():
         },
         "MAT_KILIT_TAKOZ": {
             "id": "MAT_KILIT_TAKOZ",
-            "name": "Kilit & Kol Destek Takozu (Ahşap)",
+            "name": "Kilit & Kol Destek Takozu (Kompozit)",
             "category": "Aksesuar & Takviye",
             "unit": "Adet",
             "current_stock": 22000.0,
             "min_stock": 5000.0,
             "unit_price": 12.0,
-            "notes": "Kilit ve kol boşaltmaları için iç takviye ahşap takozu (1 kanat = 2 adet)"
+            "notes": "Kilit ve kol boşaltmaları için iç takviye kompozit takoz (1 kanat = 2 adet)"
         }
     }
 
@@ -142,14 +142,14 @@ def get_default_recipes():
             "code": "KANAT-STRAFOR",
             "model_pattern": "",
             "is_default": True,
-            "description": "30 DNS EPS dolgulu, ladin serenli ve standart yüzeyli norm ahşap kanat kapı.",
+            "description": "30 DNS EPS dolgulu, kompozit serenli norm kompozit kanat kapı.",
             "items": [
                 {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres ve vakum tutkalı"},
-                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol ahşap takviye takozları"},
+                {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol kompozit takviye takozları"},
                 {"material_id": "MAT_STRAFOR_EPS", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "30 DNS EPS dolgu straforu"},
-                {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Ön ve arka standart ahşap MDF yüzey levhaları"}
+                {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Ön ve arka standart WPC kompozit yüzey levhaları"}
             ]
         },
         "REC_KANAT_BEYAZ": {
@@ -186,11 +186,11 @@ def get_default_recipes():
         },
         "REC_KANAT_TEAK": {
             "id": "REC_KANAT_TEAK",
-            "name": "Teak Ahşap Yüzeyli Kanat Kapı",
+            "name": "Teak Desenli Kompozit Kanat Kapı",
             "code": "KANAT-TEAK",
             "model_pattern": "TEAK",
             "is_default": False,
-            "description": "Teak ahşap desenli kaplama panelli kanat kapı.",
+            "description": "Teak desenli WPC kompozit panelli kanat kapı.",
             "items": [
                 {"material_id": "MAT_SEREN_KOMP", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "Boy ve En seren çerçevesi"},
                 {"material_id": "MAT_KENAR_BANDI", "qty": 5.8, "unit": "Metre", "waste_pct": 0.0, "notes": "4 kenar PVC koruma bandı"},
@@ -245,7 +245,7 @@ def get_default_recipes():
                 {"material_id": "MAT_TUTKAL_PRES", "qty": 0.35, "unit": "Kg", "waste_pct": 0.0, "notes": "Sıcak pres tutkalı"},
                 {"material_id": "MAT_KILIT_TAKOZ", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kilit ve kol takviye takozları"},
                 {"material_id": "MAT_PETEK_KRAFT", "qty": 1.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Kraft petek iç dolgu"},
-                {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Standart ahşap yüzey levhası (2 adet)"}
+                {"material_id": "MAT_MDF_STD", "qty": 2.0, "unit": "Adet", "waste_pct": 0.0, "notes": "Standart WPC kompozit yüzey levhası (2 adet)"}
             ]
         }
     }
@@ -755,7 +755,7 @@ def get_barcode_label(oid: str):
         "customer": order.get("customer", ""),
         "model": order.get("model", ""),
         "surface_finish": "Melamin / Lake",
-        "color": "Ahşap / Mat",
+        "color": "Kompozit / Mat",
         "width": 80,
         "height": 200,
         "doors": order.get("qty", 0),
@@ -1079,7 +1079,7 @@ def simulate_schedule(target_qty: Optional[int] = 1000, facility_id: Optional[st
             "order_code": o.get("order_no", ""),
             "customer": o.get("customer", ""),
             "model": "Standart Kanat Kapı",
-            "surface": "Melamin / Ahşap",
+            "surface": "Melamin / Kompozit",
             "doors": o.get("remaining_qty", 0),
             "required_days": max(1, round(o.get("remaining_qty", 0) / (daily_capacity or 1), 1)),
             "estimated_start": today_dt.isoformat(),
@@ -1448,7 +1448,7 @@ def calculate_mrp(facility_id: Optional[str] = "all", time_scope: Optional[str] 
             {"component": "Yüzey Levhası", "spec": "2 Adet (Ön ve Arka Yüz MDF/WPC 4mm Levha)"},
             {"component": "PVC Kenar Bandı", "spec": "5.8 Metre / Kapı (1mm x 45mm Ebatlama Bandı)"},
             {"component": "Sıcak Pres Tutkalı", "spec": "0.35 Kg / Kapı (Poliüretan/D3 Tutkal)"},
-            {"component": "Kilit Takozu", "spec": "2 Adet / Kapı (Ahşap Takviye Takozu)"}
+            {"component": "Kilit Takozu", "spec": "2 Adet / Kapı (Kompozit Takviye Takozu)"}
         ]
     }
 
