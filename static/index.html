@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERGÜNBAŞ Group — Kanat Üretim &amp; Sipariş Portalı</title>
+    <title>ERGÜNBAŞ Group — Kanat Üretim, İş Gücü &amp; MRP Portalı</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -112,7 +112,7 @@
             display: flex;
             align-items: center;
             gap: 7px;
-            padding: 8px 16px;
+            padding: 8px 15px;
             font-size: 13.5px;
             font-weight: 600;
             color: #475569;
@@ -358,6 +358,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .panel-title {
@@ -485,43 +486,15 @@
             border-radius: 9999px;
             font-size: 11px;
             font-weight: 700;
+            white-space: nowrap;
         }
 
-        .badge-red {
-            background: #FEF2F2;
-            color: #B91C1C;
-            border: 1px solid #FECACA;
-        }
-
-        .badge-cyan, .badge-sky {
-            background: #F0F9FF;
-            color: #0369A1;
-            border: 1px solid #BAE6FD;
-        }
-
-        .badge-green {
-            background: #F0FDF4;
-            color: #15803D;
-            border: 1px solid #BBF7D0;
-        }
-
-        .badge-amber {
-            background: #FFFBEB;
-            color: #B45309;
-            border: 1px solid #FDE68A;
-        }
-
-        .badge-slate {
-            background: #F1F5F9;
-            color: #475569;
-            border: 1px solid #CBD5E1;
-        }
-
-        .badge-indigo {
-            background: #EEF2FF;
-            color: #4338CA;
-            border: 1px solid #C7D2FE;
-        }
+        .badge-red { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+        .badge-cyan, .badge-sky { background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; }
+        .badge-green { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+        .badge-amber { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+        .badge-slate { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+        .badge-indigo { background: #EEF2FF; color: #4338CA; border: 1px solid #C7D2FE; }
 
         /* ── PROGRESS BAR ── */
         .progress-bar-bg {
@@ -632,7 +605,7 @@
             box-shadow: 0 0 0 3px rgba(227, 7, 19, 0.12);
         }
 
-        /* ── DAY CARDS (ÜRETİM GRAFİĞİ) ── */
+        /* ── DAY CARDS ── */
         .day-card {
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
@@ -656,26 +629,29 @@
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(225, 29, 72, 0.05);
         }
-
         .sarkan-panel .panel-header {
             background: #FFE4E6;
             border-bottom: 1px solid #FECDD3;
         }
+        .sarkan-panel .panel-title { color: #BE123C; }
+        .sarkan-panel .data-table th { background: #FFF1F2; color: #9F1239; border-bottom: 1px solid #FECDD3; }
+        .sarkan-panel .data-table td { background: #FFFFFF; border-bottom: 1px solid #FFE4E6; }
 
-        .sarkan-panel .panel-title {
-            color: #BE123C;
+        /* ── MRP ALERT PANEL ── */
+        .mrp-alert-panel {
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(217, 119, 6, 0.05);
         }
-
-        .sarkan-panel .data-table th {
-            background: #FFF1F2;
-            color: #9F1239;
-            border-bottom: 1px solid #FECDD3;
+        .mrp-alert-panel .panel-header {
+            background: #FEF3C7;
+            border-bottom: 1px solid #FDE68A;
         }
-
-        .sarkan-panel .data-table td {
-            background: #FFFFFF;
-            border-bottom: 1px solid #FFE4E6;
-        }
+        .mrp-alert-panel .panel-title { color: #B45309; }
+        .mrp-alert-panel .data-table th { background: #FFFBEB; color: #92400E; border-bottom: 1px solid #FDE68A; }
+        .mrp-alert-panel .data-table td { background: #FFFFFF; border-bottom: 1px solid #FEF3C7; }
 
         /* ── MODAL ── */
         .modal-overlay {
@@ -689,7 +665,6 @@
             justify-content: center;
             padding: 20px;
         }
-
         .modal-overlay.active { display: flex; }
 
         .modal-box {
@@ -702,7 +677,6 @@
             overflow-y: auto;
             box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
         }
-
         .modal-header {
             padding: 18px 24px;
             border-bottom: 1px solid #F1F5F9;
@@ -710,7 +684,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         .modal-title { font-size: 16px; font-weight: 800; color: #0F172A; }
         .modal-body { padding: 24px; }
         .modal-footer {
@@ -733,7 +706,6 @@
             justify-content: center;
             padding: 20px;
         }
-
         .login-card {
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
@@ -756,9 +728,7 @@
             transition: all 0.3s ease;
             pointer-events: none;
         }
-
         .toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
-
         .toast-inner {
             display: flex;
             align-items: center;
@@ -770,7 +740,6 @@
             min-width: 240px;
             box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
         }
-
         .toast-success { background: #F0FDF4; border: 1px solid #86EFAC; color: #15803D; }
         .toast-error { background: #FEF2F2; border: 1px solid #FCA5A5; color: #B91C1C; }
 
@@ -787,7 +756,7 @@
         <div style="text-align:center; margin-bottom:28px;">
             <img src="/static/logo.png" alt="ERGÜNBAŞ" style="height:72px; margin-bottom:12px; margin-left:auto; margin-right:auto; object-fit:contain;">
             <div style="font-size:22px; font-weight:900; color:#0F172A; letter-spacing:-0.4px;">ERGÜNBAŞ <span style="color:#E30713;">Group</span></div>
-            <div style="font-size:12px; color:#64748B; margin-top:4px; font-weight:500;">Kanat Üretim &amp; Sipariş Takip Sistemi</div>
+            <div style="font-size:12px; color:#64748B; margin-top:4px; font-weight:500;">Kanat Üretim, İş Gücü &amp; MRP Portalı</div>
         </div>
 
         <form id="login-form" onsubmit="handleLogin(event)" style="display:flex;flex-direction:column;gap:16px;">
@@ -819,9 +788,9 @@
             <img src="/static/logo.png" alt="ERGÜNBAŞ" class="header-logo">
             <div class="header-brand-text">
                 <div class="header-brand-name">ERGÜNBAŞ <span>Group</span></div>
-                <div class="header-brand-sub">Kanat Üretim &amp; Sipariş Yönetim Portalı</div>
+                <div class="header-brand-sub">Kanat Üretim, İş Gücü &amp; MRP Portalı</div>
             </div>
-            <div class="header-badge">ÜRETİM &amp; SİPARİŞ</div>
+            <div class="header-badge">ÜRETİM • İŞ GÜCÜ • MRP</div>
         </div>
 
         <!-- Nav Tabs -->
@@ -830,6 +799,10 @@
             <button class="nav-tab" onclick="switchTab('orders')" id="tab-orders">Siparişler</button>
             <button class="nav-tab" onclick="switchTab('daily')" id="tab-daily">Günlük Giriş</button>
             <button class="nav-tab" onclick="switchTab('machines')" id="tab-machines">Makineler</button>
+            <button class="nav-tab" onclick="switchTab('mrp')" id="tab-mrp">
+                <span>📦 MRP &amp; Malzemeler</span>
+                <span id="mrp-nav-badge" class="hidden text-[10px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white font-bold">!</span>
+            </button>
             <button class="nav-tab hidden" onclick="switchTab('users')" id="tab-users">Kullanıcılar</button>
         </nav>
 
@@ -887,8 +860,8 @@
 
     <!-- ===== DASHBOARD ===== -->
     <div id="section-dashboard">
-        <!-- Top KPI Row -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px;">
+        <!-- Top KPI Row (4 Cards including Workforce) -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;">
             <div class="panel" style="padding:22px 24px;border-top:4px solid #0F172A;">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#64748B;margin-bottom:6px;">Toplam Biten Kapı</div>
                 <div id="kpi-total-output" style="font-size:34px;font-weight:900;color:#0F172A;">0 <span style="font-size:14px;font-weight:500;color:#64748B;">kapı</span></div>
@@ -905,6 +878,13 @@
                 <div class="kpi-card-label" style="color:#0369A1;"><span id="kpi-fac2-label">Alt Tesis</span> — Biten Kapı</div>
                 <div class="kpi-card-value" id="kpi-fac2-output">0 <span>kapı</span></div>
                 <div class="kpi-card-meta" style="color:#0284C7;">Siparişleri Aç →</div>
+            </div>
+
+            <!-- NEW: WORKFORCE KPI -->
+            <div class="panel" style="padding:22px 24px;border-top:4px solid #16A34A;cursor:pointer;" onclick="switchTab('daily')">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#15803D;margin-bottom:6px;">👥 Bugün Hatlarda Çalışan</div>
+                <div id="kpi-workforce" style="font-size:34px;font-weight:900;color:#0F172A;">0 <span style="font-size:14px;font-weight:600;color:#15803D;">personel</span></div>
+                <div id="kpi-manhours" style="font-size:12px;color:#64748B;margin-top:6px;font-weight:500;">0 Adam-Saat</div>
             </div>
         </div>
 
@@ -958,26 +938,30 @@
             </div>
         </div>
 
-        <!-- Makine Performans ve Verimlilik Tablosu -->
+        <!-- Makine Performans, Çalışma Saati & Hat Başına Çalışan Personel Tablosu -->
         <div class="panel">
             <div class="panel-header">
                 <div>
-                    <div class="panel-title">⚙️ Makine Performans &amp; Çalışma Saati Özeti</div>
-                    <div class="panel-sub">Makinelerin dönem boyunca ürettiği parça ve saatlik verimliliği</div>
+                    <div class="panel-title">⚙️ Hat / Makine Performansı &amp; Çalışan Personel İş Gücü Dağılımı</div>
+                    <div class="panel-sub">Hangi hatta kaç kişi çalışıyor, üretilen parça, toplam adam-saat ve kişi başı verimlilik</div>
                 </div>
             </div>
             <div style="overflow-x:auto;">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Makine Adı</th>
-                            <th style="text-align:center;">Toplam Üretilen Parça</th>
-                            <th style="text-align:center;">Toplam Çalışma Süresi (sa)</th>
-                            <th style="text-align:center;">Verimlilik (Parça / Saat)</th>
+                            <th>Makine / Hat Adı</th>
+                            <th>Tesis</th>
+                            <th style="text-align:center;color:#0F172A;">Hatta Çalışan</th>
+                            <th style="text-align:center;">Çalışma Süresi (sa)</th>
+                            <th style="text-align:center;color:#0284C7;">Toplam Adam-Saat</th>
+                            <th style="text-align:center;">Üretilen Parça</th>
+                            <th style="text-align:center;">Hat Verimi (Parça/sa)</th>
+                            <th style="text-align:center;color:#15803D;">Kişi Başı Verim (Parça/Adam-sa)</th>
                         </tr>
                     </thead>
                     <tbody id="dashboard-machines-tbody">
-                        <tr><td colspan="4" style="text-align:center;padding:24px;color:#64748B;">Kayıt bulunamadı.</td></tr>
+                        <tr><td colspan="8" style="text-align:center;padding:24px;color:#64748B;">Kayıt bulunamadı.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1025,8 +1009,8 @@
     <!-- ===== DAILY ENTRY ===== -->
     <div id="section-daily" class="hidden">
         <div style="margin-bottom:22px;">
-            <div style="font-size:20px;font-weight:900;color:#0F172A;letter-spacing:-0.3px;">Günlük Üretim ve Performans Girişi</div>
-            <div style="font-size:12px;color:#64748B;margin-top:2px;">Sipariş paketleme adetleri ve makine çalışma saatleri girişi</div>
+            <div style="font-size:20px;font-weight:900;color:#0F172A;letter-spacing:-0.3px;">Günlük Üretim &amp; Hat Başına Personel Girişi</div>
+            <div style="font-size:12px;color:#64748B;margin-top:2px;">Hangi hatta kaç kişi çalıştı, harcanan çalışma saatleri ve sipariş paketleme adetleri</div>
         </div>
 
         <!-- Tarih & Operatör Ortak Bar -->
@@ -1052,7 +1036,7 @@
             </div>
         </div>
 
-        <!-- İki Ayrılmış Kart: 1. Sipariş Biten Kapı, 2. Makine Performans -->
+        <!-- İki Ayrılmış Kart: 1. Sipariş Biten Kapı, 2. Makine Performans & Çalışan Personel -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
 
             <!-- 1. SİPARİŞ PAKETLEME / BİTEN KAPI GİRİŞİ -->
@@ -1091,40 +1075,47 @@
                 </div>
             </div>
 
-            <!-- 2. MAKİNE ÇALIŞMA & PARÇA GİRİŞİ -->
+            <!-- 2. MAKİNE ÇALIŞMA & HAT BAŞINA PERSONEL GİRİŞİ -->
             <div class="panel" style="border-top:4px solid #0284C7;">
                 <div class="panel-header">
                     <div>
-                        <div class="panel-title" style="color:#0369A1;">⚙️ Makine Çalışma &amp; Performans Girişi</div>
-                        <div class="panel-sub">Makinenin günlük ürettiği parça ve çalışma saatini girin</div>
+                        <div class="panel-title" style="color:#0369A1;">⚙️ Hat / Makine &amp; Çalışan Sayısı Girişi</div>
+                        <div class="panel-sub">Hangi hatta kaç kişi çalıştı, harcanan saat ve çıkan parça</div>
                     </div>
                 </div>
                 <div style="padding:22px;display:flex;flex-direction:column;gap:14px;">
                     <div>
-                        <label class="form-label">Makine Seçin *</label>
-                        <select id="entry-machine-select" class="form-select">
+                        <label class="form-label">Makine / Hat Seçin *</label>
+                        <select id="entry-machine-select" class="form-select" onchange="handleMachineSelectChange()">
                             <option value="">Makine seçiniz...</option>
                         </select>
                     </div>
 
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
                         <div>
-                            <label class="form-label">Çıkan Parça Adedi *</label>
-                            <input type="number" min="0" id="entry-machine-qty" class="form-input" placeholder="Örn: 150" style="font-size:16px;font-weight:700;color:#0284C7;">
+                            <label class="form-label">Çıkan Parça *</label>
+                            <input type="number" min="0" id="entry-machine-qty" class="form-input" placeholder="Örn: 150" style="font-size:15px;font-weight:700;color:#0284C7;">
                         </div>
                         <div>
                             <label class="form-label">Çalışma Saati *</label>
-                            <input type="number" step="0.5" min="0" max="24" id="entry-machine-hours" class="form-input" placeholder="Örn: 8.0" style="font-size:16px;font-weight:700;">
+                            <input type="number" step="0.5" min="0" max="24" id="entry-machine-hours" value="8.0" class="form-input" placeholder="Örn: 8.0" style="font-size:15px;font-weight:700;">
                         </div>
+                        <div>
+                            <label class="form-label" style="color:#E30713;">👥 Çalışan Kişi *</label>
+                            <input type="number" min="1" max="20" id="entry-machine-workers" value="2" class="form-input" placeholder="Örn: 2" style="font-size:15px;font-weight:700;border-color:#FCA5A5;background:#FEF2F2;">
+                        </div>
+                    </div>
+                    <div style="font-size:11px;color:#64748B;margin-top:-6px;">
+                        💡 <em>Adam-Saat = Çalışma Saati x Çalışan Kişi Sayısı (Kişi başı verimlilik otomatik hesaplanır)</em>
                     </div>
 
                     <div>
                         <label class="form-label">Not / Durum</label>
-                        <input type="text" id="entry-machine-notes" class="form-input" placeholder="Hat durumu, operatör vb.">
+                        <input type="text" id="entry-machine-notes" class="form-input" placeholder="Hat durumu, operatör, vardiya vb.">
                     </div>
 
                     <button class="btn-primary" onclick="submitMachineDailyEntry()" style="background:#0284C7;justify-content:center;padding:11px;box-shadow:0 2px 8px rgba(2,132,199,0.25);">
-                        ⚙️ Makine Kaydını Ekle
+                        ⚙️ Hat / Makine Kaydını Ekle
                     </button>
                 </div>
             </div>
@@ -1134,18 +1125,18 @@
         <!-- Bugün Girilen Kayıtların Özeti -->
         <div class="panel" style="margin-bottom:24px;">
             <div class="panel-header">
-                <div class="panel-title">📋 Bugün Girilen Üretim Kayıtları</div>
+                <div class="panel-title">📋 Bugün Girilen Üretim &amp; İş Gücü Kayıtları</div>
             </div>
             <div style="padding:20px;">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
                     <div>
-                        <div style="font-size:12px;font-weight:700;color:#15803D;margin-bottom:10px;">📦 Girilen Siparişler</div>
+                        <div style="font-size:12px;font-weight:700;color:#15803D;margin-bottom:10px;">📦 Girilen Sipariş Paketleri</div>
                         <div id="today-orders-list" style="display:flex;flex-direction:column;gap:8px;">
                             <div style="color:#64748B;font-size:12px;">Kayıt yok.</div>
                         </div>
                     </div>
                     <div>
-                        <div style="font-size:12px;font-weight:700;color:#0369A1;margin-bottom:10px;">⚙️ Girilen Makineler</div>
+                        <div style="font-size:12px;font-weight:700;color:#0369A1;margin-bottom:10px;">⚙️ Girilen Hatlar &amp; Personel Sayıları</div>
                         <div id="today-machines-list" style="display:flex;flex-direction:column;gap:8px;">
                             <div style="color:#64748B;font-size:12px;">Kayıt yok.</div>
                         </div>
@@ -1157,21 +1148,22 @@
 
     <!-- ===== MACHINES ===== -->
     <div id="section-machines" class="hidden">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;">
             <div>
                 <div style="font-size:20px;font-weight:900;color:#0F172A;letter-spacing:-0.3px;">Makine ve İstasyon Yönetimi</div>
-                <div style="font-size:12px;color:#64748B;margin-top:2px;">Tesis bazında tanımlı makineler ve kapasite limitleri</div>
+                <div style="font-size:12px;color:#64748B;margin-top:2px;">Tesis bazında tanımlı makineler, standart çalışan personel sayıları ve kapasite limitleri</div>
             </div>
-            <button class="btn-primary" onclick="openMachineModal()">+ Yeni Makine</button>
+            <button class="btn-primary" onclick="openMachineModal()">+ Yeni Makine Ekle</button>
         </div>
         <div class="panel" style="overflow:hidden;">
             <div style="overflow-x:auto;">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Makine / Hat</th>
+                            <th>Makine / Hat Adı</th>
                             <th>Tesis</th>
                             <th>Bölüm / Aşama</th>
+                            <th style="text-align:center;">Standart Çalışan</th>
                             <th style="text-align:center;">Kapasite (adet/sa)</th>
                             <th style="text-align:center;">Durum</th>
                             <th>Notlar</th>
@@ -1179,9 +1171,167 @@
                         </tr>
                     </thead>
                     <tbody id="machines-tbody">
-                        <tr><td colspan="7" style="text-align:center;padding:32px;color:#64748B;">Yükleniyor...</td></tr>
+                        <tr><td colspan="8" style="text-align:center;padding:32px;color:#64748B;">Yükleniyor...</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MRP & MALZEME PLANLAMA (YENİ MODÜL) ===== -->
+    <div id="section-mrp" class="hidden space-y-6">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+            <div>
+                <div style="font-size:20px;font-weight:900;color:#0F172A;letter-spacing:-0.3px;">MRP — Malzeme İhtiyaç Planlaması &amp; Depo Stok Yönetimi</div>
+                <div style="font-size:12px;color:#64748B;margin-top:2px;">Açık siparişlerin standart kanat reçetelerine (BOM) göre hammadde gereksinimleri, anlık depo stokları ve eksik satın alma listesi</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <button class="btn-secondary" onclick="loadMRP()" style="font-weight:700;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    Yenile
+                </button>
+                <button class="btn-secondary" onclick="openStockModal()" style="font-weight:700;color:#0284C7;border-color:#BAE6FD;">
+                    📦 Hızlı Stok Hareketi
+                </button>
+                <button class="btn-primary" onclick="openMaterialModal()">
+                    + Yeni Malzeme Tanımla
+                </button>
+            </div>
+        </div>
+
+        <!-- MRP Filter Bar -->
+        <div class="panel" style="padding:14px 20px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                    <div style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;">Hesaplama Kapsamı:</div>
+                    <select id="mrp-scope-select" onchange="loadMRP()" class="form-select" style="width:220px;padding:6px 12px;font-size:12.5px;font-weight:600;">
+                        <option value="all_open">Tüm Açık Siparişler (243 Sipariş)</option>
+                        <option value="this_week">Bu Hafta Teslim Edilecekler</option>
+                        <option value="critical">Kritik / Geciken Siparişler</option>
+                    </select>
+
+                    <select id="mrp-facility-select" onchange="loadMRP()" class="form-select" style="width:180px;padding:6px 12px;font-size:12.5px;font-weight:600;">
+                        <option value="all">Tüm Tesisler</option>
+                        <option value="fac1">Yalnızca Üst Tesis</option>
+                        <option value="fac2">Yalnızca Alt Tesis</option>
+                    </select>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:11px;font-weight:700;color:#64748B;">Kategori:</span>
+                    <select id="mrp-category-filter" onchange="filterMRPTableByCategory()" class="form-select" style="width:180px;padding:6px 12px;font-size:12px;">
+                        <option value="all">Tüm Kategoriler</option>
+                        <option value="Seren & Karkas">Seren &amp; Karkas</option>
+                        <option value="Dolgu Malzemeleri">Dolgu Malzemeleri</option>
+                        <option value="Yüzey Levhaları">Yüzey Levhaları</option>
+                        <option value="Kenar Bantları">Kenar Bantları</option>
+                        <option value="Kimyasal & Yapıştırıcı">Kimyasal &amp; Yapıştırıcı</option>
+                        <option value="Aksesuar & Takviye">Aksesuar &amp; Takviye</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- MRP 4 KPI CARDS -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;">
+            <div class="panel" style="padding:20px;border-top:4px solid #0F172A;">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#64748B;">Planlanan Kanat Üretimi</div>
+                <div id="mrp-kpi-doors" style="font-size:30px;font-weight:900;color:#0F172A;margin-top:4px;">0 <span style="font-size:13px;font-weight:500;color:#64748B;">kapı</span></div>
+                <div id="mrp-kpi-orders" style="font-size:11.5px;color:#64748B;margin-top:6px;font-weight:600;">0 Açık Sipariş</div>
+            </div>
+
+            <div class="panel" style="padding:20px;border-top:4px solid #16A34A;">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#15803D;">Stok Karşılama Oranı</div>
+                <div id="mrp-kpi-fulfillment" style="font-size:30px;font-weight:900;color:#15803D;margin-top:4px;">%0</div>
+                <div class="progress-bar-bg" style="margin-top:8px;">
+                    <div id="mrp-kpi-fulfillment-bar" class="progress-bar-fill" style="width:0%;background:#16A34A;"></div>
+                </div>
+            </div>
+
+            <div class="panel" style="padding:20px;border-top:4px solid #E30713;">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#B91C1C;">Eksik Hammadde Kalemleri</div>
+                <div id="mrp-kpi-shortages" style="font-size:30px;font-weight:900;color:#B91C1C;margin-top:4px;">0 <span style="font-size:13px;font-weight:600;color:#B91C1C;">malzeme</span></div>
+                <div id="mrp-kpi-criticals" style="font-size:11.5px;color:#B45309;margin-top:6px;font-weight:600;">0 Kalem Emniyet Sınırında</div>
+            </div>
+
+            <div class="panel" style="padding:20px;border-top:4px solid #0284C7;">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0369A1;">Tahmini Satın Alma Bütçesi</div>
+                <div id="mrp-kpi-cost" style="font-size:26px;font-weight:900;color:#0F172A;margin-top:4px;">₺0</div>
+                <div style="font-size:11.5px;color:#64748B;margin-top:6px;font-weight:600;">Tüm eksikleri karşılama maliyeti</div>
+            </div>
+        </div>
+
+        <!-- 🚨 SATIN ALMA SİPARİŞ ÖNERİLERİ (PURCHASE ADVICE) BANNER -->
+        <div class="mrp-alert-panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">🚨 Acil Satın Alma &amp; Tedarik Listesi (Eksik Hammaddeler)</div>
+                    <div class="panel-sub" style="color:#92400E;">Bu malzemeler tedarik edilmezse açık siparişlerin üretimi durma noktasına gelecektir</div>
+                </div>
+                <span id="mrp-advice-badge" class="badge badge-red" style="font-size:12px;">0 Kalem Acil Tedarik</span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Malzeme Adı</th>
+                            <th>Kategori</th>
+                            <th style="text-align:center;">Mevcut Stok</th>
+                            <th style="text-align:center;color:#0F172A;">Gereken Miktar</th>
+                            <th style="text-align:center;color:#B91C1C;">Net Satın Alma İhtiyacı</th>
+                            <th style="text-align:right;">Birim Fiyat</th>
+                            <th style="text-align:right;color:#0F172A;">Tahmini Tutar</th>
+                            <th style="text-align:center;">Etkilenen Sipariş</th>
+                            <th style="text-align:right;">Hızlı İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mrp-purchase-advice-tbody">
+                        <tr><td colspan="9" style="text-align:center;padding:24px;color:#64748B;">Hesaplanıyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DETAYLI MALZEME İHTİYAÇ & STOK TABLOSU -->
+        <div class="panel" style="overflow:hidden;">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">📋 Depo Stok Durumu &amp; Brüt İhtiyaç Analizi</div>
+                    <div class="panel-sub">Fabrikada takip edilen tüm hammadde, karkas, dolgu ve yüzey levhası stokları</div>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Malzeme Kodu &amp; Adı</th>
+                            <th>Kategori</th>
+                            <th>Birim</th>
+                            <th style="text-align:center;color:#0F172A;">Gereken (Brüt)</th>
+                            <th style="text-align:center;color:#0284C7;">Mevcut Stok</th>
+                            <th style="text-align:center;">Emniyet Stoku</th>
+                            <th style="min-width:140px;">Stok Karşılama Oranı</th>
+                            <th style="text-align:center;">Durum</th>
+                            <th style="text-align:right;">Stok İşlemleri</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mrp-materials-tbody">
+                        <tr><td colspan="9" style="text-align:center;padding:32px;color:#64748B;">Malzemeler yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- STANDART KANAT ÜRÜN AĞACI (BOM) KARTI -->
+        <div class="panel" style="padding:22px;">
+            <div style="font-size:15px;font-weight:800;color:#0F172A;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
+                <span>📐 Standart ERGÜNBAŞ Kanat Ürün Ağacı (BOM) Normları</span>
+            </div>
+            <div style="font-size:12px;color:#64748B;margin-bottom:18px;">
+                1 Adet standart kapı kanadının imalatında tüketilen hammadde sarfiyat katsayıları:
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;" id="mrp-bom-cards">
+                <!-- Dynamic BOM Cards -->
             </div>
         </div>
     </div>
@@ -1285,9 +1435,15 @@
                     <label class="form-label">Makine / Hat Adı *</label>
                     <input type="text" id="m-name" required class="form-input" placeholder="Örn: Homag Ebatlama">
                 </div>
-                <div>
-                    <label class="form-label">Aşama / Bölüm *</label>
-                    <input type="text" id="m-stage" required class="form-input" placeholder="Örn: Ebatlama, Pres, CNC">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div>
+                        <label class="form-label">Aşama / Bölüm *</label>
+                        <input type="text" id="m-stage" required class="form-input" placeholder="Örn: Ebatlama, Pres, CNC">
+                    </div>
+                    <div>
+                        <label class="form-label">Standart Çalışan Sayısı (Kişi)</label>
+                        <input type="number" min="1" max="20" id="m-workers" value="2" class="form-input" placeholder="2">
+                    </div>
                 </div>
                 <div>
                     <label class="form-label">Kapasite (Adet/Saat)</label>
@@ -1300,6 +1456,113 @@
                 <div class="modal-footer" style="padding:0;border:none;">
                     <button type="button" class="btn-secondary" onclick="closeModal('modal-machine')">İptal</button>
                     <button type="submit" class="btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: MATERIAL (MRP) -->
+<div class="modal-overlay" id="modal-material">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title" id="modal-material-title">Yeni Malzeme Tanımla</div>
+            <button class="btn-icon" onclick="closeModal('modal-material')">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="material-form" onsubmit="handleMaterialSubmit(event)" style="display:flex;flex-direction:column;gap:16px;">
+                <input type="hidden" id="mat-edit-id">
+                <div>
+                    <label class="form-label">Malzeme Kodu</label>
+                    <input type="text" id="mat-id" class="form-input" placeholder="Örn: MAT_SEREN_OZEL (Boş bırakılırsa otomatik üretilir)">
+                </div>
+                <div>
+                    <label class="form-label">Malzeme Adı *</label>
+                    <input type="text" id="mat-name" required class="form-input" placeholder="Örn: Ladin Boy Seren 42x42mm">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div>
+                        <label class="form-label">Kategori *</label>
+                        <select id="mat-category" required class="form-select">
+                            <option value="Seren & Karkas">Seren &amp; Karkas</option>
+                            <option value="Dolgu Malzemeleri">Dolgu Malzemeleri</option>
+                            <option value="Yüzey Levhaları">Yüzey Levhaları</option>
+                            <option value="Kenar Bantları">Kenar Bantları</option>
+                            <option value="Kimyasal & Yapıştırıcı">Kimyasal &amp; Yapıştırıcı</option>
+                            <option value="Aksesuar & Takviye">Aksesuar &amp; Takviye</option>
+                            <option value="Diğer">Diğer</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Ölçü Birimi *</label>
+                        <select id="mat-unit" required class="form-select">
+                            <option value="Adet">Adet</option>
+                            <option value="Metre">Metre</option>
+                            <option value="Kg">Kg</option>
+                            <option value="m²">m²</option>
+                            <option value="Paket">Paket</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+                    <div>
+                        <label class="form-label">Mevcut Stok</label>
+                        <input type="number" step="0.1" min="0" id="mat-current-stock" value="0" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">Emniyet Stoku</label>
+                        <input type="number" step="0.1" min="0" id="mat-min-stock" value="0" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">Birim Fiyat (₺)</label>
+                        <input type="number" step="0.01" min="0" id="mat-price" value="0" class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Açıklama / Standart Norm</label>
+                    <textarea id="mat-notes" rows="2" class="form-textarea" placeholder="Malzeme özellikleri, tedarikçi kodu vb."></textarea>
+                </div>
+                <div class="modal-footer" style="padding:0;border:none;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modal-material')">İptal</button>
+                    <button type="submit" class="btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: STOCK ADJUSTMENT (HIZLI STOK HAREKETİ) -->
+<div class="modal-overlay" id="modal-stock">
+    <div class="modal-box" style="max-width:440px;">
+        <div class="modal-header">
+            <div class="modal-title">📦 Hızlı Stok Hareketi</div>
+            <button class="btn-icon" onclick="closeModal('modal-stock')">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="stock-form" onsubmit="handleStockSubmit(event)" style="display:flex;flex-direction:column;gap:16px;">
+                <div>
+                    <label class="form-label">Malzeme Seçin *</label>
+                    <select id="stock-mat-select" required class="form-select"></select>
+                </div>
+                <div>
+                    <label class="form-label">İşlem Türü *</label>
+                    <select id="stock-op-select" class="form-select">
+                        <option value="in">📥 Malzeme Girişi (+ Depoya Ekle)</option>
+                        <option value="out">📤 Malzeme Çıkışı / Sarf (- Depodan Düş)</option>
+                        <option value="set">🔄 Doğrudan Sayım Düzeltme (= Yeni Miktar)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Miktar *</label>
+                    <input type="number" step="0.1" min="0.1" id="stock-qty" required class="form-input" placeholder="Örn: 500" style="font-size:16px;font-weight:700;">
+                </div>
+                <div>
+                    <label class="form-label">İrsaliye / Fatura / Açıklama</label>
+                    <input type="text" id="stock-notes" class="form-input" placeholder="Örn: Tedarikçi sevkiyatı, irsaliye no 1234">
+                </div>
+                <div class="modal-footer" style="padding:0;border:none;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modal-stock')">İptal</button>
+                    <button type="submit" class="btn-primary">Stoku Güncelle</button>
                 </div>
             </form>
         </div>
@@ -1376,6 +1639,8 @@ let allFacilities = [];
 let allOrders = [];
 let allMachines = [];
 let allUsers = [];
+let allMaterials = [];
+let mrpData = null;
 let currentFacility = 'all';
 let currentPeriod = 'weekly';
 
@@ -1415,6 +1680,7 @@ function bootApp() {
     loadDashboard();
     loadOrders();
     loadMachines();
+    loadMaterials();
     loadUsersList();
 }
 
@@ -1427,15 +1693,18 @@ function toast(msg, type='success') {
     setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-const sections = ['dashboard','orders','daily','machines','users'];
+const sections = ['dashboard','orders','daily','machines','mrp','users'];
 function switchTab(id) {
     sections.forEach(s => {
-        document.getElementById(`section-${s}`).classList.toggle('hidden', s !== id);
-        document.getElementById(`tab-${s}`).classList.toggle('active', s === id);
+        const sec = document.getElementById(`section-${s}`);
+        const tab = document.getElementById(`tab-${s}`);
+        if(sec) sec.classList.toggle('hidden', s !== id);
+        if(tab) tab.classList.toggle('active', s === id);
     });
     if(id==='dashboard') loadDashboard();
     if(id==='orders') loadOrders();
     if(id==='machines') loadMachines();
+    if(id==='mrp') loadMRP();
     if(id==='users') loadUsersList();
     if(id==='daily') loadDailyEntries();
 }
@@ -1523,6 +1792,10 @@ async function loadDashboard() {
         document.getElementById('kpi-fac1-output').innerHTML = `${(psum.fac1_output||0).toLocaleString('tr-TR')} <span>kapı</span>`;
         document.getElementById('kpi-fac2-output').innerHTML = `${(psum.fac2_output||0).toLocaleString('tr-TR')} <span>kapı</span>`;
 
+        // Workforce KPI
+        document.getElementById('kpi-workforce').innerHTML = `${psum.today_active_workers || 0} <span style="font-size:14px;font-weight:600;color:#15803D;">personel</span>`;
+        document.getElementById('kpi-manhours').textContent = `${psum.period_man_hours || 0} Adam-Saat İş Gücü`;
+
         // Weekly Days
         const wg = document.getElementById('weekly-days-grid');
         const days = psum.days || [];
@@ -1575,20 +1848,30 @@ async function loadDashboard() {
                 </div>
             `).join('');
 
-        // Makine Performans Tablosu
+        // Makine & Hat Başına Çalışan Personel Tablosu
         const mstats = d.machine_stats || [];
         document.getElementById('dashboard-machines-tbody').innerHTML = mstats.length === 0
-            ? `<tr><td colspan="4" style="text-align:center;padding:24px;color:#64748B;">Bu dönemde makine çalışma kaydı yok.</td></tr>`
-            : mstats.map(m => `
-                <tr>
+            ? `<tr><td colspan="8" style="text-align:center;padding:24px;color:#64748B;">Bu dönemde makine çalışma kaydı yok.</td></tr>`
+            : mstats.map(m => {
+                const isFac2 = m.facility_id === 'fac2';
+                const facName = isFac2 ? 'Alt Tesis' : 'Üst Tesis';
+                return `<tr>
                     <td style="font-weight:700;color:#0F172A;">${m.name}</td>
-                    <td style="text-align:center;font-weight:800;color:#0284C7;">${m.output.toLocaleString('tr-TR')} parça</td>
-                    <td style="text-align:center;font-weight:700;color:#334155;">${m.hours} saat</td>
-                    <td style="text-align:center;">
-                        <span class="badge badge-green" style="font-size:12px;">${m.efficiency} adet/saat</span>
+                    <td><span class="badge ${isFac2?'badge-sky':'badge-red'}">${facName}</span></td>
+                    <td style="text-align:center;font-weight:800;color:#E30713;">
+                        <span class="px-2.5 py-1 bg-red-50 text-red-700 rounded-lg border border-red-200">${m.worker_count||1} Kişi</span>
                     </td>
-                </tr>
-            `).join('');
+                    <td style="text-align:center;font-weight:700;color:#334155;">${m.hours} sa</td>
+                    <td style="text-align:center;font-weight:800;color:#0284C7;">${m.man_hours} sa</td>
+                    <td style="text-align:center;font-weight:800;color:#0F172A;">${m.output.toLocaleString('tr-TR')} parça</td>
+                    <td style="text-align:center;">
+                        <span class="badge badge-slate">${m.efficiency} /sa</span>
+                    </td>
+                    <td style="text-align:center;">
+                        <span class="badge badge-green" style="font-size:11.5px;font-weight:800;">${m.man_hour_efficiency} parça/adam-sa</span>
+                    </td>
+                </tr>`;
+            }).join('');
 
     } catch(err) { console.error('Dashboard hatası', err); }
 }
@@ -1599,7 +1882,6 @@ async function loadOrders() {
         const r = await fetch(`/api/orders?facility_id=${currentFacility}`);
         allOrders = await r.json();
 
-        // Facility counts
         const allR = await fetch('/api/orders?facility_id=all');
         const allO = await allR.json();
         document.getElementById('cnt-all').textContent = `(${allO.length})`;
@@ -1676,6 +1958,7 @@ async function handleOrderSubmit(e) {
             closeModal('modal-order');
             loadOrders();
             loadDashboard();
+            if(!document.getElementById('section-mrp').classList.contains('hidden')) loadMRP();
         }
     } catch(e) { toast('Hata oluştu.','error'); }
 }
@@ -1712,16 +1995,27 @@ async function loadDailyEntries() {
                 </div>`;
             }).join('');
 
-        // Render today's machine entries
+        // Render today's machine entries with worker count!
         const mList = document.getElementById('today-machines-list');
         const mEntries = d.machine_entries || [];
         mList.innerHTML = mEntries.length === 0
-            ? `<div style="color:#64748B;font-size:12px;">Bugün makine girişi yapılmadı.</div>`
+            ? `<div style="color:#64748B;font-size:12px;">Bugün hat/makine girişi yapılmadı.</div>`
             : mEntries.map(me => {
                 const m = allMachines.find(x => x.id === me.machine_id) || {name: me.machine_id};
-                return `<div style="padding:8px 12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;display:flex;justify-content:space-between;font-size:12px;">
-                    <span style="color:#0F172A;"><strong>${m.name}</strong></span>
-                    <span style="color:#0284C7;font-weight:700;">${me.output_qty} parça / ${me.work_hours} sa</span>
+                const workers = me.worker_count || 1;
+                const manHours = (me.work_hours || 0) * workers;
+                const effPerWorker = manHours > 0 ? (me.output_qty / manHours).toFixed(1) : me.output_qty;
+                return `<div style="padding:10px 12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-size:12px;">
+                    <div>
+                        <div style="color:#0F172A;font-weight:700;">${m.name}</div>
+                        <div style="color:#64748B;font-size:11px;">
+                            👥 <strong>${workers} personel</strong> • ${me.work_hours} sa (${manHours} adam-saat)
+                        </div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="color:#0284C7;font-weight:800;font-size:13px;">${me.output_qty} parça</div>
+                        <div style="color:#15803D;font-weight:600;font-size:10.5px;">${effPerWorker} parça/adam-sa</div>
+                    </div>
                 </div>`;
             }).join('');
 
@@ -1749,7 +2043,15 @@ function updateSelectedOrderInfo() {
 function populateDailyMachineSelect() {
     const sel = document.getElementById('entry-machine-select');
     sel.innerHTML = `<option value="">Makine seçiniz (${allMachines.length} Makine)...</option>` +
-        allMachines.map(m => `<option value="${m.id}">${m.name} (${m.stage})</option>`).join('');
+        allMachines.map(m => `<option value="${m.id}" data-workers="${m.default_workers||2}">${m.name} (${m.stage})</option>`).join('');
+}
+
+function handleMachineSelectChange() {
+    const sel = document.getElementById('entry-machine-select');
+    const opt = sel.options[sel.selectedIndex];
+    if(opt && opt.dataset.workers) {
+        document.getElementById('entry-machine-workers').value = opt.dataset.workers;
+    }
 }
 
 async function populateDailyOperators() {
@@ -1795,10 +2097,12 @@ async function submitMachineDailyEntry() {
     const machine_id = document.getElementById('entry-machine-select').value;
     const qty = parseInt(document.getElementById('entry-machine-qty').value);
     const hours = parseFloat(document.getElementById('entry-machine-hours').value);
+    const workers = parseInt(document.getElementById('entry-machine-workers').value) || 1;
 
     if(!machine_id) { toast('Lütfen bir makine seçin.','error'); return; }
     if(isNaN(qty) || qty < 0) { toast('Lütfen parça adedi girin.','error'); return; }
     if(isNaN(hours) || hours <= 0) { toast('Lütfen çalışma saati girin.','error'); return; }
+    if(isNaN(workers) || workers < 1) { toast('Lütfen çalışan kişi sayısını girin.','error'); return; }
 
     const payload = {
         date: date,
@@ -1807,6 +2111,7 @@ async function submitMachineDailyEntry() {
             machine_id: machine_id,
             output_qty: qty,
             work_hours: hours,
+            worker_count: workers,
             operator: document.getElementById('daily-operator').value,
             notes: document.getElementById('entry-machine-notes').value.trim()
         }]
@@ -1815,9 +2120,8 @@ async function submitMachineDailyEntry() {
     try {
         const r = await fetch(`/api/daily/${date}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
         if(r.ok) {
-            toast('Makine çalışma kaydı başarıyla eklendi!');
+            toast('Hat çalışma ve personel kaydı başarıyla eklendi!');
             document.getElementById('entry-machine-qty').value = '';
-            document.getElementById('entry-machine-hours').value = '';
             document.getElementById('entry-machine-notes').value = '';
             loadDailyEntries();
             loadDashboard();
@@ -1831,7 +2135,7 @@ async function loadMachines() {
         const r = await fetch(`/api/machines?facility_id=${currentFacility}`);
         allMachines = await r.json();
         const tb = document.getElementById('machines-tbody');
-        if(!allMachines.length) { tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:32px;color:#64748B;">Makine kaydı yok.</td></tr>`; return; }
+        if(!allMachines.length) { tb.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:32px;color:#64748B;">Makine kaydı yok.</td></tr>`; return; }
         tb.innerHTML = allMachines.map(m => {
             const isFac2 = m.facility_id==='fac2';
             const facName = isFac2 ? 'Alt Tesis' : 'Üst Tesis';
@@ -1839,6 +2143,9 @@ async function loadMachines() {
                 <td style="font-weight:700;color:#0F172A;">${m.name}</td>
                 <td><span class="badge ${isFac2?'badge-sky':'badge-red'}">${facName}</span></td>
                 <td style="color:#475569;font-weight:600;">${m.stage}</td>
+                <td style="text-align:center;font-weight:800;color:#E30713;">
+                    <span class="px-2.5 py-0.5 bg-red-50 text-red-700 rounded-md border border-red-200">${m.default_workers||1} Kişi</span>
+                </td>
                 <td style="text-align:center;font-family:monospace;font-weight:700;color:#0F172A;">${m.capacity_per_hour||0}</td>
                 <td style="text-align:center;"><span class="badge badge-green">Aktif</span></td>
                 <td style="font-size:12px;color:#64748B;">${m.notes||'—'}</td>
@@ -1864,6 +2171,7 @@ async function handleMachineSubmit(e) {
         facility_id: document.getElementById('m-facility').value,
         name: document.getElementById('m-name').value.trim(),
         stage: document.getElementById('m-stage').value.trim(),
+        default_workers: parseInt(document.getElementById('m-workers').value) || 1,
         capacity_per_hour: parseFloat(document.getElementById('m-capacity').value)||0,
         notes: document.getElementById('m-notes').value.trim()
     };
@@ -1877,6 +2185,241 @@ async function deleteMachine(mid) {
     if(!confirm('Makineyi silmek istediğinize emin misiniz?')) return;
     const r = await fetch(`/api/machines/${mid}`, {method:'DELETE'});
     if(r.ok) { toast('Makine silindi.'); loadMachines(); }
+}
+
+// ── MRP & MATERIALS LOGIC ─────────────────────────────────
+async function loadMaterials() {
+    try {
+        const r = await fetch('/api/mrp/materials');
+        allMaterials = await r.json();
+        populateStockMatSelect();
+    } catch(e) {}
+}
+
+function populateStockMatSelect() {
+    const sel = document.getElementById('stock-mat-select');
+    if(!sel) return;
+    sel.innerHTML = allMaterials.map(m => `<option value="${m.id}">${m.name} (${m.current_stock} ${m.unit})</option>`).join('');
+}
+
+async function loadMRP() {
+    const scope = document.getElementById('mrp-scope-select').value;
+    const fac = document.getElementById('mrp-facility-select').value;
+    try {
+        const r = await fetch(`/api/mrp/calculation?facility_id=${fac}&time_scope=${scope}`);
+        mrpData = await r.json();
+        renderMRPView(mrpData);
+    } catch(e) {
+        console.error('MRP yükleme hatası', e);
+    }
+}
+
+function renderMRPView(data) {
+    const s = data.summary || {};
+    
+    // Top KPI cards
+    document.getElementById('mrp-kpi-doors').innerHTML = `${(s.total_doors||0).toLocaleString('tr-TR')} <span style="font-size:13px;font-weight:500;color:#64748B;">kapı</span>`;
+    document.getElementById('mrp-kpi-orders').textContent = `${s.orders_count||0} Açık Sipariş İncelendi`;
+    
+    const fr = s.fulfillment_rate || 0;
+    document.getElementById('mrp-kpi-fulfillment').textContent = `%${fr}`;
+    document.getElementById('mrp-kpi-fulfillment-bar').style.width = `${Math.min(fr, 100)}%`;
+    document.getElementById('mrp-kpi-fulfillment-bar').style.background = fr > 70 ? '#16A34A' : (fr > 40 ? '#D97706' : '#DC2626');
+    
+    document.getElementById('mrp-kpi-shortages').innerHTML = `${s.shortage_count||0} <span style="font-size:13px;font-weight:600;color:#B91C1C;">malzeme eksik</span>`;
+    document.getElementById('mrp-kpi-criticals').textContent = `${s.critical_count||0} Kalem Emniyet Sınırında`;
+    
+    document.getElementById('mrp-kpi-cost').textContent = `₺${(s.total_purchase_cost||0).toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+
+    // Nav badge alert
+    const navBadge = document.getElementById('mrp-nav-badge');
+    if(s.shortage_count > 0) {
+        navBadge.classList.remove('hidden');
+        navBadge.textContent = s.shortage_count;
+    } else {
+        navBadge.classList.add('hidden');
+    }
+
+    // Purchase Advice Banner
+    const padvice = data.purchase_advice || [];
+    document.getElementById('mrp-advice-badge').textContent = `${padvice.length} Kalem Satın Alma Önerisi`;
+    const paTb = document.getElementById('mrp-purchase-advice-tbody');
+    if(!padvice.length) {
+        paTb.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:#15803D;font-weight:600;">Depodaki malzemeler seçilen tüm siparişler için eksiksiz yeterlidir! ✓</td></tr>`;
+    } else {
+        paTb.innerHTML = padvice.map(item => `
+            <tr>
+                <td style="font-weight:800;color:#0F172A;">${item.name}</td>
+                <td><span class="badge badge-slate">${item.category}</span></td>
+                <td style="text-align:center;font-weight:600;color:#64748B;">${item.current_stock.toLocaleString('tr-TR')} ${item.unit}</td>
+                <td style="text-align:center;font-weight:700;color:#0F172A;">${item.gross_required.toLocaleString('tr-TR')} ${item.unit}</td>
+                <td style="text-align:center;font-weight:900;color:#B91C1C;">
+                    <span class="px-2.5 py-1 bg-red-100 text-red-800 rounded-lg font-mono">-${item.net_shortage.toLocaleString('tr-TR')} ${item.unit}</span>
+                </td>
+                <td style="text-align:right;font-family:monospace;color:#64748B;">₺${item.unit_price.toFixed(2)}</td>
+                <td style="text-align:right;font-weight:800;color:#0F172A;">₺${item.purchase_cost.toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+                <td style="text-align:center;font-weight:700;color:#475569;">${item.affected_orders_count} Sipariş</td>
+                <td style="text-align:right;">
+                    <button class="btn-secondary" onclick="openStockModal('${item.id}', 'in')" style="padding:4px 10px;font-size:11px;color:#15803D;border-color:#BBF7D0;">
+                        + Giriş Yap
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // All Materials Table
+    filterMRPTableByCategory();
+
+    // Standard BOM Cards
+    const boms = data.bom_standards || [];
+    document.getElementById('mrp-bom-cards').innerHTML = boms.map(b => `
+        <div style="padding:12px 14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+            <div style="font-size:12px;font-weight:800;color:#0F172A;">${b.component}</div>
+            <div style="font-size:11px;color:#64748B;margin-top:4px;">${b.spec}</div>
+        </div>
+    `).join('');
+}
+
+function filterMRPTableByCategory() {
+    if(!mrpData) return;
+    const cat = document.getElementById('mrp-category-filter').value;
+    const reqs = mrpData.requirements || [];
+    const filtered = cat === 'all' ? reqs : reqs.filter(r => r.category === cat);
+    
+    const tb = document.getElementById('mrp-materials-tbody');
+    if(!filtered.length) {
+        tb.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:#64748B;">Bu kategoride malzeme bulunamadı.</td></tr>`;
+        return;
+    }
+
+    tb.innerHTML = filtered.map(m => {
+        let statusBadge = '<span class="badge badge-green">Yeterli</span>';
+        if(m.status === 'shortage') statusBadge = '<span class="badge badge-red">Eksik / Tedarik</span>';
+        else if(m.status === 'critical') statusBadge = '<span class="badge badge-amber">Emniyet Sınırında</span>';
+
+        return `<tr>
+            <td>
+                <div style="font-weight:700;color:#0F172A;">${m.name}</div>
+                <div style="font-size:10.5px;color:#94A3B8;font-family:monospace;">${m.id}</div>
+            </td>
+            <td><span class="badge badge-slate">${m.category}</span></td>
+            <td style="color:#64748B;font-weight:600;">${m.unit}</td>
+            <td style="text-align:center;font-weight:800;color:#0F172A;">${m.gross_required.toLocaleString('tr-TR')}</td>
+            <td style="text-align:center;font-weight:800;color:#0284C7;">${m.current_stock.toLocaleString('tr-TR')}</td>
+            <td style="text-align:center;color:#64748B;">${m.min_stock.toLocaleString('tr-TR')}</td>
+            <td>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width:${m.coverage_pct}%;background:${m.status==='ok'?'#16A34A':(m.status==='critical'?'#D97706':'#DC2626')};"></div>
+                </div>
+                <div style="font-size:10px;color:#64748B;margin-top:2px;font-weight:600;">%${m.coverage_pct} Karşılıyor</div>
+            </td>
+            <td style="text-align:center;">${statusBadge}</td>
+            <td style="text-align:right;white-space:nowrap;">
+                <button class="btn-icon" onclick="openStockModal('${m.id}', 'in')" title="Stok Ekle" style="color:#16A34A;">+</button>
+                <button class="btn-icon" onclick="openStockModal('${m.id}', 'out')" title="Sarf / Çıkış" style="color:#DC2626;">-</button>
+                <button class="btn-icon" onclick="editMaterial('${m.id}')" title="Düzenle">✏️</button>
+                <button class="btn-icon danger" onclick="deleteMaterial('${m.id}')" title="Sil">✕</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function openMaterialModal(isEdit=false) {
+    document.getElementById('material-form').reset();
+    document.getElementById('mat-edit-id').value = '';
+    document.getElementById('mat-id').disabled = false;
+    document.getElementById('modal-material-title').textContent = isEdit ? 'Malzemeyi Düzenle' : 'Yeni Malzeme Tanımla';
+    openModal('modal-material');
+}
+
+function editMaterial(mid) {
+    const m = (mrpData?.requirements || allMaterials).find(x => x.id === mid);
+    if(!m) return;
+    openMaterialModal(true);
+    document.getElementById('mat-edit-id').value = m.id;
+    document.getElementById('mat-id').value = m.id;
+    document.getElementById('mat-id').disabled = true;
+    document.getElementById('mat-name').value = m.name;
+    document.getElementById('mat-category').value = m.category;
+    document.getElementById('mat-unit').value = m.unit;
+    document.getElementById('mat-current-stock').value = m.current_stock;
+    document.getElementById('mat-min_stock' || 'mat-min-stock').value = m.min_stock;
+    document.getElementById('mat-price').value = m.unit_price;
+    document.getElementById('mat-notes').value = m.notes || '';
+}
+
+async function handleMaterialSubmit(e) {
+    e.preventDefault();
+    const editId = document.getElementById('mat-edit-id').value;
+    const payload = {
+        id: document.getElementById('mat-id').value.trim() || undefined,
+        name: document.getElementById('mat-name').value.trim(),
+        category: document.getElementById('mat-category').value,
+        unit: document.getElementById('mat-unit').value,
+        current_stock: parseFloat(document.getElementById('mat-current-stock').value)||0,
+        min_stock: parseFloat(document.getElementById('mat-min-stock').value)||0,
+        unit_price: parseFloat(document.getElementById('mat-price').value)||0,
+        notes: document.getElementById('mat-notes').value.trim()
+    };
+
+    try {
+        const url = editId ? `/api/mrp/materials/${editId}` : '/api/mrp/materials';
+        const method = editId ? 'PUT' : 'POST';
+        const r = await fetch(url, { method: method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        if(r.ok) {
+            toast(editId ? 'Malzeme güncellendi!' : 'Yeni malzeme tanımlandı!');
+            closeModal('modal-material');
+            await loadMaterials();
+            loadMRP();
+        } else {
+            const err = await r.json();
+            toast(err.detail || 'Hata oluştu', 'error');
+        }
+    } catch(e) { toast('İşlem başarısız', 'error'); }
+}
+
+async function deleteMaterial(mid) {
+    if(!confirm('Bu malzemeyi silmek istediğinize emin misiniz?')) return;
+    const r = await fetch(`/api/mrp/materials/${mid}`, { method:'DELETE' });
+    if(r.ok) {
+        toast('Malzeme silindi.');
+        await loadMaterials();
+        loadMRP();
+    }
+}
+
+function openStockModal(mid=null, op='in') {
+    populateStockMatSelect();
+    if(mid) document.getElementById('stock-mat-select').value = mid;
+    document.getElementById('stock-op-select').value = op;
+    document.getElementById('stock-qty').value = '';
+    document.getElementById('stock-notes').value = '';
+    openModal('modal-stock');
+}
+
+async function handleStockSubmit(e) {
+    e.preventDefault();
+    const mid = document.getElementById('stock-mat-select').value;
+    const op = document.getElementById('stock-op-select').value;
+    const qty = parseFloat(document.getElementById('stock-qty').value);
+    const notes = document.getElementById('stock-notes').value.trim();
+
+    if(!mid || isNaN(qty) || qty <= 0) { toast('Lütfen geçerli bir miktar girin.', 'error'); return; }
+
+    try {
+        const r = await fetch(`/api/mrp/materials/${mid}/stock`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ change_qty: qty, operation: op, notes: notes })
+        });
+        if(r.ok) {
+            toast('Stok hareketi başarıyla kaydedildi!');
+            closeModal('modal-stock');
+            await loadMaterials();
+            loadMRP();
+        }
+    } catch(e) { toast('Stok hareketi kaydedilemedi.', 'error'); }
 }
 
 // ── USERS ─────────────────────────────────────────────────

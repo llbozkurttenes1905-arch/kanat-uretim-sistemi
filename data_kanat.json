@@ -16,8 +16,9 @@
       "facility_id": "fac1",
       "stage": "Seren Kesim",
       "capacity_per_hour": 40.0,
+      "default_workers": 2,
       "status": "active",
-      "notes": ""
+      "notes": "Boy ve En seren ebatlama"
     },
     "MCH_UST_2": {
       "id": "MCH_UST_2",
@@ -25,8 +26,9 @@
       "facility_id": "fac1",
       "stage": "CNC Strafor",
       "capacity_per_hour": 35.0,
+      "default_workers": 1,
       "status": "active",
-      "notes": ""
+      "notes": "İç dolgu strafor hassas kesimi"
     },
     "MCH_UST_3": {
       "id": "MCH_UST_3",
@@ -34,8 +36,9 @@
       "facility_id": "fac1",
       "stage": "Levha Vakum",
       "capacity_per_hour": 60.0,
+      "default_workers": 2,
       "status": "active",
-      "notes": ""
+      "notes": "Yüzey MDF vakum kaplama"
     },
     "MCH_UST_4": {
       "id": "MCH_UST_4",
@@ -43,8 +46,9 @@
       "facility_id": "fac1",
       "stage": "Pres",
       "capacity_per_hour": 30.0,
+      "default_workers": 3,
       "status": "active",
-      "notes": ""
+      "notes": "Kanat sıcak pres yapıştırma"
     },
     "MCH_UST_5": {
       "id": "MCH_UST_5",
@@ -52,26 +56,29 @@
       "facility_id": "fac1",
       "stage": "Paketleme",
       "capacity_per_hour": 45.0,
+      "default_workers": 2,
       "status": "active",
-      "notes": ""
+      "notes": "Koruma kartonu ve naylon shrink"
     },
     "MCH_ALT_1": {
       "id": "MCH_ALT_1",
       "name": "ETA Makinesi",
       "facility_id": "fac2",
       "stage": "ETA (Dolumlu Seren)",
-      "capacity_per_hour": 40.0,
+      "capacity_per_hour": 35.0,
+      "default_workers": 2,
       "status": "active",
-      "notes": ""
+      "notes": "Dolumlu seren montajı"
     },
     "MCH_ALT_2": {
       "id": "MCH_ALT_2",
       "name": "Homag Ebatlama & Kenar",
       "facility_id": "fac2",
       "stage": "Homag",
-      "capacity_per_hour": 35.0,
+      "capacity_per_hour": 25.0,
+      "default_workers": 2,
       "status": "active",
-      "notes": ""
+      "notes": "PVC Kenar bantlama ve ebatlama"
     },
     "MCH_ALT_3": {
       "id": "MCH_ALT_3",
@@ -79,8 +86,9 @@
       "facility_id": "fac2",
       "stage": "Torwegge",
       "capacity_per_hour": 30.0,
+      "default_workers": 2,
       "status": "active",
-      "notes": ""
+      "notes": "Özel kanal frezeleme ve pres"
     },
     "MCH_ALT_4": {
       "id": "MCH_ALT_4",
@@ -88,8 +96,9 @@
       "facility_id": "fac2",
       "stage": "Paketleme",
       "capacity_per_hour": 40.0,
+      "default_workers": 2,
       "status": "active",
-      "notes": ""
+      "notes": "Alt tesis son kontrol ve paketleme"
     }
   },
   "orders": {
@@ -3010,5 +3019,229 @@
       "created_at": "2026-09-02T15:54:13.973177"
     }
   },
-  "daily_entries": {}
+  "daily_entries": {
+    "2026-09-29": {
+      "date": "2026-09-29",
+      "order_entries": [
+        {
+          "order_id": "SIP-UST-0001",
+          "output_qty": 35,
+          "shift": "Gündüz",
+          "operator": "Kanat Operatörü 1",
+          "notes": "Palet 1 sevk edildi"
+        },
+        {
+          "order_id": "SIP-UST-0002",
+          "output_qty": 25,
+          "shift": "Gündüz",
+          "operator": "Kanat Operatörü 1",
+          "notes": "Paketleme tamam"
+        }
+      ],
+      "machine_entries": [
+        {
+          "machine_id": "MCH_UST_1",
+          "output_qty": 280,
+          "work_hours": 8.0,
+          "worker_count": 2,
+          "operator": "Kanat Operatörü 1",
+          "notes": "Boy seren kesildi"
+        },
+        {
+          "machine_id": "MCH_UST_2",
+          "output_qty": 260,
+          "work_hours": 8.0,
+          "worker_count": 1,
+          "operator": "Kanat Operatörü 1",
+          "notes": "800x2050 straforlar hazır"
+        },
+        {
+          "machine_id": "MCH_UST_3",
+          "output_qty": 450,
+          "work_hours": 8.0,
+          "worker_count": 2,
+          "operator": "Kanat Operatörü 1",
+          "notes": "Teak levhalar vakumlandı"
+        },
+        {
+          "machine_id": "MCH_UST_4",
+          "output_qty": 220,
+          "work_hours": 8.0,
+          "worker_count": 3,
+          "operator": "Kanat Operatörü 1",
+          "notes": "Sıcak pres tam kapasite"
+        },
+        {
+          "machine_id": "MCH_UST_5",
+          "output_qty": 210,
+          "work_hours": 8.0,
+          "worker_count": 2,
+          "operator": "Kanat Operatörü 1",
+          "notes": "Paketleme hattı"
+        },
+        {
+          "machine_id": "MCH_ALT_1",
+          "output_qty": 180,
+          "work_hours": 7.5,
+          "worker_count": 2,
+          "operator": "Kanat Operatörü 1",
+          "notes": "ETA dolum serisi"
+        },
+        {
+          "machine_id": "MCH_ALT_2",
+          "output_qty": 190,
+          "work_hours": 8.0,
+          "worker_count": 2,
+          "operator": "Kanat Operatörü 1",
+          "notes": "PVC kenar çekildi"
+        },
+        {
+          "machine_id": "MCH_ALT_3",
+          "output_qty": 170,
+          "work_hours": 7.5,
+          "worker_count": 2,
+          "operator": "Kanat Operatörü 1",
+          "notes": "Torwegge pres tamam"
+        },
+        {
+          "machine_id": "MCH_ALT_4",
+          "output_qty": 170,
+          "work_hours": 7.5,
+          "worker_count": 2,
+          "operator": "Kanat Operatörü 1",
+          "notes": "Alt tesis paket"
+        }
+      ],
+      "downtimes": [
+        {
+          "machine_id": "MCH_UST_4",
+          "reason": "Bıçak/Ayar Değişimi",
+          "duration_min": 25.0,
+          "notes": "Pres rezistans kontrolü"
+        }
+      ]
+    }
+  },
+  "materials": {
+    "MAT_SEREN_KOMP": {
+      "id": "MAT_SEREN_KOMP",
+      "name": "Kompozit Ahşap Seren (42x42mm)",
+      "category": "Seren & Karkas",
+      "unit": "Metre",
+      "current_stock": 45000.0,
+      "min_stock": 10000.0,
+      "unit_price": 45.0,
+      "notes": "Boy ve En seren imalatında kullanılan karkas profili (1 kanat ~ 5.8m)"
+    },
+    "MAT_STRAFOR_EPS": {
+      "id": "MAT_STRAFOR_EPS",
+      "name": "EPS Strafor Dolgu Levhası (32mm)",
+      "category": "Dolgu Malzemeleri",
+      "unit": "Adet",
+      "current_stock": 8500.0,
+      "min_stock": 2500.0,
+      "unit_price": 65.0,
+      "notes": "Kanat içi ses ve ısı yalıtım dolgusu (1 kanat = 1 adet)"
+    },
+    "MAT_PETEK_KRAFT": {
+      "id": "MAT_PETEK_KRAFT",
+      "name": "Kraft Kağıt Petek Dolgu",
+      "category": "Dolgu Malzemeleri",
+      "unit": "Adet",
+      "current_stock": 1200.0,
+      "min_stock": 500.0,
+      "unit_price": 40.0,
+      "notes": "Hafif kanat içi petek dolgu malzemesi"
+    },
+    "MAT_MDF_TEAK": {
+      "id": "MAT_MDF_TEAK",
+      "name": "WPC/MDF Yüzey Levhası - Teak (4mm)",
+      "category": "Yüzey Levhaları",
+      "unit": "Adet",
+      "current_stock": 12000.0,
+      "min_stock": 3000.0,
+      "unit_price": 180.0,
+      "notes": "Teak desenli preslenmiş yüzey kaplama paneli (Ön/Arka 2 adet/kanat)"
+    },
+    "MAT_MDF_BEYAZ": {
+      "id": "MAT_MDF_BEYAZ",
+      "name": "WPC/MDF Yüzey Levhası - D.Beyaz (4mm)",
+      "category": "Yüzey Levhaları",
+      "unit": "Adet",
+      "current_stock": 6500.0,
+      "min_stock": 2000.0,
+      "unit_price": 175.0,
+      "notes": "Düz/Lake beyaz preslenmiş yüzey kaplama paneli (2 adet/kanat)"
+    },
+    "MAT_MDF_ANTRASIT": {
+      "id": "MAT_MDF_ANTRASIT",
+      "name": "WPC/MDF Yüzey Levhası - Antrasit (4mm)",
+      "category": "Yüzey Levhaları",
+      "unit": "Adet",
+      "current_stock": 2800.0,
+      "min_stock": 1500.0,
+      "unit_price": 185.0,
+      "notes": "Antrasit mat preslenmiş yüzey kaplama paneli (2 adet/kanat)"
+    },
+    "MAT_MDF_SOMONO": {
+      "id": "MAT_MDF_SOMONO",
+      "name": "WPC/MDF Yüzey Levhası - Somono (4mm)",
+      "category": "Yüzey Levhaları",
+      "unit": "Adet",
+      "current_stock": 3100.0,
+      "min_stock": 1200.0,
+      "unit_price": 180.0,
+      "notes": "Somono desenli preslenmiş yüzey kaplama paneli (2 adet/kanat)"
+    },
+    "MAT_MDF_BTEAK": {
+      "id": "MAT_MDF_BTEAK",
+      "name": "WPC/MDF Yüzey Levhası - B.Teak (4mm)",
+      "category": "Yüzey Levhaları",
+      "unit": "Adet",
+      "current_stock": 2500.0,
+      "min_stock": 1000.0,
+      "unit_price": 180.0,
+      "notes": "Beyaz Teak preslenmiş yüzey kaplama paneli (2 adet/kanat)"
+    },
+    "MAT_MDF_STD": {
+      "id": "MAT_MDF_STD",
+      "name": "WPC/MDF Yüzey Levhası - Standart Ahşap (4mm)",
+      "category": "Yüzey Levhaları",
+      "unit": "Adet",
+      "current_stock": 1500.0,
+      "min_stock": 800.0,
+      "unit_price": 170.0,
+      "notes": "Standart ham veya ahşap desenli kaplama paneli (2 adet/kanat)"
+    },
+    "MAT_KENAR_BANDI": {
+      "id": "MAT_KENAR_BANDI",
+      "name": "PVC Kenar Bandı (1mm x 45mm)",
+      "category": "Kenar Bantları",
+      "unit": "Metre",
+      "current_stock": 60000.0,
+      "min_stock": 15000.0,
+      "unit_price": 4.5,
+      "notes": "Kanat yan/üst/alt ebatlama sonrası kenar koruma bandı (1 kanat ~ 5.8m)"
+    },
+    "MAT_TUTKAL_PRES": {
+      "id": "MAT_TUTKAL_PRES",
+      "name": "Poliüretan Sıcak Pres Tutkalı",
+      "category": "Kimyasal & Yapıştırıcı",
+      "unit": "Kg",
+      "current_stock": 3500.0,
+      "min_stock": 1000.0,
+      "unit_price": 85.0,
+      "notes": "Sıcak pres ve vakum yapıştırma tutkalı (1 kanat ~ 0.35kg)"
+    },
+    "MAT_KILIT_TAKOZ": {
+      "id": "MAT_KILIT_TAKOZ",
+      "name": "Kilit & Kol Destek Takozu (Ahşap)",
+      "category": "Aksesuar & Takviye",
+      "unit": "Adet",
+      "current_stock": 22000.0,
+      "min_stock": 5000.0,
+      "unit_price": 12.0,
+      "notes": "Kilit ve kol boşaltmaları için iç takviye ahşap takozu (1 kanat = 2 adet)"
+    }
+  }
 }
