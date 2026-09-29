@@ -1639,7 +1639,7 @@
                 </div>
                 <div>
                     <label class="form-label">Model &amp; Ebat *</label>
-                    <input type="text" id="o-model" required class="form-input" placeholder="Örn: ER100 WPC 900x2020x40">
+                    <input type="text" id="o-model" required class="form-input" placeholder="Örn: ER100 KANAT AKÇAAGAÇ KOM.SEREN STRAFOR 700X2020X40">
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                     <div>
@@ -3561,10 +3561,11 @@ async function openBarcodeModal(orderId) {
         const data = await r.json();
         if (data.error) { toast(data.error, 'error'); return; }
 
+        const colorName = data.color || data.surface_finish || 'Standart';
         document.getElementById('lbl-order-code').innerText = data.order_code || data.order_id;
         document.getElementById('lbl-customer').innerText = data.customer || '—';
         document.getElementById('lbl-model').innerText = data.model || 'Standart';
-        document.getElementById('lbl-surface').innerText = data.surface_finish || data.color || 'Standart';
+        document.getElementById('lbl-surface').innerText = colorName;
         document.getElementById('lbl-dims').innerText = `${data.width || '—'} x ${data.height || '—'} cm`;
         document.getElementById('lbl-qty').innerText = `${data.doors || data.total_doors || 0} ADET`;
         document.getElementById('lbl-facility-badge').innerText = 'ERGÜNBAŞ FABRİKASI';
@@ -3766,7 +3767,7 @@ function viewPackingList(sid) {
     document.getElementById('pk-status').innerText = s.status || 'Hazırlanıyor';
     document.getElementById('pk-total-doors').innerText = `${s.doors || 0} KAPI`;
 
-    const items = s.items && s.items.length ? s.items : [{ order_code: s.order_id, model: 'Standart Melamin/Lake', surface: 'Melamin', doors: s.doors }];
+    const items = s.items && s.items.length ? s.items : [{ order_code: s.order_id, model: s.model || 'Standart Kompozit Seren Kapı', surface: s.surface || s.color || 'Kompozit / PVC', doors: s.doors }];
     const tb = document.getElementById('pk-items-tbody');
     tb.innerHTML = items.map((it, idx) => `
         <tr style="border-bottom:1px solid #E2E8F0;">

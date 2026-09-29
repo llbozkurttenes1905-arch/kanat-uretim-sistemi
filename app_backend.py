@@ -563,7 +563,7 @@ def update_facility(fid: str, payload: dict):
 
 # ── PARAMETRIC SPECIFICATIONS & DYNAMIC ROUTING ───────────
 
-def parse_door_specs(model_str: str) -> dict:
+def parse_door_specs(model_str: str, custom_color: str = None) -> dict:
     m = (model_str or "").strip()
     m_up = m.upper()
 
@@ -586,29 +586,36 @@ def parse_door_specs(model_str: str) -> dict:
     has_cam = ("CAM" in m_up) or ("CAMLI" in m_up)
 
     # 4. Parse Surface Color
-    color = "D.BEYAZ"
-    surface_mat_id = "MAT_MDF_BEYAZ"
-    if "K.CEVIZ" in m_up or "K. CEVIZ" in m_up or "CEVIZ" in m_up:
-        color = "K.CEVIZ"
+    if custom_color and custom_color.strip():
+        color = custom_color.strip().upper()
+        surface_mat_id = "MAT_MDF_STD"
+    elif "K.CEVIZ" in m_up or "K. CEVIZ" in m_up or "K.CEVİZ" in m_up or "CEVIZ" in m_up or "CEVİZ" in m_up:
+        color = "K.CEVİZ"
         surface_mat_id = "MAT_MDF_KCEVIZ"
     elif "B.TEAK" in m_up or "B. TEAK" in m_up:
         color = "B.TEAK"
         surface_mat_id = "MAT_MDF_BTEAK"
-    elif "TEAK" in m_up:
+    elif "TEAK" in m_up or "TİK" in m_up or "TIK" in m_up:
         color = "TEAK"
         surface_mat_id = "MAT_MDF_TEAK"
     elif "ANTRAS" in m_up:
         color = "ANTRASİT"
         surface_mat_id = "MAT_MDF_ANTRASIT"
-    elif "SOMONO" in m_up:
+    elif "SOMONO" in m_up or "SOMON" in m_up:
         color = "SOMONO"
         surface_mat_id = "MAT_MDF_SOMONO"
-    elif "COCO" in m_up:
+    elif "COCO" in m_up or "KOKO" in m_up:
         color = "COCO"
         surface_mat_id = "MAT_MDF_COCO"
-    elif "AKÇAAGAÇ" in m_up or "AKCAAGAC" in m_up:
+    elif any(k in m_up for k in ["AKÇAAGAÇ", "AKCAAGAC", "AKÇAAĞAÇ", "AKCAAĞAC"]):
         color = "AKÇAAGAÇ"
         surface_mat_id = "MAT_MDF_AKCAAGAC"
+    elif "MEŞE" in m_up or "MESE" in m_up:
+        color = "MEŞE"
+        surface_mat_id = "MAT_MDF_STD"
+    elif "BAMBU" in m_up or "BAMBOO" in m_up:
+        color = "BAMBU"
+        surface_mat_id = "MAT_MDF_STD"
     elif "D.BEYAZ" in m_up or "BEYAZ" in m_up:
         color = "D.BEYAZ"
         surface_mat_id = "MAT_MDF_BEYAZ"
@@ -930,16 +937,33 @@ def get_barcode_label(oid: str):
                 raise HTTPException(404, "Sipariş bulunamadı")
                 
     fac_name = "ERGÜNBAŞ Kanat Fabrikası"
+    model_str = order.get("model", "")
+    specs = parse_door_specs(model_str, custom_color=order.get("color"))
+
+    color = order.get("color") or specs.get("color") or "D.BEYAZ"
+    width_mm = specs.get("width", 800)
+    height_mm = specs.get("height", 2020)
+    thick_mm = specs.get("thickness", 40)
+    width_cm = round(width_mm / 10)
+    height_cm = round(height_mm / 10)
+    core_type = specs.get("core_type", "STRAFOR")
+
     return {
         "order_id": oid,
         "order_code": order.get("order_no", oid),
         "order_no": order.get("order_no", oid),
         "customer": order.get("customer", ""),
-        "model": order.get("model", ""),
-        "surface_finish": "Melamin / Lake",
-        "color": "Kompozit / Mat",
-        "width": 80,
-        "height": 200,
+        "model": model_str or "Standart Kanat Kapı",
+        "surface_finish": color,
+        "color": color,
+        "core_type": core_type,
+        "width": width_cm,
+        "height": height_cm,
+        "width_mm": width_mm,
+        "height_mm": height_mm,
+        "thickness_mm": thick_mm,
+        "dim_str": f"{width_mm}x{height_mm}x{thick_mm}",
+        "dims_formatted": f"{width_cm} x {height_cm} cm",
         "doors": order.get("qty", 0),
         "total_doors": order.get("qty", 0),
         "facility_name": fac_name,
@@ -948,7 +972,7 @@ def get_barcode_label(oid: str):
         "delivery_date": order.get("delivery_date", ""),
         "barcode": f"ERG-{order.get('order_no', oid)}",
         "barcode_text": f"ERG-{oid}-{order.get('qty', 0)}",
-        "qr_payload": f"ERGUNBAS|{oid}|{order.get('order_no')}|{order.get('qty')}|{order.get('model')}"
+        "qr_payload": f"ERGUNBAS|{oid}|{order.get('order_no')}|{order.get('qty')}|{order.get('model')}|{color}|{width_mm}x{height_mm}"
     }
 
 @app.get("/api/stages/pipeline")
@@ -967,12 +991,19 @@ def get_stages_pipeline():
         curr_stage = st_info.get("current_stage", "seren")
         if curr_stage not in pipeline: curr_stage = "seren"
         
+        specs = parse_door_specs(o.get("model", ""), custom_color=o.get("color"))
+        color = o.get("color") or specs.get("color", "")
         item = {
             "order_id": oid,
             "order_code": o.get("order_no", oid),
             "order_no": o.get("order_no", oid),
             "customer": o.get("customer", ""),
             "model": o.get("model", ""),
+            "color": color,
+            "surface_finish": color,
+            "specs": specs,
+            "width": round(specs.get("width", 800) / 10),
+            "height": round(specs.get("height", 2020) / 10),
             "total_doors": o.get("qty", 0),
             "doors": o.get("qty", 0),
             "total_qty": o.get("qty", 0),
@@ -1247,6 +1278,8 @@ def simulate_schedule(target_qty: Optional[int] = 1000, facility_id: Optional[st
         queue_timeline.append({
             "order_no": o["order_no"],
             "customer": o["customer"],
+            "model": o.get("model", ""),
+            "color": o.get("color", ""),
             "remaining_qty": o["remaining_qty"],
             "committed_delivery": o["delivery_date"],
             "estimated_completion": est_finish.isoformat(),
@@ -1255,13 +1288,17 @@ def simulate_schedule(target_qty: Optional[int] = 1000, facility_id: Optional[st
 
     queue_items = []
     for idx, o in enumerate(queue_timeline):
+        m_str = o.get("model", "")
+        sp = parse_door_specs(m_str, custom_color=o.get("color"))
+        col = o.get("color") or sp.get("color") or "Kompozit"
         queue_items.append({
             "sequence": idx + 1,
             "order_id": o.get("order_no", ""),
             "order_code": o.get("order_no", ""),
             "customer": o.get("customer", ""),
-            "model": "Standart Kanat Kapı",
-            "surface": "Melamin / Kompozit",
+            "model": m_str or "Standart Kanat Kapı",
+            "surface": col,
+            "color": col,
             "doors": o.get("remaining_qty", 0),
             "required_days": max(1, round(o.get("remaining_qty", 0) / (daily_capacity or 1), 1)),
             "estimated_start": today_dt.isoformat(),
