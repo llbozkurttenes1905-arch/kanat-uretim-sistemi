@@ -3326,6 +3326,23 @@
       "operator": "Test Operator",
       "notes": "Test aciklama",
       "created_at": "2026-09-29T11:43:05.447111"
+    },
+    "SCR-20260929-115554": {
+      "id": "SCR-20260929-115554",
+      "date": "2026-09-29",
+      "order_id": "",
+      "order_code": "2026-TEST",
+      "order_no": "2026-TEST",
+      "machine_id": "",
+      "machine_name": "Vakum Pres",
+      "station": "Vakum Pres",
+      "facility_id": "fac1",
+      "reason": "Yüzey Baloncuk / Folyo Hatası",
+      "qty": 2,
+      "scrap_qty": 2,
+      "operator": "Test Operator",
+      "notes": "Test aciklama",
+      "created_at": "2026-09-29T11:55:54.669787"
     }
   },
   "shipments": {
@@ -3422,12 +3439,35 @@
       "total_doors": 25,
       "notes": "Test sevk notu",
       "created_at": "2026-09-29T11:43:05.384481"
+    },
+    "SEVK-20260929-1155": {
+      "id": "SEVK-20260929-1155",
+      "shipment_code": "SEVK-20260929-1155",
+      "shipment_no": "SEVK-20260929-1155",
+      "customer": "Test Musteri",
+      "order_id": "SIP-UST-0001",
+      "plate": "34 TEST 123",
+      "plate_no": "34 TEST 123",
+      "driver": "Ali Usta",
+      "driver_name": "Ali Usta",
+      "driver_phone": "",
+      "destination": "",
+      "ship_date": "2026-09-30",
+      "shipment_date": "2026-09-30",
+      "facility": "fac1",
+      "facility_id": "fac1",
+      "status": "Hazırlanıyor",
+      "items": [],
+      "doors": 25,
+      "total_doors": 25,
+      "notes": "Test sevk notu",
+      "created_at": "2026-09-29T11:55:54.608943"
     }
   },
   "order_stages": {
     "SIP-UST-0001": {
       "order_id": "SIP-UST-0001",
-      "current_stage": "vakum",
+      "current_stage": "pres",
       "qty_completed_in_stage": 0,
       "last_updated": "2026-09-29",
       "operator": "Operatör",
@@ -3444,6 +3484,14 @@
           "timestamp": "2026-09-29T11:43:05.307479",
           "stage": "vakum",
           "stage_name": "Levha & Vakum Pres",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        },
+        {
+          "timestamp": "2026-09-29T11:55:54.529324",
+          "stage": "pres",
+          "stage_name": "Sıcak Pres Hattı",
           "qty": 0,
           "operator": "",
           "notes": ""
