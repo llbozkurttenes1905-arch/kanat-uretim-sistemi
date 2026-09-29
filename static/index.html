@@ -4,7 +4,603 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ERGÜNBAŞ Group — Kanat Üretim, İş Gücü &amp; MRP Portalı</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+// ==========================================================
+// 🏷️ 1. İSTASYON & BARKOD TAKİP JS
+// ==========================================================
+let allPipelineOrders = [];
+
+async function loadStages() {
+    try {
+        const r = await fetch('/api/stages/pipeline');
+        const data = await r.json();
+        allPipelineOrders = data.orders || [];
+
+        const stagesList = [
+            { id: 'seren', name: '1. Seren Hazırlık', icon: '🪵', color: '#64748B' },
+            { id: 'strafor', name: '2. Dolgu & Strafor', icon: '📦', color: '#D97706' },
+            { id: 'vakum', name: '3. Vakum Pres', icon: '♨️', color: '#EA580C' },
+            { id: 'sicak_pres', name: '4. Sıcak Pres', icon: '🔥', color: '#DC2626' },
+            { id: 'homag', name: '5. Homag & Ebat', icon: '⚙️', color: '#2563EB' },
+            { id: 'paket', name: '6. Kalite & Paket', icon: '✅', color: '#059669' }
+        ];
+
+        let totalInStages = 0;
+        let totalDone = 0;
+
+        const container = document.getElementById('pipeline-columns-container');
+        container.innerHTML = stagesList.map(st => {
+            const inStage = allPipelineOrders.filter(o => (o.stage || 'seren') === st.id);
+            totalInStages += inStage.length;
+            if (st.id === 'paket') totalDone += inStage.length;
+
+            return `
+                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; display:flex; flex-direction:column; max-height:750px; overflow:hidden;">
+                    <!-- Column Header -->
+                    <div style="padding:12px 14px; background:#FFFFFF; border-bottom:2px solid ${st.color}; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="font-weight:800; font-size:13px; color:#0F172A; display:flex; align-items:center; gap:6px;">
+                            <span>${st.icon}</span> <span>${st.name}</span>
+                        </div>
+                        <span style="font-size:11px; font-weight:800; padding:2px 8px; border-radius:12px; background:#F1F5F9; color:#475569;">${inStage.length}</span>
+                    </div>
+
+                    <!-- Cards Container -->
+                    <div style="padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; flex:1;">
+                        ${inStage.length === 0 ? `<div style="text-align:center; padding:30px 10px; color:#94A3B8; font-size:12px;">Bu istasyonda bekleyen sipariş yok</div>` : ''}
+                        ${inStage.map(o => `
+                            <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:8px; padding:12px; box-shadow:0 1px 3px rgba(15,23,42,0.05); transition:transform 0.15s;" class="hover:border-slate-400">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                    <span style="font-weight:900; font-size:13px; color:#0F172A; font-family:monospace;">${o.order_code || o.order_id}</span>
+                                    <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:${o.facility==='fac1'?'#FEF2F2':'#F0F9FF'}; color:${o.facility==='fac1'?'#B91C1C':'#0369A1'};">${o.facility==='fac1'?'ÜST':'ALT'}</span>
+                                </div>
+                                <div style="font-weight:700; font-size:12px; color:#334155; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.customer || ''}">${o.customer || 'İsimsiz Müşteri'}</div>
+                                <div style="font-size:11px; color:#64748B; margin-top:2px;">${o.model || 'Model'} • <strong>${o.total_doors || o.doors || 0}</strong> kapı</div>
+                                
+                                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                                    <button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="openBarcodeModal('${o.order_id}')" title="Etiketi Yazdır">🏷️ Etiket</button>
+                                    ${st.id !== 'paket' ? `
+                                        <button class="btn-primary" style="padding:4px 10px; font-size:11px;" onclick="advanceStage('${o.order_id}')">İlerlet ➔</button>
+                                    ` : `
+                                        <span style="font-size:11px; font-weight:800; color:#059669;">Tamamlandı ✓</span>
+                                    `}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const cntTotal = document.getElementById('pipeline-total-cnt');
+        if (cntTotal) cntTotal.innerText = allPipelineOrders.length;
+        const cntDone = document.getElementById('pipeline-done-cnt');
+        if (cntDone) cntDone.innerText = totalDone;
+        const cntLabel = document.getElementById('pipeline-label-cnt');
+        if (cntLabel) cntLabel.innerText = allPipelineOrders.length;
+
+    } catch (e) {
+        console.error('loadStages error', e);
+    }
+}
+
+async function advanceStage(orderId, targetStage = null) {
+    try {
+        const r = await fetch('/api/stages/advance', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order_id: orderId, next_stage: targetStage })
+        });
+        const res = await r.json();
+        if (res.success) {
+            toast(`Sipariş aşaması güncellendi: ${res.new_stage_name || res.new_stage}`);
+            loadStages();
+        } else {
+            toast(res.detail || 'Aşama ilerletilemedi.', 'error');
+        }
+    } catch (e) {
+        toast('İşlem başarısız.', 'error');
+    }
+}
+
+function handleBarcodeScanInput() {
+    const inp = document.getElementById('barcode-scan-input');
+    const val = inp.value.trim();
+    if (!val) return;
+
+    // Search order
+    const found = allPipelineOrders.find(o => 
+        (o.order_code && o.order_code.toLowerCase() === val.toLowerCase()) || 
+        (o.order_id && o.order_id.toLowerCase() === val.toLowerCase()) ||
+        (o.barcode && o.barcode.toLowerCase() === val.toLowerCase())
+    );
+
+    if (found) {
+        advanceStage(found.order_id);
+        inp.value = '';
+    } else {
+        toast(`"${val}" kodlu sipariş bulunamadı!`, 'error');
+    }
+}
+
+async function openBarcodeModal(orderId) {
+    try {
+        const r = await fetch(`/api/barcode/label/${orderId}`);
+        const data = await r.json();
+        if (data.error) { toast(data.error, 'error'); return; }
+
+        document.getElementById('lbl-order-code').innerText = data.order_code || data.order_id;
+        document.getElementById('lbl-customer').innerText = data.customer || '—';
+        document.getElementById('lbl-model').innerText = data.model || 'Standart';
+        document.getElementById('lbl-surface').innerText = data.surface_finish || data.color || 'Standart';
+        document.getElementById('lbl-dims').innerText = `${data.width || '—'} x ${data.height || '—'} cm`;
+        document.getElementById('lbl-qty').innerText = `${data.doors || data.total_doors || 0} ADET`;
+        document.getElementById('lbl-facility-badge').innerText = data.facility === 'fac2' ? 'ALT TESİS' : 'ÜST TESİS';
+        document.getElementById('lbl-barcode-text').innerText = `*${data.barcode || data.order_code}*`;
+
+        // Render QR SVG dynamically
+        const qrHolder = document.getElementById('lbl-qr-holder');
+        qrHolder.innerHTML = `
+            <svg viewBox="0 0 100 100" width="100" height="100">
+                <rect width="100" height="100" fill="#FFFFFF"/>
+                <path d="M10 10h30v30h-30z M60 10h30v30h-30z M10 60h30v30h-30z" fill="#0F172A"/>
+                <rect x="18" y="18" width="14" height="14" fill="#FFFFFF"/>
+                <rect x="68" y="18" width="14" height="14" fill="#FFFFFF"/>
+                <rect x="18" y="68" width="14" height="14" fill="#FFFFFF"/>
+                <rect x="22" y="22" width="6" height="6" fill="#0F172A"/>
+                <rect x="72" y="22" width="6" height="6" fill="#0F172A"/>
+                <rect x="22" y="72" width="6" height="6" fill="#0F172A"/>
+                <!-- Data dots pattern -->
+                <rect x="46" y="14" width="8" height="8" fill="#0F172A"/>
+                <rect x="46" y="28" width="8" height="8" fill="#0F172A"/>
+                <rect x="46" y="44" width="8" height="12" fill="#0F172A"/>
+                <rect x="14" y="46" width="12" height="8" fill="#0F172A"/>
+                <rect x="62" y="48" width="8" height="8" fill="#0F172A"/>
+                <rect x="76" y="48" width="12" height="8" fill="#0F172A"/>
+                <rect x="58" y="62" width="8" height="14" fill="#0F172A"/>
+                <rect x="72" y="66" width="16" height="8" fill="#0F172A"/>
+                <rect x="64" y="80" width="12" height="8" fill="#0F172A"/>
+                <rect x="46" y="76" width="8" height="12" fill="#0F172A"/>
+            </svg>
+        `;
+
+        // Render Barcode simulated bars
+        const barsHolder = document.getElementById('lbl-barcode-bars');
+        const barHeights = [28, 32, 24, 32, 32, 26, 32, 24, 32, 28, 32, 32, 24, 32, 30, 32, 24, 32, 28, 32];
+        barsHolder.innerHTML = barHeights.map((h, idx) => `
+            <div style="background:#0F172A; width:${idx%3===0?'3px':'1.5px'}; height:${h}px;"></div>
+        `).join('');
+
+        openModal('modal-label');
+    } catch (e) {
+        toast('Etiket yüklenemedi.', 'error');
+    }
+}
+
+
+// ==========================================================
+// 🚛 2. SEVKİYAT & ÇEKİ LİSTESİ JS
+// ==========================================================
+let allShipmentsList = [];
+
+async function loadShipments() {
+    try {
+        const r = await fetch('/api/shipments');
+        allShipmentsList = await r.json();
+
+        let cntPlanned = 0, cntTransit = 0, cntDeliveredDoors = 0;
+        allShipmentsList.forEach(s => {
+            if (s.status === 'Hazırlanıyor') cntPlanned++;
+            else if (s.status === 'Yolda') cntTransit++;
+            else if (s.status === 'Teslim Edildi') cntDeliveredDoors += (s.doors || 0);
+        });
+
+        const kpiP = document.getElementById('shipment-kpi-planned');
+        if (kpiP) kpiP.innerText = cntPlanned;
+        const kpiT = document.getElementById('shipment-kpi-transit');
+        if (kpiT) kpiT.innerText = cntTransit;
+        const kpiD = document.getElementById('shipment-kpi-delivered');
+        if (kpiD) kpiD.innerHTML = `${cntDeliveredDoors} <span style="font-size:13px; font-weight:600; color:#64748B;">kapı</span>`;
+
+        const tb = document.getElementById('shipments-tbody');
+        if (!allShipmentsList.length) {
+            tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#94A3B8;">Henüz planlanmış sevkiyat bulunmuyor.</td></tr>';
+            return;
+        }
+
+        tb.innerHTML = allShipmentsList.map(s => {
+            let badgeClass = 'badge-slate';
+            if (s.status === 'Hazırlanıyor') badgeClass = 'badge-amber';
+            if (s.status === 'Yolda') badgeClass = 'badge-blue';
+            if (s.status === 'Teslim Edildi') badgeClass = 'badge-green';
+
+            return `
+                <tr>
+                    <td style="font-weight:800; font-family:monospace; color:#0F172A;">${s.shipment_code}</td>
+                    <td style="font-weight:700; color:#1E293B;">${s.customer || '—'}</td>
+                    <td><span class="badge ${s.facility==='fac1'?'badge-red':'badge-blue'}">${s.facility==='fac1'?'Üst Tesis':'Alt Tesis'}</span></td>
+                    <td>
+                        <div style="font-weight:700; color:#0F172A;">${s.plate || '—'}</div>
+                        <div style="font-size:11px; color:#64748B;">${s.driver || '—'}</div>
+                    </td>
+                    <td style="text-align:center; font-weight:800; color:#E30713; font-size:14px;">${s.doors || 0}</td>
+                    <td style="color:#475569;">${s.shipment_date || '—'}</td>
+                    <td style="text-align:center;"><span class="badge ${badgeClass}">${s.status}</span></td>
+                    <td style="text-align:right;">
+                        <button class="btn-secondary" style="padding:5px 9px; font-size:11px;" onclick="viewPackingList('${s.id}')" title="Çeki Listesi / İrsaliye">📄 Çeki Listesi</button>
+                        <select onchange="updateShipmentStatus('${s.id}', this.value)" style="margin-left:4px; padding:4px 6px; border:1px solid #CBD5E1; border-radius:6px; font-size:11px;">
+                            <option value="Hazırlanıyor" ${s.status==='Hazırlanıyor'?'selected':''}>Hazırlanıyor</option>
+                            <option value="Yolda" ${s.status==='Yolda'?'selected':''}>Yola Çıktı</option>
+                            <option value="Teslim Edildi" ${s.status==='Teslim Edildi'?'selected':''}>Teslim Edildi</option>
+                        </select>
+                        <button class="btn-icon danger" onclick="deleteShipment('${s.id}')" title="Sil" style="margin-left:4px;">✕</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+    } catch (e) {
+        console.error('loadShipments error', e);
+    }
+}
+
+function openShipmentModal() {
+    // Populate orders dropdown
+    const sel = document.getElementById('sh-order-select');
+    sel.innerHTML = '<option value="">-- Sipariş Seçiniz --</option>' + 
+        allOrders.map(o => `<option value="${o.id}">${o.order_code || o.id} — ${o.customer || ''} (${o.doors || 0} kapı)</option>`).join('');
+    
+    document.getElementById('sh-date').value = new Date().toISOString().split('T')[0];
+    openModal('modal-shipment');
+}
+
+function handleShipmentOrderSelect() {
+    const oid = document.getElementById('sh-order-select').value;
+    const ord = allOrders.find(o => o.id === oid);
+    if (ord) {
+        document.getElementById('sh-customer').value = ord.customer || '';
+        document.getElementById('sh-facility').value = ord.facility || 'fac1';
+        document.getElementById('sh-doors').value = ord.doors || 0;
+    }
+}
+
+async function handleShipmentSubmit(e) {
+    e.preventDefault();
+    const oid = document.getElementById('sh-order-select').value;
+    const ord = allOrders.find(o => o.id === oid);
+
+    const payload = {
+        order_id: oid,
+        customer: document.getElementById('sh-customer').value.trim(),
+        facility: document.getElementById('sh-facility').value,
+        plate: document.getElementById('sh-plate').value.trim(),
+        driver: document.getElementById('sh-driver').value.trim(),
+        doors: parseInt(document.getElementById('sh-doors').value) || 0,
+        shipment_date: document.getElementById('sh-date').value,
+        notes: document.getElementById('sh-notes').value.trim(),
+        status: 'Hazırlanıyor',
+        items: ord ? [{ order_code: ord.order_code, model: ord.model, surface: ord.surface_finish, doors: ord.doors }] : []
+    };
+
+    try {
+        const r = await fetch('/api/shipments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (r.ok) {
+            toast('Sevkiyat başarıyla planlandı!');
+            closeModal('modal-shipment');
+            loadShipments();
+        }
+    } catch (e) {
+        toast('Sevkiyat kaydedilemedi.', 'error');
+    }
+}
+
+async function updateShipmentStatus(sid, newStatus) {
+    try {
+        const r = await fetch(`/api/shipments/${sid}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        });
+        if (r.ok) {
+            toast(`Sevkiyat durumu: ${newStatus}`);
+            loadShipments();
+        }
+    } catch (e) {
+        toast('Durum güncellenemedi.', 'error');
+    }
+}
+
+async function deleteShipment(sid) {
+    if (!confirm('Bu sevkiyat kaydı silinsin mi?')) return;
+    try {
+        const r = await fetch(`/api/shipments/${sid}`, { method: 'DELETE' });
+        if (r.ok) {
+            toast('Sevkiyat silindi.');
+            loadShipments();
+        }
+    } catch (e) {
+        toast('Silme işlemi başarısız.', 'error');
+    }
+}
+
+function viewPackingList(sid) {
+    const s = allShipmentsList.find(x => x.id === sid);
+    if (!s) return;
+
+    document.getElementById('pk-code').innerText = s.shipment_code;
+    document.getElementById('pk-date').innerText = `Tarih: ${s.shipment_date || new Date().toISOString().split('T')[0]}`;
+    document.getElementById('pk-customer').innerText = s.customer || '—';
+    document.getElementById('pk-facility').innerText = `Tesis: ${s.facility === 'fac2' ? 'Alt Tesis (Tesis 2)' : 'Üst Tesis (Tesis 1)'}`;
+    document.getElementById('pk-notes').innerText = `Not / Adres: ${s.notes || 'Standart Fabrika Teslimi'}`;
+    document.getElementById('pk-plate').innerText = s.plate || '—';
+    document.getElementById('pk-driver').innerText = s.driver || '—';
+    document.getElementById('pk-status').innerText = s.status || 'Hazırlanıyor';
+    document.getElementById('pk-total-doors').innerText = `${s.doors || 0} KAPI`;
+
+    const items = s.items && s.items.length ? s.items : [{ order_code: s.order_id, model: 'Standart Melamin/Lake', surface: 'Melamin', doors: s.doors }];
+    const tb = document.getElementById('pk-items-tbody');
+    tb.innerHTML = items.map((it, idx) => `
+        <tr style="border-bottom:1px solid #E2E8F0;">
+            <td style="padding:8px 10px;">${idx + 1}</td>
+            <td style="padding:8px 10px; font-weight:800; font-family:monospace;">${it.order_code || s.shipment_code}</td>
+            <td style="padding:8px 10px; font-weight:600;">${it.model || 'Standart Kanat Kapı'}</td>
+            <td style="padding:8px 10px; color:#475569;">${it.surface || 'Ahşap Desen'}</td>
+            <td style="padding:8px 10px; text-align:center; font-weight:800; color:#0F172A;">${it.doors || s.doors} Adet</td>
+        </tr>
+    `).join('');
+
+    openModal('modal-packing-list');
+}
+
+
+// ==========================================================
+// 🔍 3. KALİTE KONTROL & FİRE TAKİBİ JS
+// ==========================================================
+let allScrapsList = [];
+
+async function loadQuality() {
+    try {
+        const r = await fetch('/api/quality/scraps');
+        allScrapsList = await r.json();
+
+        // Total Doors Produced (fetch dashboard summary to get accurate % fire rate)
+        let totalOutput = 0;
+        try {
+            const rd = await fetch('/api/dashboard?period=monthly');
+            const dd = await rd.json();
+            totalOutput = dd.total_output || 1000;
+        } catch(e) { totalOutput = 1000; }
+
+        let totalScraps = 0;
+        const reasonsCount = {};
+        const stationsCount = {};
+
+        allScrapsList.forEach(sc => {
+            const q = sc.scrap_qty || 1;
+            totalScraps += q;
+            reasonsCount[sc.reason] = (reasonsCount[sc.reason] || 0) + q;
+            stationsCount[sc.station] = (stationsCount[sc.station] || 0) + q;
+        });
+
+        const fireRate = totalOutput > 0 ? ((totalScraps / (totalOutput + totalScraps)) * 100).toFixed(2) : '0.0';
+
+        // Top station
+        let topStation = '—', topStationVal = 0;
+        Object.entries(stationsCount).forEach(([st, cnt]) => {
+            if (cnt > topStationVal) { topStationVal = cnt; topStation = st; }
+        });
+
+        document.getElementById('quality-kpi-total').innerHTML = `${totalScraps} <span style="font-size:13px; font-weight:600; color:#64748B;">adet</span>`;
+        document.getElementById('quality-kpi-rate').innerText = `% ${fireRate}`;
+        document.getElementById('quality-kpi-top-station').innerText = topStation;
+        document.getElementById('quality-kpi-top-station-sub').innerText = `${topStationVal} adet fire kaydedildi`;
+
+        // Render Reasons Breakdown Bars
+        const rcHolder = document.getElementById('quality-reasons-container');
+        if (!Object.keys(reasonsCount).length) {
+            rcHolder.innerHTML = '<div style="color:#94A3B8; text-align:center;">Henüz fire verisi kaydedilmemiş.</div>';
+        } else {
+            rcHolder.innerHTML = Object.entries(reasonsCount)
+                .sort((a,b) => b[1] - a[1])
+                .map(([rsn, cnt]) => {
+                    const pct = totalScraps > 0 ? ((cnt / totalScraps) * 100).toFixed(1) : 0;
+                    return `
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;">
+                                <span style="color:#0F172A;">${rsn}</span>
+                                <span style="color:#E30713;">${cnt} adet (%${pct})</span>
+                            </div>
+                            <div style="background:#E2E8F0; border-radius:999px; height:8px; overflow:hidden;">
+                                <div style="background:#E30713; height:8px; width:${pct}%; border-radius:999px;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        // Render Stations Breakdown Bars
+        const scHolder = document.getElementById('quality-stations-container');
+        if (!Object.keys(stationsCount).length) {
+            scHolder.innerHTML = '<div style="color:#94A3B8; text-align:center;">Henüz fire verisi kaydedilmemiş.</div>';
+        } else {
+            scHolder.innerHTML = Object.entries(stationsCount)
+                .sort((a,b) => b[1] - a[1])
+                .map(([stn, cnt]) => {
+                    const pct = totalScraps > 0 ? ((cnt / totalScraps) * 100).toFixed(1) : 0;
+                    return `
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;">
+                                <span style="color:#0F172A;">${stn}</span>
+                                <span style="color:#4338CA;">${cnt} adet (%${pct})</span>
+                            </div>
+                            <div style="background:#E2E8F0; border-radius:999px; height:8px; overflow:hidden;">
+                                <div style="background:#4338CA; height:8px; width:${pct}%; border-radius:999px;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        // Render Table
+        const tb = document.getElementById('quality-tbody');
+        if (!allScrapsList.length) {
+            tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#94A3B8;">Kayıtlı fire bulunmuyor.</td></tr>';
+            return;
+        }
+
+        tb.innerHTML = allScrapsList.map(sc => `
+            <tr>
+                <td style="font-weight:600; color:#475569;">${sc.date || '—'}</td>
+                <td style="font-weight:800; font-family:monospace; color:#0F172A;">${sc.order_code || sc.order_id || '—'}</td>
+                <td><span class="badge badge-slate">${sc.station}</span></td>
+                <td style="text-align:center; font-weight:800; color:#DC2626; font-size:14px;">${sc.scrap_qty || 1}</td>
+                <td style="font-weight:700; color:#B91C1C;">${sc.reason}</td>
+                <td style="color:#334155;">${sc.operator || '—'}</td>
+                <td style="color:#64748B; font-size:12px;">${sc.notes || '—'}</td>
+                <td style="text-align:right;">
+                    <button class="btn-icon danger" onclick="deleteScrap('${sc.id}')" title="Sil">✕</button>
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (e) {
+        console.error('loadQuality error', e);
+    }
+}
+
+function openScrapModal() {
+    document.getElementById('sc-date').value = new Date().toISOString().split('T')[0];
+    openModal('modal-scrap');
+}
+
+async function handleScrapSubmit(e) {
+    e.preventDefault();
+    const payload = {
+        date: document.getElementById('sc-date').value,
+        order_code: document.getElementById('sc-order').value.trim(),
+        station: document.getElementById('sc-station').value,
+        scrap_qty: parseInt(document.getElementById('sc-qty').value) || 1,
+        reason: document.getElementById('sc-reason').value,
+        operator: document.getElementById('sc-operator').value.trim(),
+        notes: document.getElementById('sc-notes').value.trim()
+    };
+
+    try {
+        const r = await fetch('/api/quality/scraps', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (r.ok) {
+            toast('Fire / hurda kaydı başarıyla eklendi!');
+            closeModal('modal-scrap');
+            loadQuality();
+        }
+    } catch (e) {
+        toast('Fire kaydı eklenemedi.', 'error');
+    }
+}
+
+async function deleteScrap(scId) {
+    if (!confirm('Fire kaydı silinsin mi?')) return;
+    try {
+        const r = await fetch(`/api/quality/scraps/${scId}`, { method: 'DELETE' });
+        if (r.ok) {
+            toast('Kayıt silindi.');
+            loadQuality();
+        }
+    } catch (e) {
+        toast('Silme başarısız.', 'error');
+    }
+}
+
+
+// ==========================================================
+// 📅 6. KAPASİTE & ÇİZELGELEME SİMÜLASYONU JS
+// ==========================================================
+async function loadScheduling() {
+    runSchedulingSimulation();
+}
+
+async function runSchedulingSimulation() {
+    const hours = parseFloat(document.getElementById('sched-hours').value) || 9;
+    const eff = parseFloat(document.getElementById('sched-efficiency').value) || 0.85;
+
+    try {
+        const r = await fetch(`/api/scheduling/simulate?hours_per_day=${hours}&efficiency=${eff}`);
+        const sim = await r.json();
+
+        document.getElementById('sched-kpi-orders').innerText = sim.total_orders || 0;
+        document.getElementById('sched-kpi-doors').innerText = `${sim.total_doors || 0} adet`;
+        document.getElementById('sched-kpi-days').innerHTML = `${sim.total_days || 0} <span style="font-size:13px; font-weight:600; color:#64748B;">iş günü</span>`;
+        document.getElementById('sched-kpi-finish').innerText = sim.estimated_queue_completion || '—';
+        document.getElementById('sched-kpi-bottleneck').innerText = sim.bottleneck_station ? `${sim.bottleneck_station} (${sim.bottleneck_capacity}/gün)` : '—';
+
+        const tb = document.getElementById('sched-tbody');
+        if (!sim.queue || !sim.queue.length) {
+            tb.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:30px; color:#94A3B8;">Kuyrukta açık sipariş bulunamadı.</td></tr>';
+            return;
+        }
+
+        tb.innerHTML = sim.queue.map(q => {
+            const isLate = q.estimated_finish > (q.due_date || '9999');
+            return `
+                <tr>
+                    <td style="font-weight:800; color:#64748B;">#${q.sequence}</td>
+                    <td style="font-weight:900; font-family:monospace; color:#0F172A;">${q.order_code || q.order_id}</td>
+                    <td style="font-weight:700; color:#1E293B;">${q.customer || '—'}</td>
+                    <td>${q.model || 'Model'} • <span style="color:#64748B;">${q.surface || ''}</span></td>
+                    <td style="text-align:center; font-weight:800; color:#2563EB;">${q.doors || 0}</td>
+                    <td style="text-align:center; font-weight:600; color:#475569;">${q.required_days} gün</td>
+                    <td style="color:#334155; font-size:12px;">${q.estimated_start}</td>
+                    <td style="font-weight:700; color:#059669; font-size:12px;">${q.estimated_finish}</td>
+                    <td style="text-align:center;">
+                        <span class="badge ${isLate ? 'badge-red' : 'badge-green'}">${isLate ? 'Gecikme Riski ⚠️' : 'Zamanında ✓'}</span>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+    } catch (e) {
+        console.error('runSchedulingSimulation error', e);
+    }
+}
+
+// ── PRINT HELPER ──────────────────────────────────────────
+function printElementContent(elementId) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>ERGÜNBAŞ Yazdır</title>
+            <style>
+                body { font-family: sans-serif; margin: 20px; color: #0F172A; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #CBD5E1; padding: 8px; }
+                @media print {
+                    button { display: none !important; }
+                }
+            </style>
+        </head>
+        <body>
+            ${el.innerHTML}
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+    }, 300);
+}
+
+</script>
     <style>
         :root {
             --brand-red: #E30713;
@@ -797,12 +1393,16 @@
         <nav class="nav-tabs" id="main-nav">
             <button class="nav-tab active" onclick="switchTab('dashboard')" id="tab-dashboard">Dashboard</button>
             <button class="nav-tab" onclick="switchTab('orders')" id="tab-orders">Siparişler</button>
+            <button class="nav-tab" onclick="switchTab('stages')" id="tab-stages">🏷️ İstasyon &amp; Barkod</button>
             <button class="nav-tab" onclick="switchTab('daily')" id="tab-daily">Günlük Giriş</button>
-            <button class="nav-tab" onclick="switchTab('machines')" id="tab-machines">Makineler</button>
+            <button class="nav-tab" onclick="switchTab('quality')" id="tab-quality">🔍 Kalite &amp; Fire</button>
+            <button class="nav-tab" onclick="switchTab('shipments')" id="tab-shipments">🚛 Sevkiyat &amp; Çeki</button>
+            <button class="nav-tab" onclick="switchTab('scheduling')" id="tab-scheduling">📅 Çizelgeleme</button>
             <button class="nav-tab" onclick="switchTab('mrp')" id="tab-mrp">
                 <span>📦 MRP &amp; Malzemeler</span>
                 <span id="mrp-nav-badge" class="hidden text-[10px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white font-bold">!</span>
             </button>
+            <button class="nav-tab" onclick="switchTab('machines')" id="tab-machines">Makineler</button>
             <button class="nav-tab hidden" onclick="switchTab('users')" id="tab-users">Kullanıcılar</button>
         </nav>
 
@@ -1362,6 +1962,256 @@
         </div>
     </div>
 
+
+    <!-- ===== 1. İSTASYON & BARKOD CANLI TAKİP ===== -->
+    <div id="section-stages" class="hidden">
+        <div class="panel" style="margin-bottom:20px; border-top:4px solid #E30713;">
+            <div class="panel-header" style="flex-wrap:wrap; gap:12px;">
+                <div>
+                    <div class="panel-title" style="font-size:17px;">
+                        <span>🏷️</span> İstasyon Bazlı Canlı Üretim Hattı &amp; Barkod Takip
+                    </div>
+                    <div class="panel-sub">
+                        6 Aşamalı Hat: Seren Hazırlık → Dolgu &amp; Strafor → Vakum Pres → Sıcak Pres → Homag &amp; Ebatlama → Kalite &amp; Paketleme
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <div style="position:relative;">
+                        <input type="text" id="barcode-scan-input" placeholder="Barkod / Sipariş Kodu Okut (Enter)..." 
+                               onkeydown="if(event.key==='Enter') handleBarcodeScanInput()" 
+                               class="form-input" style="width:260px; font-family:monospace; padding-left:32px;">
+                        <span style="position:absolute; left:10px; top:9px; color:#94A3B8;">📷</span>
+                    </div>
+                    <button class="btn-primary" onclick="handleBarcodeScanInput()">Okut / İlerlet</button>
+                    <button class="btn-secondary" onclick="loadStages()">🔄 Yenile</button>
+                </div>
+            </div>
+            
+            <!-- Quick Stat Bar -->
+            <div style="padding:14px 22px; background:#F8FAFC; border-bottom:1px solid #E2E8F0; display:flex; gap:20px; flex-wrap:wrap; font-size:12px; font-weight:600; color:#475569;">
+                <div>Toplam İstasyonda: <span id="pipeline-total-cnt" style="color:#0F172A; font-weight:800;">0</span> sipariş</div>
+                <div>Tamamlanan: <span id="pipeline-done-cnt" style="color:#16A34A; font-weight:800;">0</span> sipariş</div>
+                <div>Barkod Etiketi Hazır: <span id="pipeline-label-cnt" style="color:#2563EB; font-weight:800;">243</span> adet</div>
+                <div style="margin-left:auto; color:#94A3B8;">Herhangi bir karta tıklayarak QR &amp; Barkod etiketini yazdırabilirsiniz.</div>
+            </div>
+
+            <!-- Kanban Pipeline Columns -->
+            <div style="padding:18px; overflow-x:auto;">
+                <div style="display:grid; grid-template-columns:repeat(6, minmax(240px, 1fr)); gap:14px; min-width:1200px;" id="pipeline-columns-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 2. SEVKİYAT & ÇEKİ LİSTESİ ===== -->
+    <div id="section-shipments" class="hidden">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:20px;">
+            <div class="panel" style="padding:18px 22px; border-top:4px solid #E30713;">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#64748B;">Planlanan / Hazırlanan</div>
+                <div id="shipment-kpi-planned" style="font-size:30px; font-weight:900; color:#0F172A; margin-top:4px;">0</div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Bekleyen sevkiyatlar</div>
+            </div>
+            <div class="panel" style="padding:18px 22px; border-top:4px solid #F59E0B;">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#64748B;">Yoldaki Araçlar</div>
+                <div id="shipment-kpi-transit" style="font-size:30px; font-weight:900; color:#D97706; margin-top:4px;">0</div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Teslimat yolunda</div>
+            </div>
+            <div class="panel" style="padding:18px 22px; border-top:4px solid #10B981;">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#64748B;">Teslim Edilen Kapılar</div>
+                <div id="shipment-kpi-delivered" style="font-size:30px; font-weight:900; color:#059669; margin-top:4px;">0 <span style="font-size:13px; font-weight:600; color:#64748B;">kapı</span></div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Tamamlanan sevkler</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title"><span>🚛</span> Sevkiyat Planları &amp; Çeki Listeleri</div>
+                    <div class="panel-sub">Sipariş bazlı irsaliye, şoför/plaka kaydı ve tek tıkla A4 Çeki Listesi çıktısı</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-primary" onclick="openShipmentModal()">+ Yeni Sevkiyat Planla</button>
+                    <button class="btn-secondary" onclick="loadShipments()">🔄 Yenile</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Sevkiyat Kodu</th>
+                            <th>Müşteri / Proje</th>
+                            <th>Tesis</th>
+                            <th>Araç Plakası &amp; Şoför</th>
+                            <th style="text-align:center;">Kapı Adedi</th>
+                            <th>Sevk Tarihi</th>
+                            <th style="text-align:center;">Durum</th>
+                            <th style="text-align:right;">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipments-tbody">
+                        <tr><td colspan="8" style="text-align:center; padding:30px; color:#94A3B8;">Sevkiyatlar yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 3. KALİTE KONTROL & FİRE TAKİBİ ===== -->
+    <div id="section-quality" class="hidden">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:20px;">
+            <div class="panel" style="padding:18px 22px; border-top:4px solid #DC2626;">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#64748B;">Toplam Fire Kapı</div>
+                <div id="quality-kpi-total" style="font-size:30px; font-weight:900; color:#DC2626; margin-top:4px;">0 <span style="font-size:13px; font-weight:600; color:#64748B;">adet</span></div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Tüm zamanlar hurda</div>
+            </div>
+            <div class="panel" style="padding:18px 22px; border-top:4px solid #EA580C;">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#64748B;">Genel Fire Oranı</div>
+                <div id="quality-kpi-rate" style="font-size:30px; font-weight:900; color:#EA580C; margin-top:4px;">% 0.0</div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Üretilen kapılara kıyasla</div>
+            </div>
+            <div class="panel" style="padding:18px 22px; border-top:4px solid #6366F1;">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#64748B;">En Çok Fire Veren İstasyon</div>
+                <div id="quality-kpi-top-station" style="font-size:22px; font-weight:800; color:#4338CA; margin-top:6px;">—</div>
+                <div id="quality-kpi-top-station-sub" style="font-size:11px; color:#94A3B8; margin-top:4px;">0 adet fire</div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:20px;">
+            <!-- Reason breakdown -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title"><span>📊</span> Hata / Fire Nedenleri Dağılımı</div>
+                </div>
+                <div style="padding:20px;" id="quality-reasons-container">
+                    <div style="color:#94A3B8; text-align:center;">Veri yükleniyor...</div>
+                </div>
+            </div>
+
+            <!-- Station breakdown -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title"><span>⚙️</span> Makine &amp; İstasyon Bazlı Fire Dağılımı</div>
+                </div>
+                <div style="padding:20px;" id="quality-stations-container">
+                    <div style="color:#94A3B8; text-align:center;">Veri yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrap log table -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title"><span>📝</span> Kalite Kontrol Fire &amp; Hurda Günlüğü</div>
+                    <div class="panel-sub">İstasyonlardan gelen hata ve hurdaya ayrılan kapı kayıtları</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-primary" onclick="openScrapModal()">+ Fire / Hurda Kaydı Ekle</button>
+                    <button class="btn-secondary" onclick="loadQuality()">🔄 Yenile</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Sipariş No</th>
+                            <th>Makine / İstasyon</th>
+                            <th style="text-align:center;">Hurda Adedi</th>
+                            <th>Hata Nedeni</th>
+                            <th>Kaydeden Operatör</th>
+                            <th>Açıklama</th>
+                            <th style="text-align:right;">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quality-tbody">
+                        <tr><td colspan="8" style="text-align:center; padding:30px; color:#94A3B8;">Kayıtlar yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 6. KAPASİTE & ÇİZELGELEME SİMÜLASYONU ===== -->
+    <div id="section-scheduling" class="hidden">
+        <div class="panel" style="margin-bottom:20px; border-top:4px solid #2563EB;">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title" style="font-size:17px;">
+                        <span>📅</span> Kapasite &amp; Çizelgeleme Simülasyonu ("Ne Zaman Biter?")
+                    </div>
+                    <div class="panel-sub">
+                        Mevcut makine hızları, darboğaz kapasiteleri ve açık sipariş kuyruğuna göre dinamik teslimat takvimi
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span style="font-size:12px; font-weight:700; color:#475569;">Günlük Çalışma:</span>
+                        <input type="number" id="sched-hours" value="9" min="4" max="24" class="form-input" style="width:70px; padding:6px 10px;">
+                        <span style="font-size:12px; color:#64748B;">saat</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span style="font-size:12px; font-weight:700; color:#475569;">Verimlilik:</span>
+                        <select id="sched-efficiency" class="form-select" style="width:100px; padding:6px 10px;">
+                            <option value="1.0">%100</option>
+                            <option value="0.9">%90</option>
+                            <option value="0.85" selected>%85</option>
+                            <option value="0.75">%75</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="runSchedulingSimulation()">🚀 Simülasyonu Hesapla</button>
+                </div>
+            </div>
+
+            <!-- Simulation Summary KPI Cards -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:14px; padding:18px 22px; background:#F8FAFC; border-bottom:1px solid #E2E8F0;">
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Kuyruktaki Sipariş</div>
+                    <div id="sched-kpi-orders" style="font-size:26px; font-weight:900; color:#0F172A; margin-top:2px;">0</div>
+                </div>
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Kuyruktaki Toplam Kapı</div>
+                    <div id="sched-kpi-doors" style="font-size:26px; font-weight:900; color:#2563EB; margin-top:2px;">0</div>
+                </div>
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Tahmini Üretim Süresi</div>
+                    <div id="sched-kpi-days" style="font-size:26px; font-weight:900; color:#7C3AED; margin-top:2px;">0 <span style="font-size:13px; font-weight:600; color:#64748B;">iş günü</span></div>
+                </div>
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Tüm Kuyruk Bitiş Tarihi</div>
+                    <div id="sched-kpi-finish" style="font-size:22px; font-weight:900; color:#059669; margin-top:4px;">—</div>
+                </div>
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Kritik Darboğaz Makine</div>
+                    <div id="sched-kpi-bottleneck" style="font-size:18px; font-weight:800; color:#DC2626; margin-top:6px;">—</div>
+                </div>
+            </div>
+
+            <!-- Queue Schedule Table -->
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px;">Sıra</th>
+                            <th>Sipariş No</th>
+                            <th>Müşteri / Proje</th>
+                            <th>Model / Kaplama</th>
+                            <th style="text-align:center;">Adet</th>
+                            <th style="text-align:center;">Gereken Süre</th>
+                            <th>Tahmini Başlangıç</th>
+                            <th>Tahmini Bitiş</th>
+                            <th style="text-align:center;">Termin Durumu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sched-tbody">
+                        <tr><td colspan="9" style="text-align:center; padding:30px; color:#94A3B8;">Simülasyon hesaplanıyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <!-- MODAL: ORDER -->
@@ -1633,6 +2483,327 @@
     </div>
 </div>
 
+
+<!-- MODAL: BARKOD & QR KOD ÜRETİM ETİKETİ (Yazdırılabilir) -->
+<div class="modal-overlay" id="modal-label">
+    <div class="modal-box" style="max-width:680px;">
+        <div class="modal-header">
+            <div class="modal-title">🏷️ Üretim Barkod &amp; QR Kod Etiketi</div>
+            <button class="btn-icon" onclick="closeModal('modal-label')">✕</button>
+        </div>
+        <div class="modal-body" id="label-printable-area" style="background:#FFFFFF; padding:20px; font-family:sans-serif;">
+            <!-- Printable Label Card -->
+            <div style="border:2px dashed #0F172A; border-radius:10px; padding:22px; background:#FFFFFF;">
+                <!-- Header -->
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0F172A; padding-bottom:12px; margin-bottom:14px;">
+                    <div>
+                        <div style="font-size:20px; font-weight:900; color:#0F172A; letter-spacing:-0.5px;">ERGÜNBAŞ <span style="color:#E30713;">Group</span></div>
+                        <div style="font-size:11px; font-weight:700; color:#475569; text-transform:uppercase;">Kanat Üretim &amp; Takip Kimlik Kartı</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <span id="lbl-facility-badge" style="display:inline-block; padding:4px 10px; background:#0F172A; color:#FFFFFF; font-size:11px; font-weight:800; border-radius:6px;">ÜST TESİS</span>
+                    </div>
+                </div>
+
+                <!-- Main Details Grid -->
+                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:16px; margin-bottom:16px;">
+                    <div>
+                        <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Sipariş Kodu &amp; Müşteri</div>
+                        <div id="lbl-order-code" style="font-size:24px; font-weight:900; color:#0F172A; font-family:monospace;">—</div>
+                        <div id="lbl-customer" style="font-size:14px; font-weight:700; color:#334155; margin-top:2px;">—</div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; background:#F8FAFC; padding:10px; border-radius:8px; border:1px solid #E2E8F0;">
+                            <div>
+                                <span style="font-size:10px; font-weight:700; color:#64748B;">MODEL:</span>
+                                <div id="lbl-model" style="font-size:13px; font-weight:800; color:#0F172A;">—</div>
+                            </div>
+                            <div>
+                                <span style="font-size:10px; font-weight:700; color:#64748B;">RENK / YÜZEY:</span>
+                                <div id="lbl-surface" style="font-size:13px; font-weight:800; color:#0F172A;">—</div>
+                            </div>
+                            <div>
+                                <span style="font-size:10px; font-weight:700; color:#64748B;">EBAT (En x Boy):</span>
+                                <div id="lbl-dims" style="font-size:13px; font-weight:800; color:#0F172A;">—</div>
+                            </div>
+                            <div>
+                                <span style="font-size:10px; font-weight:700; color:#64748B;">TOPLAM ADET:</span>
+                                <div id="lbl-qty" style="font-size:15px; font-weight:900; color:#E30713;">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QR Code & Barcode Graphic Area -->
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #E2E8F0; border-radius:8px; padding:12px; background:#FFFFFF;">
+                        <!-- SVG QR Code Placeholder -->
+                        <div id="lbl-qr-holder" style="width:110px; height:110px; display:flex; align-items:center; justify-content:center;">
+                            <!-- QR SVG generated by JS -->
+                        </div>
+                        <div id="lbl-barcode-text" style="font-family:monospace; font-size:11px; font-weight:800; color:#0F172A; margin-top:6px; letter-spacing:1px;">—</div>
+                        <!-- Simulated Barcode Lines -->
+                        <div id="lbl-barcode-bars" style="margin-top:4px; height:32px; width:130px; display:flex; gap:2px; align-items:flex-end;">
+                            <!-- bars generated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6 Station Checkboxes for Shopfloor Workers -->
+                <div style="border-top:1px solid #E2E8F0; padding-top:12px;">
+                    <div style="font-size:10px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:8px;">İSTASYON ONAY VE İMZA ÇİZELGESİ:</div>
+                    <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:6px; text-align:center;">
+                        <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
+                            <div style="font-weight:800; color:#0F172A;">1. Seren</div>
+                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                        </div>
+                        <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
+                            <div style="font-weight:800; color:#0F172A;">2. Dolgu</div>
+                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                        </div>
+                        <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
+                            <div style="font-weight:800; color:#0F172A;">3. Vakum</div>
+                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                        </div>
+                        <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
+                            <div style="font-weight:800; color:#0F172A;">4. Pres</div>
+                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                        </div>
+                        <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
+                            <div style="font-weight:800; color:#0F172A;">5. Homag</div>
+                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                        </div>
+                        <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
+                            <div style="font-weight:800; color:#0F172A;">6. Paket</div>
+                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('modal-label')">Kapat</button>
+            <button class="btn-primary" onclick="printElementContent('label-printable-area')">🖨️ Etiketi Yazdır</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: YENİ SEVKİYAT PLANI -->
+<div class="modal-overlay" id="modal-shipment">
+    <div class="modal-box" style="max-width:560px;">
+        <div class="modal-header">
+            <div class="modal-title">🚛 Yeni Sevkiyat Planı Oluştur</div>
+            <button class="btn-icon" onclick="closeModal('modal-shipment')">✕</button>
+        </div>
+        <form onsubmit="handleShipmentSubmit(event)">
+            <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+                <div>
+                    <label class="form-label">Sipariş Seçin *</label>
+                    <select id="sh-order-select" required class="form-select" onchange="handleShipmentOrderSelect()">
+                        <option value="">-- Sipariş Seçiniz --</option>
+                    </select>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label class="form-label">Müşteri / Proje</label>
+                        <input type="text" id="sh-customer" required class="form-input" placeholder="Müşteri Adı">
+                    </div>
+                    <div>
+                        <label class="form-label">Tesis</label>
+                        <select id="sh-facility" class="form-select">
+                            <option value="fac1">Üst Tesis</option>
+                            <option value="fac2">Alt Tesis</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label class="form-label">Araç Plakası *</label>
+                        <input type="text" id="sh-plate" required class="form-input" placeholder="34 ABC 789">
+                    </div>
+                    <div>
+                        <label class="form-label">Şoför Adı &amp; Telefon *</label>
+                        <input type="text" id="sh-driver" required class="form-input" placeholder="Ahmet Yılmaz (05XX...)">
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label class="form-label">Sevk Edilecek Kapı Adedi *</label>
+                        <input type="number" id="sh-doors" required min="1" class="form-input" placeholder="Örn: 50">
+                    </div>
+                    <div>
+                        <label class="form-label">Planlanan Sevk Tarihi *</label>
+                        <input type="date" id="sh-date" required class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Sevk Notları / Teslim Adresi</label>
+                    <textarea id="sh-notes" class="form-textarea" rows="2" placeholder="Şantiye adresi, irsaliye no, irtibat vb..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('modal-shipment')">İptal</button>
+                <button type="submit" class="btn-primary">Sevkiyatı Kaydet</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: ÇEKİ LİSTESİ / İRSALİYE A4 YAZDIRMA (Packing List) -->
+<div class="modal-overlay" id="modal-packing-list">
+    <div class="modal-box" style="max-width:760px;">
+        <div class="modal-header">
+            <div class="modal-title">📄 Sevkiyat Çeki Listesi &amp; Sevk İrsaliyesi</div>
+            <button class="btn-icon" onclick="closeModal('modal-packing-list')">✕</button>
+        </div>
+        <div class="modal-body" id="packing-printable-area" style="background:#FFFFFF; padding:28px; font-family:sans-serif; color:#0F172A;">
+            <!-- Official Packing List Sheet -->
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #E30713; padding-bottom:14px; margin-bottom:20px;">
+                <div>
+                    <div style="font-size:24px; font-weight:900; color:#0F172A; letter-spacing:-0.5px;">ERGÜNBAŞ <span style="color:#E30713;">Group</span></div>
+                    <div style="font-size:12px; font-weight:700; color:#475569; margin-top:2px;">KAPI ÜRETİM SANAYİ VE TİCARET A.Ş.</div>
+                    <div style="font-size:11px; color:#64748B;">Organize Sanayi Bölgesi / Fabrika Sevk Departmanı</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:18px; font-weight:900; color:#E30713; text-transform:uppercase;">SEVKİYAT ÇEKİ LİSTESİ</div>
+                    <div id="pk-code" style="font-size:13px; font-weight:800; font-family:monospace; margin-top:4px;">SEV-2026-001</div>
+                    <div id="pk-date" style="font-size:12px; font-weight:600; color:#475569; margin-top:2px;">Tarih: —</div>
+                </div>
+            </div>
+
+            <!-- Shipment Info 2 Column -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:14px; margin-bottom:20px;">
+                <div>
+                    <div style="font-size:10px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:4px;">ALICI / MÜŞTERİ BİLGİLERİ:</div>
+                    <div id="pk-customer" style="font-size:14px; font-weight:800; color:#0F172A;">—</div>
+                    <div id="pk-facility" style="font-size:12px; color:#475569; margin-top:2px;">Tesis: —</div>
+                    <div id="pk-notes" style="font-size:11px; color:#64748B; margin-top:6px;">Not: —</div>
+                </div>
+                <div>
+                    <div style="font-size:10px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:4px;">NAKLİYE &amp; TESLİMAT BİLGİLERİ:</div>
+                    <div style="font-size:12px; font-weight:600;">Plaka: <strong id="pk-plate" style="color:#0F172A;">—</strong></div>
+                    <div style="font-size:12px; font-weight:600; margin-top:2px;">Şoför: <strong id="pk-driver" style="color:#0F172A;">—</strong></div>
+                    <div style="font-size:12px; font-weight:600; margin-top:2px;">Durum: <span id="pk-status" style="color:#059669; font-weight:800;">—</span></div>
+                </div>
+            </div>
+
+            <!-- Itemized Table -->
+            <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:30px;">
+                <thead>
+                    <tr style="background:#0F172A; color:#FFFFFF;">
+                        <th style="padding:8px 10px; text-align:left;">Sıra</th>
+                        <th style="padding:8px 10px; text-align:left;">Sipariş Kodu</th>
+                        <th style="padding:8px 10px; text-align:left;">Ürün / Model</th>
+                        <th style="padding:8px 10px; text-align:left;">Yüzey / Renk</th>
+                        <th style="padding:8px 10px; text-align:center;">Sevk Edilen Adet</th>
+                    </tr>
+                </thead>
+                <tbody id="pk-items-tbody">
+                    <!-- Populated by JS -->
+                </tbody>
+                <tfoot>
+                    <tr style="background:#F1F5F9; font-weight:800;">
+                        <td colspan="4" style="padding:10px; text-align:right;">TOPLAM SEVKİYAT MİKTARI:</td>
+                        <td id="pk-total-doors" style="padding:10px; text-align:center; font-size:14px; color:#E30713;">0 KAPI</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Signature Fields -->
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; text-align:center; margin-top:40px; padding-top:20px; border-top:1px dashed #CBD5E1;">
+                <div>
+                    <div style="font-size:11px; font-weight:800; color:#475569;">TESLİM EDEN (FABRİKA)</div>
+                    <div style="height:50px;"></div>
+                    <div style="font-size:11px; color:#94A3B8;">İmza / Kaşe</div>
+                </div>
+                <div>
+                    <div style="font-size:11px; font-weight:800; color:#475569;">TAŞIYICI (ŞOFÖR)</div>
+                    <div style="height:50px;"></div>
+                    <div style="font-size:11px; color:#94A3B8;">İmza</div>
+                </div>
+                <div>
+                    <div style="font-size:11px; font-weight:800; color:#475569;">TESLİM ALAN (MÜŞTERİ)</div>
+                    <div style="height:50px;"></div>
+                    <div style="font-size:11px; color:#94A3B8;">İmza / Kaşe</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('modal-packing-list')">Kapat</button>
+            <button class="btn-primary" onclick="printElementContent('packing-printable-area')">🖨️ A4 Çeki Listesi Yazdır</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: FİRE / HURDA GİRİŞİ -->
+<div class="modal-overlay" id="modal-scrap">
+    <div class="modal-box" style="max-width:520px;">
+        <div class="modal-header">
+            <div class="modal-title">🔍 Yeni Fire / Hurda Kaydı</div>
+            <button class="btn-icon" onclick="closeModal('modal-scrap')">✕</button>
+        </div>
+        <form onsubmit="handleScrapSubmit(event)">
+            <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label class="form-label">Tarih *</label>
+                        <input type="date" id="sc-date" required class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">İlgili Sipariş No</label>
+                        <input type="text" id="sc-order" class="form-input" placeholder="Örn: 2026-004">
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label class="form-label">Makine / İstasyon *</label>
+                        <select id="sc-station" required class="form-select">
+                            <option value="Vakum Pres">Vakum Pres</option>
+                            <option value="Sıcak Pres">Sıcak Pres</option>
+                            <option value="Homag Ebatlama">Homag Ebatlama</option>
+                            <option value="Kenar Bantlama">Kenar Bantlama</option>
+                            <option value="Seren Kesim">Seren Kesim</option>
+                            <option value="Strafor / Petek">Strafor / Petek</option>
+                            <option value="Son Kalite Kontrol">Son Kalite Kontrol</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Fire / Hurda Adedi *</label>
+                        <input type="number" id="sc-qty" required min="1" value="1" class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Hata / Fire Nedeni *</label>
+                    <select id="sc-reason" required class="form-select">
+                        <option value="Yüzey Baloncuk / Folyo Hatası">Yüzey Baloncuk / Folyo Hatası</option>
+                        <option value="Ebat Sapması / Gönye Bozukluğu">Ebat Sapması / Gönye Bozukluğu</option>
+                        <option value="Pres Yanığı / Isı Dağılım Hatası">Pres Yanığı / Isı Dağılım Hatası</option>
+                        <option value="Kenar Bant Açılması / Tutkal Hatası">Kenar Bant Açılması / Tutkal Hatası</option>
+                        <option value="Çizik / Ezilme / Taşıma Hasarı">Çizik / Ezilme / Taşıma Hasarı</option>
+                        <option value="Seren / Petek Boşluğu">Seren / Petek Boşluğu</option>
+                        <option value="Diğer Kalite Kusuru">Diğer Kalite Kusuru</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Kaydeden Operatör</label>
+                    <input type="text" id="sc-operator" class="form-input" placeholder="Örn: Mustafa Usta">
+                </div>
+                <div>
+                    <label class="form-label">Detaylı Açıklama</label>
+                    <textarea id="sc-notes" class="form-textarea" rows="2" placeholder="Hatanın oluş şekli veya parti detayı..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('modal-scrap')">İptal</button>
+                <button type="submit" class="btn-primary">Fire Kaydını Ekle</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
 let currentUser = null;
 let allFacilities = [];
@@ -1693,7 +2864,7 @@ function toast(msg, type='success') {
     setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-const sections = ['dashboard','orders','daily','machines','mrp','users'];
+const sections = ['dashboard','orders','stages','daily','quality','shipments','scheduling','mrp','machines','users'];
 function switchTab(id) {
     sections.forEach(s => {
         const sec = document.getElementById(`section-${s}`);
@@ -1703,10 +2874,14 @@ function switchTab(id) {
     });
     if(id==='dashboard') loadDashboard();
     if(id==='orders') loadOrders();
+    if(id==='stages') loadStages();
+    if(id==='daily') loadDailyEntries();
+    if(id==='quality') loadQuality();
+    if(id==='shipments') loadShipments();
+    if(id==='scheduling') loadScheduling();
     if(id==='machines') loadMachines();
     if(id==='mrp') loadMRP();
     if(id==='users') loadUsersList();
-    if(id==='daily') loadDailyEntries();
 }
 
 function openModal(id) { document.getElementById(id).classList.add('active'); }
@@ -2462,6 +3637,602 @@ async function deleteUser(uid) {
     const r = await fetch(`/api/users/${uid}`, {method:'DELETE'});
     if(r.ok) { toast('Kullanıcı silindi.'); loadUsersList(); }
 }
+
+// ==========================================================
+// 🏷️ 1. İSTASYON & BARKOD TAKİP JS
+// ==========================================================
+let allPipelineOrders = [];
+
+async function loadStages() {
+    try {
+        const r = await fetch('/api/stages/pipeline');
+        const data = await r.json();
+        allPipelineOrders = data.orders || [];
+
+        const stagesList = [
+            { id: 'seren', name: '1. Seren Hazırlık', icon: '🪵', color: '#64748B' },
+            { id: 'strafor', name: '2. Dolgu & Strafor', icon: '📦', color: '#D97706' },
+            { id: 'vakum', name: '3. Vakum Pres', icon: '♨️', color: '#EA580C' },
+            { id: 'sicak_pres', name: '4. Sıcak Pres', icon: '🔥', color: '#DC2626' },
+            { id: 'homag', name: '5. Homag & Ebat', icon: '⚙️', color: '#2563EB' },
+            { id: 'paket', name: '6. Kalite & Paket', icon: '✅', color: '#059669' }
+        ];
+
+        let totalInStages = 0;
+        let totalDone = 0;
+
+        const container = document.getElementById('pipeline-columns-container');
+        container.innerHTML = stagesList.map(st => {
+            const inStage = allPipelineOrders.filter(o => (o.stage || 'seren') === st.id);
+            totalInStages += inStage.length;
+            if (st.id === 'paket') totalDone += inStage.length;
+
+            return `
+                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; display:flex; flex-direction:column; max-height:750px; overflow:hidden;">
+                    <!-- Column Header -->
+                    <div style="padding:12px 14px; background:#FFFFFF; border-bottom:2px solid ${st.color}; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="font-weight:800; font-size:13px; color:#0F172A; display:flex; align-items:center; gap:6px;">
+                            <span>${st.icon}</span> <span>${st.name}</span>
+                        </div>
+                        <span style="font-size:11px; font-weight:800; padding:2px 8px; border-radius:12px; background:#F1F5F9; color:#475569;">${inStage.length}</span>
+                    </div>
+
+                    <!-- Cards Container -->
+                    <div style="padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; flex:1;">
+                        ${inStage.length === 0 ? `<div style="text-align:center; padding:30px 10px; color:#94A3B8; font-size:12px;">Bu istasyonda bekleyen sipariş yok</div>` : ''}
+                        ${inStage.map(o => `
+                            <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:8px; padding:12px; box-shadow:0 1px 3px rgba(15,23,42,0.05); transition:transform 0.15s;" class="hover:border-slate-400">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                    <span style="font-weight:900; font-size:13px; color:#0F172A; font-family:monospace;">${o.order_code || o.order_id}</span>
+                                    <span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:${o.facility==='fac1'?'#FEF2F2':'#F0F9FF'}; color:${o.facility==='fac1'?'#B91C1C':'#0369A1'};">${o.facility==='fac1'?'ÜST':'ALT'}</span>
+                                </div>
+                                <div style="font-weight:700; font-size:12px; color:#334155; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.customer || ''}">${o.customer || 'İsimsiz Müşteri'}</div>
+                                <div style="font-size:11px; color:#64748B; margin-top:2px;">${o.model || 'Model'} • <strong>${o.total_doors || o.doors || 0}</strong> kapı</div>
+                                
+                                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                                    <button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="openBarcodeModal('${o.order_id}')" title="Etiketi Yazdır">🏷️ Etiket</button>
+                                    ${st.id !== 'paket' ? `
+                                        <button class="btn-primary" style="padding:4px 10px; font-size:11px;" onclick="advanceStage('${o.order_id}')">İlerlet ➔</button>
+                                    ` : `
+                                        <span style="font-size:11px; font-weight:800; color:#059669;">Tamamlandı ✓</span>
+                                    `}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const cntTotal = document.getElementById('pipeline-total-cnt');
+        if (cntTotal) cntTotal.innerText = allPipelineOrders.length;
+        const cntDone = document.getElementById('pipeline-done-cnt');
+        if (cntDone) cntDone.innerText = totalDone;
+        const cntLabel = document.getElementById('pipeline-label-cnt');
+        if (cntLabel) cntLabel.innerText = allPipelineOrders.length;
+
+    } catch (e) {
+        console.error('loadStages error', e);
+    }
+}
+
+async function advanceStage(orderId, targetStage = null) {
+    try {
+        const r = await fetch('/api/stages/advance', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order_id: orderId, next_stage: targetStage })
+        });
+        const res = await r.json();
+        if (res.success) {
+            toast(`Sipariş aşaması güncellendi: ${res.new_stage_name || res.new_stage}`);
+            loadStages();
+        } else {
+            toast(res.detail || 'Aşama ilerletilemedi.', 'error');
+        }
+    } catch (e) {
+        toast('İşlem başarısız.', 'error');
+    }
+}
+
+function handleBarcodeScanInput() {
+    const inp = document.getElementById('barcode-scan-input');
+    const val = inp.value.trim();
+    if (!val) return;
+
+    // Search order
+    const found = allPipelineOrders.find(o => 
+        (o.order_code && o.order_code.toLowerCase() === val.toLowerCase()) || 
+        (o.order_id && o.order_id.toLowerCase() === val.toLowerCase()) ||
+        (o.barcode && o.barcode.toLowerCase() === val.toLowerCase())
+    );
+
+    if (found) {
+        advanceStage(found.order_id);
+        inp.value = '';
+    } else {
+        toast(`"${val}" kodlu sipariş bulunamadı!`, 'error');
+    }
+}
+
+async function openBarcodeModal(orderId) {
+    try {
+        const r = await fetch(`/api/barcode/label/${orderId}`);
+        const data = await r.json();
+        if (data.error) { toast(data.error, 'error'); return; }
+
+        document.getElementById('lbl-order-code').innerText = data.order_code || data.order_id;
+        document.getElementById('lbl-customer').innerText = data.customer || '—';
+        document.getElementById('lbl-model').innerText = data.model || 'Standart';
+        document.getElementById('lbl-surface').innerText = data.surface_finish || data.color || 'Standart';
+        document.getElementById('lbl-dims').innerText = `${data.width || '—'} x ${data.height || '—'} cm`;
+        document.getElementById('lbl-qty').innerText = `${data.doors || data.total_doors || 0} ADET`;
+        document.getElementById('lbl-facility-badge').innerText = data.facility === 'fac2' ? 'ALT TESİS' : 'ÜST TESİS';
+        document.getElementById('lbl-barcode-text').innerText = `*${data.barcode || data.order_code}*`;
+
+        // Render QR SVG dynamically
+        const qrHolder = document.getElementById('lbl-qr-holder');
+        qrHolder.innerHTML = `
+            <svg viewBox="0 0 100 100" width="100" height="100">
+                <rect width="100" height="100" fill="#FFFFFF"/>
+                <path d="M10 10h30v30h-30z M60 10h30v30h-30z M10 60h30v30h-30z" fill="#0F172A"/>
+                <rect x="18" y="18" width="14" height="14" fill="#FFFFFF"/>
+                <rect x="68" y="18" width="14" height="14" fill="#FFFFFF"/>
+                <rect x="18" y="68" width="14" height="14" fill="#FFFFFF"/>
+                <rect x="22" y="22" width="6" height="6" fill="#0F172A"/>
+                <rect x="72" y="22" width="6" height="6" fill="#0F172A"/>
+                <rect x="22" y="72" width="6" height="6" fill="#0F172A"/>
+                <!-- Data dots pattern -->
+                <rect x="46" y="14" width="8" height="8" fill="#0F172A"/>
+                <rect x="46" y="28" width="8" height="8" fill="#0F172A"/>
+                <rect x="46" y="44" width="8" height="12" fill="#0F172A"/>
+                <rect x="14" y="46" width="12" height="8" fill="#0F172A"/>
+                <rect x="62" y="48" width="8" height="8" fill="#0F172A"/>
+                <rect x="76" y="48" width="12" height="8" fill="#0F172A"/>
+                <rect x="58" y="62" width="8" height="14" fill="#0F172A"/>
+                <rect x="72" y="66" width="16" height="8" fill="#0F172A"/>
+                <rect x="64" y="80" width="12" height="8" fill="#0F172A"/>
+                <rect x="46" y="76" width="8" height="12" fill="#0F172A"/>
+            </svg>
+        `;
+
+        // Render Barcode simulated bars
+        const barsHolder = document.getElementById('lbl-barcode-bars');
+        const barHeights = [28, 32, 24, 32, 32, 26, 32, 24, 32, 28, 32, 32, 24, 32, 30, 32, 24, 32, 28, 32];
+        barsHolder.innerHTML = barHeights.map((h, idx) => `
+            <div style="background:#0F172A; width:${idx%3===0?'3px':'1.5px'}; height:${h}px;"></div>
+        `).join('');
+
+        openModal('modal-label');
+    } catch (e) {
+        toast('Etiket yüklenemedi.', 'error');
+    }
+}
+
+
+// ==========================================================
+// 🚛 2. SEVKİYAT & ÇEKİ LİSTESİ JS
+// ==========================================================
+let allShipmentsList = [];
+
+async function loadShipments() {
+    try {
+        const r = await fetch('/api/shipments');
+        allShipmentsList = await r.json();
+
+        let cntPlanned = 0, cntTransit = 0, cntDeliveredDoors = 0;
+        allShipmentsList.forEach(s => {
+            if (s.status === 'Hazırlanıyor') cntPlanned++;
+            else if (s.status === 'Yolda') cntTransit++;
+            else if (s.status === 'Teslim Edildi') cntDeliveredDoors += (s.doors || 0);
+        });
+
+        const kpiP = document.getElementById('shipment-kpi-planned');
+        if (kpiP) kpiP.innerText = cntPlanned;
+        const kpiT = document.getElementById('shipment-kpi-transit');
+        if (kpiT) kpiT.innerText = cntTransit;
+        const kpiD = document.getElementById('shipment-kpi-delivered');
+        if (kpiD) kpiD.innerHTML = `${cntDeliveredDoors} <span style="font-size:13px; font-weight:600; color:#64748B;">kapı</span>`;
+
+        const tb = document.getElementById('shipments-tbody');
+        if (!allShipmentsList.length) {
+            tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#94A3B8;">Henüz planlanmış sevkiyat bulunmuyor.</td></tr>';
+            return;
+        }
+
+        tb.innerHTML = allShipmentsList.map(s => {
+            let badgeClass = 'badge-slate';
+            if (s.status === 'Hazırlanıyor') badgeClass = 'badge-amber';
+            if (s.status === 'Yolda') badgeClass = 'badge-blue';
+            if (s.status === 'Teslim Edildi') badgeClass = 'badge-green';
+
+            return `
+                <tr>
+                    <td style="font-weight:800; font-family:monospace; color:#0F172A;">${s.shipment_code}</td>
+                    <td style="font-weight:700; color:#1E293B;">${s.customer || '—'}</td>
+                    <td><span class="badge ${s.facility==='fac1'?'badge-red':'badge-blue'}">${s.facility==='fac1'?'Üst Tesis':'Alt Tesis'}</span></td>
+                    <td>
+                        <div style="font-weight:700; color:#0F172A;">${s.plate || '—'}</div>
+                        <div style="font-size:11px; color:#64748B;">${s.driver || '—'}</div>
+                    </td>
+                    <td style="text-align:center; font-weight:800; color:#E30713; font-size:14px;">${s.doors || 0}</td>
+                    <td style="color:#475569;">${s.shipment_date || '—'}</td>
+                    <td style="text-align:center;"><span class="badge ${badgeClass}">${s.status}</span></td>
+                    <td style="text-align:right;">
+                        <button class="btn-secondary" style="padding:5px 9px; font-size:11px;" onclick="viewPackingList('${s.id}')" title="Çeki Listesi / İrsaliye">📄 Çeki Listesi</button>
+                        <select onchange="updateShipmentStatus('${s.id}', this.value)" style="margin-left:4px; padding:4px 6px; border:1px solid #CBD5E1; border-radius:6px; font-size:11px;">
+                            <option value="Hazırlanıyor" ${s.status==='Hazırlanıyor'?'selected':''}>Hazırlanıyor</option>
+                            <option value="Yolda" ${s.status==='Yolda'?'selected':''}>Yola Çıktı</option>
+                            <option value="Teslim Edildi" ${s.status==='Teslim Edildi'?'selected':''}>Teslim Edildi</option>
+                        </select>
+                        <button class="btn-icon danger" onclick="deleteShipment('${s.id}')" title="Sil" style="margin-left:4px;">✕</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+    } catch (e) {
+        console.error('loadShipments error', e);
+    }
+}
+
+function openShipmentModal() {
+    // Populate orders dropdown
+    const sel = document.getElementById('sh-order-select');
+    sel.innerHTML = '<option value="">-- Sipariş Seçiniz --</option>' + 
+        allOrders.map(o => `<option value="${o.id}">${o.order_code || o.id} — ${o.customer || ''} (${o.doors || 0} kapı)</option>`).join('');
+    
+    document.getElementById('sh-date').value = new Date().toISOString().split('T')[0];
+    openModal('modal-shipment');
+}
+
+function handleShipmentOrderSelect() {
+    const oid = document.getElementById('sh-order-select').value;
+    const ord = allOrders.find(o => o.id === oid);
+    if (ord) {
+        document.getElementById('sh-customer').value = ord.customer || '';
+        document.getElementById('sh-facility').value = ord.facility || 'fac1';
+        document.getElementById('sh-doors').value = ord.doors || 0;
+    }
+}
+
+async function handleShipmentSubmit(e) {
+    e.preventDefault();
+    const oid = document.getElementById('sh-order-select').value;
+    const ord = allOrders.find(o => o.id === oid);
+
+    const payload = {
+        order_id: oid,
+        customer: document.getElementById('sh-customer').value.trim(),
+        facility: document.getElementById('sh-facility').value,
+        plate: document.getElementById('sh-plate').value.trim(),
+        driver: document.getElementById('sh-driver').value.trim(),
+        doors: parseInt(document.getElementById('sh-doors').value) || 0,
+        shipment_date: document.getElementById('sh-date').value,
+        notes: document.getElementById('sh-notes').value.trim(),
+        status: 'Hazırlanıyor',
+        items: ord ? [{ order_code: ord.order_code, model: ord.model, surface: ord.surface_finish, doors: ord.doors }] : []
+    };
+
+    try {
+        const r = await fetch('/api/shipments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (r.ok) {
+            toast('Sevkiyat başarıyla planlandı!');
+            closeModal('modal-shipment');
+            loadShipments();
+        }
+    } catch (e) {
+        toast('Sevkiyat kaydedilemedi.', 'error');
+    }
+}
+
+async function updateShipmentStatus(sid, newStatus) {
+    try {
+        const r = await fetch(`/api/shipments/${sid}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        });
+        if (r.ok) {
+            toast(`Sevkiyat durumu: ${newStatus}`);
+            loadShipments();
+        }
+    } catch (e) {
+        toast('Durum güncellenemedi.', 'error');
+    }
+}
+
+async function deleteShipment(sid) {
+    if (!confirm('Bu sevkiyat kaydı silinsin mi?')) return;
+    try {
+        const r = await fetch(`/api/shipments/${sid}`, { method: 'DELETE' });
+        if (r.ok) {
+            toast('Sevkiyat silindi.');
+            loadShipments();
+        }
+    } catch (e) {
+        toast('Silme işlemi başarısız.', 'error');
+    }
+}
+
+function viewPackingList(sid) {
+    const s = allShipmentsList.find(x => x.id === sid);
+    if (!s) return;
+
+    document.getElementById('pk-code').innerText = s.shipment_code;
+    document.getElementById('pk-date').innerText = `Tarih: ${s.shipment_date || new Date().toISOString().split('T')[0]}`;
+    document.getElementById('pk-customer').innerText = s.customer || '—';
+    document.getElementById('pk-facility').innerText = `Tesis: ${s.facility === 'fac2' ? 'Alt Tesis (Tesis 2)' : 'Üst Tesis (Tesis 1)'}`;
+    document.getElementById('pk-notes').innerText = `Not / Adres: ${s.notes || 'Standart Fabrika Teslimi'}`;
+    document.getElementById('pk-plate').innerText = s.plate || '—';
+    document.getElementById('pk-driver').innerText = s.driver || '—';
+    document.getElementById('pk-status').innerText = s.status || 'Hazırlanıyor';
+    document.getElementById('pk-total-doors').innerText = `${s.doors || 0} KAPI`;
+
+    const items = s.items && s.items.length ? s.items : [{ order_code: s.order_id, model: 'Standart Melamin/Lake', surface: 'Melamin', doors: s.doors }];
+    const tb = document.getElementById('pk-items-tbody');
+    tb.innerHTML = items.map((it, idx) => `
+        <tr style="border-bottom:1px solid #E2E8F0;">
+            <td style="padding:8px 10px;">${idx + 1}</td>
+            <td style="padding:8px 10px; font-weight:800; font-family:monospace;">${it.order_code || s.shipment_code}</td>
+            <td style="padding:8px 10px; font-weight:600;">${it.model || 'Standart Kanat Kapı'}</td>
+            <td style="padding:8px 10px; color:#475569;">${it.surface || 'Ahşap Desen'}</td>
+            <td style="padding:8px 10px; text-align:center; font-weight:800; color:#0F172A;">${it.doors || s.doors} Adet</td>
+        </tr>
+    `).join('');
+
+    openModal('modal-packing-list');
+}
+
+
+// ==========================================================
+// 🔍 3. KALİTE KONTROL & FİRE TAKİBİ JS
+// ==========================================================
+let allScrapsList = [];
+
+async function loadQuality() {
+    try {
+        const r = await fetch('/api/quality/scraps');
+        allScrapsList = await r.json();
+
+        // Total Doors Produced (fetch dashboard summary to get accurate % fire rate)
+        let totalOutput = 0;
+        try {
+            const rd = await fetch('/api/dashboard?period=monthly');
+            const dd = await rd.json();
+            totalOutput = dd.total_output || 1000;
+        } catch(e) { totalOutput = 1000; }
+
+        let totalScraps = 0;
+        const reasonsCount = {};
+        const stationsCount = {};
+
+        allScrapsList.forEach(sc => {
+            const q = sc.scrap_qty || 1;
+            totalScraps += q;
+            reasonsCount[sc.reason] = (reasonsCount[sc.reason] || 0) + q;
+            stationsCount[sc.station] = (stationsCount[sc.station] || 0) + q;
+        });
+
+        const fireRate = totalOutput > 0 ? ((totalScraps / (totalOutput + totalScraps)) * 100).toFixed(2) : '0.0';
+
+        // Top station
+        let topStation = '—', topStationVal = 0;
+        Object.entries(stationsCount).forEach(([st, cnt]) => {
+            if (cnt > topStationVal) { topStationVal = cnt; topStation = st; }
+        });
+
+        document.getElementById('quality-kpi-total').innerHTML = `${totalScraps} <span style="font-size:13px; font-weight:600; color:#64748B;">adet</span>`;
+        document.getElementById('quality-kpi-rate').innerText = `% ${fireRate}`;
+        document.getElementById('quality-kpi-top-station').innerText = topStation;
+        document.getElementById('quality-kpi-top-station-sub').innerText = `${topStationVal} adet fire kaydedildi`;
+
+        // Render Reasons Breakdown Bars
+        const rcHolder = document.getElementById('quality-reasons-container');
+        if (!Object.keys(reasonsCount).length) {
+            rcHolder.innerHTML = '<div style="color:#94A3B8; text-align:center;">Henüz fire verisi kaydedilmemiş.</div>';
+        } else {
+            rcHolder.innerHTML = Object.entries(reasonsCount)
+                .sort((a,b) => b[1] - a[1])
+                .map(([rsn, cnt]) => {
+                    const pct = totalScraps > 0 ? ((cnt / totalScraps) * 100).toFixed(1) : 0;
+                    return `
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;">
+                                <span style="color:#0F172A;">${rsn}</span>
+                                <span style="color:#E30713;">${cnt} adet (%${pct})</span>
+                            </div>
+                            <div style="background:#E2E8F0; border-radius:999px; height:8px; overflow:hidden;">
+                                <div style="background:#E30713; height:8px; width:${pct}%; border-radius:999px;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        // Render Stations Breakdown Bars
+        const scHolder = document.getElementById('quality-stations-container');
+        if (!Object.keys(stationsCount).length) {
+            scHolder.innerHTML = '<div style="color:#94A3B8; text-align:center;">Henüz fire verisi kaydedilmemiş.</div>';
+        } else {
+            scHolder.innerHTML = Object.entries(stationsCount)
+                .sort((a,b) => b[1] - a[1])
+                .map(([stn, cnt]) => {
+                    const pct = totalScraps > 0 ? ((cnt / totalScraps) * 100).toFixed(1) : 0;
+                    return `
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;">
+                                <span style="color:#0F172A;">${stn}</span>
+                                <span style="color:#4338CA;">${cnt} adet (%${pct})</span>
+                            </div>
+                            <div style="background:#E2E8F0; border-radius:999px; height:8px; overflow:hidden;">
+                                <div style="background:#4338CA; height:8px; width:${pct}%; border-radius:999px;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        // Render Table
+        const tb = document.getElementById('quality-tbody');
+        if (!allScrapsList.length) {
+            tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#94A3B8;">Kayıtlı fire bulunmuyor.</td></tr>';
+            return;
+        }
+
+        tb.innerHTML = allScrapsList.map(sc => `
+            <tr>
+                <td style="font-weight:600; color:#475569;">${sc.date || '—'}</td>
+                <td style="font-weight:800; font-family:monospace; color:#0F172A;">${sc.order_code || sc.order_id || '—'}</td>
+                <td><span class="badge badge-slate">${sc.station}</span></td>
+                <td style="text-align:center; font-weight:800; color:#DC2626; font-size:14px;">${sc.scrap_qty || 1}</td>
+                <td style="font-weight:700; color:#B91C1C;">${sc.reason}</td>
+                <td style="color:#334155;">${sc.operator || '—'}</td>
+                <td style="color:#64748B; font-size:12px;">${sc.notes || '—'}</td>
+                <td style="text-align:right;">
+                    <button class="btn-icon danger" onclick="deleteScrap('${sc.id}')" title="Sil">✕</button>
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (e) {
+        console.error('loadQuality error', e);
+    }
+}
+
+function openScrapModal() {
+    document.getElementById('sc-date').value = new Date().toISOString().split('T')[0];
+    openModal('modal-scrap');
+}
+
+async function handleScrapSubmit(e) {
+    e.preventDefault();
+    const payload = {
+        date: document.getElementById('sc-date').value,
+        order_code: document.getElementById('sc-order').value.trim(),
+        station: document.getElementById('sc-station').value,
+        scrap_qty: parseInt(document.getElementById('sc-qty').value) || 1,
+        reason: document.getElementById('sc-reason').value,
+        operator: document.getElementById('sc-operator').value.trim(),
+        notes: document.getElementById('sc-notes').value.trim()
+    };
+
+    try {
+        const r = await fetch('/api/quality/scraps', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (r.ok) {
+            toast('Fire / hurda kaydı başarıyla eklendi!');
+            closeModal('modal-scrap');
+            loadQuality();
+        }
+    } catch (e) {
+        toast('Fire kaydı eklenemedi.', 'error');
+    }
+}
+
+async function deleteScrap(scId) {
+    if (!confirm('Fire kaydı silinsin mi?')) return;
+    try {
+        const r = await fetch(`/api/quality/scraps/${scId}`, { method: 'DELETE' });
+        if (r.ok) {
+            toast('Kayıt silindi.');
+            loadQuality();
+        }
+    } catch (e) {
+        toast('Silme başarısız.', 'error');
+    }
+}
+
+
+// ==========================================================
+// 📅 6. KAPASİTE & ÇİZELGELEME SİMÜLASYONU JS
+// ==========================================================
+async function loadScheduling() {
+    runSchedulingSimulation();
+}
+
+async function runSchedulingSimulation() {
+    const hours = parseFloat(document.getElementById('sched-hours').value) || 9;
+    const eff = parseFloat(document.getElementById('sched-efficiency').value) || 0.85;
+
+    try {
+        const r = await fetch(`/api/scheduling/simulate?hours_per_day=${hours}&efficiency=${eff}`);
+        const sim = await r.json();
+
+        document.getElementById('sched-kpi-orders').innerText = sim.total_orders || 0;
+        document.getElementById('sched-kpi-doors').innerText = `${sim.total_doors || 0} adet`;
+        document.getElementById('sched-kpi-days').innerHTML = `${sim.total_days || 0} <span style="font-size:13px; font-weight:600; color:#64748B;">iş günü</span>`;
+        document.getElementById('sched-kpi-finish').innerText = sim.estimated_queue_completion || '—';
+        document.getElementById('sched-kpi-bottleneck').innerText = sim.bottleneck_station ? `${sim.bottleneck_station} (${sim.bottleneck_capacity}/gün)` : '—';
+
+        const tb = document.getElementById('sched-tbody');
+        if (!sim.queue || !sim.queue.length) {
+            tb.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:30px; color:#94A3B8;">Kuyrukta açık sipariş bulunamadı.</td></tr>';
+            return;
+        }
+
+        tb.innerHTML = sim.queue.map(q => {
+            const isLate = q.estimated_finish > (q.due_date || '9999');
+            return `
+                <tr>
+                    <td style="font-weight:800; color:#64748B;">#${q.sequence}</td>
+                    <td style="font-weight:900; font-family:monospace; color:#0F172A;">${q.order_code || q.order_id}</td>
+                    <td style="font-weight:700; color:#1E293B;">${q.customer || '—'}</td>
+                    <td>${q.model || 'Model'} • <span style="color:#64748B;">${q.surface || ''}</span></td>
+                    <td style="text-align:center; font-weight:800; color:#2563EB;">${q.doors || 0}</td>
+                    <td style="text-align:center; font-weight:600; color:#475569;">${q.required_days} gün</td>
+                    <td style="color:#334155; font-size:12px;">${q.estimated_start}</td>
+                    <td style="font-weight:700; color:#059669; font-size:12px;">${q.estimated_finish}</td>
+                    <td style="text-align:center;">
+                        <span class="badge ${isLate ? 'badge-red' : 'badge-green'}">${isLate ? 'Gecikme Riski ⚠️' : 'Zamanında ✓'}</span>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+    } catch (e) {
+        console.error('runSchedulingSimulation error', e);
+    }
+}
+
+// ── PRINT HELPER ──────────────────────────────────────────
+function printElementContent(elementId) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>ERGÜNBAŞ Yazdır</title>
+            <style>
+                body { font-family: sans-serif; margin: 20px; color: #0F172A; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #CBD5E1; padding: 8px; }
+                @media print {
+                    button { display: none !important; }
+                }
+            </style>
+        </head>
+        <body>
+            ${el.innerHTML}
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+    }, 300);
+}
+
 </script>
 </body>
 </html>

@@ -3243,5 +3243,215 @@
       "unit_price": 12.0,
       "notes": "Kilit ve kol boşaltmaları için iç takviye ahşap takozu (1 kanat = 2 adet)"
     }
+  },
+  "scraps": {
+    "SCR-001": {
+      "id": "SCR-001",
+      "date": "2026-09-29",
+      "order_id": "SIP-UST-0001",
+      "order_no": "2026-126-002060",
+      "machine_id": "MCH_UST_4",
+      "machine_name": "Sıcak Pres Hattı 1",
+      "facility_id": "fac1",
+      "reason": "Pres Kabarması / Tutkal Hatası",
+      "qty": 4,
+      "operator": "Kanat Operatörü 1",
+      "notes": "Pres plakası sıcaklık dalgalanması sebebiyle sol üst köşede kabarma oluştu"
+    },
+    "SCR-002": {
+      "id": "SCR-002",
+      "date": "2026-09-29",
+      "order_id": "SIP-UST-0002",
+      "order_no": "2026-126-002060",
+      "machine_id": "MCH_ALT_2",
+      "machine_name": "Homag Ebatlama & Kenar",
+      "facility_id": "fac2",
+      "reason": "Kenar Bandı Atması",
+      "qty": 2,
+      "operator": "Kanat Operatörü 1",
+      "notes": "PVC kenar bandı yapışma zayıflığı"
+    },
+    "SCR-003": {
+      "id": "SCR-003",
+      "date": "2026-09-28",
+      "order_id": "SIP-UST-0003",
+      "order_no": "2026-126-002060",
+      "machine_id": "MCH_UST_3",
+      "machine_name": "Levha Vakum Makinesi",
+      "facility_id": "fac1",
+      "reason": "Yüzey Çiziği / Deformasyon",
+      "qty": 3,
+      "operator": "Kanat Operatörü 1",
+      "notes": "Hammadde taşıma esnasında levha yüzeyinde çizik tespit edildi"
+    },
+    "SCR-004": {
+      "id": "SCR-004",
+      "date": "2026-09-28",
+      "order_id": "SIP-UST-0004",
+      "order_no": "2026-126-002060",
+      "machine_id": "MCH_ALT_3",
+      "machine_name": "Torwegge Pres / Freze",
+      "facility_id": "fac2",
+      "reason": "Ebat / Gönye Hatası",
+      "qty": 1,
+      "operator": "Kanat Operatörü 1",
+      "notes": "Freze ayar kaçıklığı"
+    },
+    "SCR-20260929-111926": {
+      "id": "SCR-20260929-111926",
+      "date": "2026-09-29",
+      "order_id": "",
+      "order_code": "2026-TEST",
+      "order_no": "2026-TEST",
+      "machine_id": "",
+      "machine_name": "Vakum Pres",
+      "station": "Vakum Pres",
+      "facility_id": "fac1",
+      "reason": "Yüzey Baloncuk / Folyo Hatası",
+      "qty": 2,
+      "scrap_qty": 2,
+      "operator": "Test Operator",
+      "notes": "Test aciklama",
+      "created_at": "2026-09-29T11:19:26.379185"
+    }
+  },
+  "shipments": {
+    "SEVK-2026-001": {
+      "id": "SEVK-2026-001",
+      "shipment_no": "SEVK-2026-001",
+      "customer": "OMAR ABU KALAM",
+      "plate_no": "06 ERG 1905",
+      "driver_name": "Mehmet Karaca",
+      "driver_phone": "0532 444 1905",
+      "destination": "Ankara / İncek Şantiye Deposu",
+      "ship_date": "2026-09-29",
+      "facility_id": "fac1",
+      "status": "loaded",
+      "items": [
+        {
+          "order_id": "SIP-UST-0001",
+          "order_no": "2026-126-002060",
+          "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 700X2020X40",
+          "qty": 85,
+          "palette_no": "PAL-01, PAL-02"
+        }
+      ],
+      "total_doors": 85,
+      "notes": "Kamyon üzeri çift brandalı sevk edildi. İrsaliye şoföre teslim edildi."
+    },
+    "SEVK-2026-002": {
+      "id": "SEVK-2026-002",
+      "shipment_no": "SEVK-2026-002",
+      "customer": "OMAR ABU KALAM",
+      "plate_no": "34 KNT 8820",
+      "driver_name": "Kemal Demir",
+      "driver_phone": "0544 333 8820",
+      "destination": "İstanbul / Dudullu Merkez Depo",
+      "ship_date": "2026-09-29",
+      "facility_id": "fac2",
+      "status": "preparing",
+      "items": [
+        {
+          "order_id": "SIP-UST-0002",
+          "order_no": "2026-126-002060",
+          "model": "ER100 KANAT K.CEVIZ KOM.SEREN STRAFOR 700X2020X40",
+          "qty": 60,
+          "palette_no": "PAL-03"
+        }
+      ],
+      "total_doors": 60,
+      "notes": "Paketleme ve palet çemberleme sürüyor."
+    },
+    "SEVK-20260929-1119": {
+      "id": "SEVK-20260929-1119",
+      "shipment_code": "SEVK-20260929-1119",
+      "shipment_no": "SEVK-20260929-1119",
+      "customer": "Test Musteri",
+      "order_id": "SIP-UST-0001",
+      "plate": "34 TEST 123",
+      "plate_no": "34 TEST 123",
+      "driver": "Ali Usta",
+      "driver_name": "Ali Usta",
+      "driver_phone": "",
+      "destination": "",
+      "ship_date": "2026-09-30",
+      "shipment_date": "2026-09-30",
+      "facility": "fac1",
+      "facility_id": "fac1",
+      "status": "Hazırlanıyor",
+      "items": [],
+      "doors": 25,
+      "total_doors": 25,
+      "notes": "Test sevk notu",
+      "created_at": "2026-09-29T11:19:26.333646"
+    }
+  },
+  "order_stages": {
+    "SIP-UST-0001": {
+      "order_id": "SIP-UST-0001",
+      "current_stage": "strafor",
+      "qty_completed_in_stage": 0,
+      "last_updated": "2026-09-29",
+      "operator": "Operatör",
+      "history": [
+        {
+          "timestamp": "2026-09-29T11:19:26.253927",
+          "stage": "strafor",
+          "stage_name": "Strafor / Petek Dolgu",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        }
+      ]
+    },
+    "SIP-UST-0002": {
+      "order_id": "SIP-UST-0002",
+      "current_stage": "strafor",
+      "qty_completed_in_stage": 4,
+      "last_updated": "2026-09-29",
+      "operator": "Kanat Operatörü 1"
+    },
+    "SIP-UST-0003": {
+      "order_id": "SIP-UST-0003",
+      "current_stage": "vakum",
+      "qty_completed_in_stage": 2,
+      "last_updated": "2026-09-29",
+      "operator": "Kanat Operatörü 1"
+    },
+    "SIP-UST-0004": {
+      "order_id": "SIP-UST-0004",
+      "current_stage": "pres",
+      "qty_completed_in_stage": 4,
+      "last_updated": "2026-09-29",
+      "operator": "Kanat Operatörü 1"
+    },
+    "SIP-UST-0005": {
+      "order_id": "SIP-UST-0005",
+      "current_stage": "ebatlama",
+      "qty_completed_in_stage": 1,
+      "last_updated": "2026-09-29",
+      "operator": "Kanat Operatörü 1"
+    },
+    "SIP-UST-0006": {
+      "order_id": "SIP-UST-0006",
+      "current_stage": "paket",
+      "qty_completed_in_stage": 0,
+      "last_updated": "2026-09-29",
+      "operator": "Kanat Operatörü 1"
+    },
+    "SIP-UST-0007": {
+      "order_id": "SIP-UST-0007",
+      "current_stage": "seren",
+      "qty_completed_in_stage": 1,
+      "last_updated": "2026-09-29",
+      "operator": "Kanat Operatörü 1"
+    },
+    "SIP-UST-0008": {
+      "order_id": "SIP-UST-0008",
+      "current_stage": "strafor",
+      "qty_completed_in_stage": 2,
+      "last_updated": "2026-09-29",
+      "operator": "Kanat Operatörü 1"
+    }
   }
 }
