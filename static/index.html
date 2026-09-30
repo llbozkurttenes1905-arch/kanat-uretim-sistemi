@@ -758,41 +758,47 @@
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-screen" id="login-screen">
+<!-- LOGIN (Varsayılan olarak gizli, doğrudan erişim aktif) -->
+<div class="login-screen" id="login-screen" style="display:none !important;">
     <div class="login-card">
-        <div style="text-align:center; margin-bottom:28px;">
+        <div style="text-align:center; margin-bottom:24px;">
             <img src="/static/logo.png" alt="ERGÜNBAŞ" style="height:64px; margin:0 auto 14px; object-fit:contain;">
             <div style="font-size:20px; font-weight:900; color:#0F172A; letter-spacing:-0.5px;">ERGÜNBAŞ <span style="color:#E30713;">Group</span></div>
             <div style="font-size:12px; color:#64748B; margin-top:4px; font-weight:600;">Kanat Üretim, İş Gücü &amp; MRP Portalı</div>
         </div>
 
-        <form id="login-form" onsubmit="handleLogin(event)" style="display:flex;flex-direction:column;gap:16px;">
+        <div style="margin-bottom:16px;">
+            <button type="button" onclick="enterDirectly('admin')" class="btn-primary" style="width:100%;padding:14px;font-size:14px;font-weight:900;background:linear-gradient(135deg, #10B981 0%, #059669 100%);border:none;border-radius:10px;color:#fff;box-shadow:0 4px 14px rgba(16,185,129,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                <span>🚀</span> ŞİFRESİZ DOĞRUDAN GİRİŞ YAP
+            </button>
+        </div>
+
+        <form id="login-form" onsubmit="handleLogin(event)" style="display:flex;flex-direction:column;gap:14px;">
             <div>
                 <label class="form-label">Kullanıcı Adı</label>
-                <input type="text" id="l-user" required class="form-input" placeholder="admin" autocomplete="username" value="admin">
+                <input type="text" id="l-user" class="form-input" placeholder="admin" autocomplete="username" value="admin">
             </div>
             <div>
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
                     <label class="form-label" style="margin-bottom:0;">Şifre</label>
                     <button type="button" onclick="togglePasswordVisibility()" id="btn-toggle-pass" style="background:none;border:none;color:#0284C7;font-size:11.5px;font-weight:700;cursor:pointer;padding:0;">Şifreyi Göster</button>
                 </div>
-                <input type="password" id="l-pass" required class="form-input" placeholder="••••••••" autocomplete="current-password" value="ergunbas2026">
+                <input type="password" id="l-pass" class="form-input" placeholder="••••••••" autocomplete="current-password" value="ergunbas2026">
             </div>
             <div id="l-err" class="hidden" style="font-size:12px;color:#B91C1C;background:#FEF2F2;border:1px solid #FCA5A5;padding:10px 14px;border-radius:8px;font-weight:600;"></div>
-            <button type="submit" class="btn-primary" style="width:100%;padding:12px;font-size:14px;font-weight:800;letter-spacing:0.3px;margin-top:4px;">Giriş Yap</button>
+            <button type="submit" class="btn-primary" style="width:100%;padding:12px;font-size:14px;font-weight:800;letter-spacing:0.3px;">Giriş Yap</button>
         </form>
 
-        <div style="margin-top:16px;display:flex;gap:10px;">
+        <div style="margin-top:14px;display:flex;gap:10px;">
             <button type="button" onclick="quickLogin('admin')" style="flex:1;padding:10px 8px;font-size:12px;font-weight:800;background:#F8FAFC;border:1.5px solid #0284C7;border-radius:8px;color:#0369A1;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-                <span>🛡️</span> Yönetici Girişi
+                <span>🛡️</span> Yönetici
             </button>
             <button type="button" onclick="quickLogin('operator1')" style="flex:1;padding:10px 8px;font-size:12px;font-weight:800;background:#F8FAFC;border:1.5px solid #64748B;border-radius:8px;color:#334155;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-                <span>👷</span> Operatör Girişi
+                <span>👷</span> Operatör
             </button>
         </div>
 
-        <div style="margin-top:18px;text-align:center;font-size:11.5px;color:#64748B;background:#F1F5F9;padding:8px 12px;border-radius:8px;">
+        <div style="margin-top:14px;text-align:center;font-size:11.5px;color:#64748B;background:#F1F5F9;padding:8px 12px;border-radius:8px;">
             Varsayılan: <strong style="color:#0F172A;">admin</strong> / <strong style="color:#0F172A;">ergunbas2026</strong>
         </div>
     </div>
@@ -2719,14 +2725,54 @@ let allRecipes = [];
 let mrpData = null;
 let currentPeriod = 'weekly';
 
-document.addEventListener('DOMContentLoaded', () => {
-    const now = new Date();
-    document.getElementById('daily-date').value = now.toISOString().split('T')[0];
-    document.getElementById('month-picker').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-    loadDoorModelsCatalog();
+function enterDirectly(role = 'admin') {
+    currentUser = {
+        id: role === 'admin' ? 'u1' : 'u2',
+        username: role,
+        role: role,
+        name: role === 'admin' ? 'Sistem Yöneticisi' : 'Kanat Operatörü 1'
+    };
+    try { localStorage.setItem('kanat_user', JSON.stringify(currentUser)); } catch(e) {}
+    bootApp();
+}
 
-    const stored = localStorage.getItem('kanat_user');
-    if(stored) { try { currentUser = JSON.parse(stored); bootApp(); } catch(e) {} }
+document.addEventListener('DOMContentLoaded', () => {
+    // Giriş ekranını varsayılan olarak kesinlikle gizle
+    const lScreen = document.getElementById('login-screen');
+    if (lScreen) {
+        lScreen.style.setProperty('display', 'none', 'important');
+    }
+
+    const now = new Date();
+    try {
+        const dDate = document.getElementById('daily-date');
+        if (dDate) dDate.value = now.toISOString().split('T')[0];
+        const mPicker = document.getElementById('month-picker');
+        if (mPicker) mPicker.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    } catch(e) {}
+
+    try { loadDoorModelsCatalog(); } catch(e) {}
+
+    // Otomatik Admin Girişi - Kullanıcıyı hiçbir zaman giriş ekranında bekletme
+    let storedUser = null;
+    try {
+        const s = localStorage.getItem('kanat_user');
+        if (s) storedUser = JSON.parse(s);
+    } catch(e) {}
+
+    if (storedUser && storedUser.username) {
+        currentUser = storedUser;
+    } else {
+        currentUser = {
+            id: 'u1',
+            username: 'admin',
+            role: 'admin',
+            name: 'Sistem Yöneticisi'
+        };
+        try { localStorage.setItem('kanat_user', JSON.stringify(currentUser)); } catch(e) {}
+    }
+
+    bootApp();
 });
 
 function togglePasswordVisibility() {
@@ -2743,60 +2789,38 @@ function togglePasswordVisibility() {
 }
 
 function quickLogin(role) {
-    if (role === 'admin') {
-        document.getElementById('l-user').value = 'admin';
-        document.getElementById('l-pass').value = 'ergunbas2026';
-    } else {
-        document.getElementById('l-user').value = 'operator1';
-        document.getElementById('l-pass').value = 'operator1';
-    }
-    handleLogin();
+    enterDirectly(role);
 }
 
 async function handleLogin(e) {
     if (e && e.preventDefault) e.preventDefault();
-    const errEl = document.getElementById('l-err');
-    errEl.classList.add('hidden');
-    const uVal = (document.getElementById('l-user').value || '').trim();
-    const pVal = (document.getElementById('l-pass').value || '').trim();
+    const uVal = (document.getElementById('l-user')?.value || 'admin').trim();
+    const pVal = (document.getElementById('l-pass')?.value || 'ergunbas2026').trim();
+    const isOp = uVal.toLowerCase().includes('op');
 
-    if (!uVal || !pVal) {
-        errEl.textContent = 'Lütfen kullanıcı adı ve şifre giriniz.';
-        errEl.classList.remove('hidden');
-        return;
-    }
+    currentUser = {
+        id: isOp ? 'u2' : 'u1',
+        username: uVal || (isOp ? 'operator1' : 'admin'),
+        role: isOp ? 'operator' : 'admin',
+        name: isOp ? 'Kanat Operatörü 1' : 'Sistem Yöneticisi'
+    };
+    try { localStorage.setItem('kanat_user', JSON.stringify(currentUser)); } catch(e) {}
 
+    // Arka planda sunucuya da bildir
     try {
-        const res = await fetch('/api/auth/login', {
+        fetch('/api/auth/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ username: uVal, password: pVal })
-        });
-        const d = await res.json();
-        if (!res.ok) {
-            errEl.textContent = d.detail || 'Kullanıcı adı veya şifre hatalı.';
-            errEl.classList.remove('hidden');
-            return;
-        }
-        currentUser = d.user;
-        localStorage.setItem('kanat_user', JSON.stringify(currentUser));
-        bootApp();
-    } catch(err) {
-        // Ağ hatası veya bağlantı problemi durumunda yerel fallback
-        if ((uVal.toLowerCase() === 'admin' && pVal === 'ergunbas2026') || (uVal.toLowerCase() === 'operator1' && pVal === 'operator1')) {
-            currentUser = {
-                id: uVal.toLowerCase() === 'admin' ? 'u1' : 'u2',
-                username: uVal,
-                role: uVal.toLowerCase() === 'admin' ? 'admin' : 'operator',
-                name: uVal.toLowerCase() === 'admin' ? 'Sistem Yöneticisi' : 'Kanat Operatörü 1'
-            };
-            localStorage.setItem('kanat_user', JSON.stringify(currentUser));
-            bootApp();
-            return;
-        }
-        errEl.textContent = 'Sunucuya bağlanılamadı. Lütfen sunucunun açık olduğundan emin olun.';
-        errEl.classList.remove('hidden');
-    }
+        }).then(r => r.json()).then(d => {
+            if (d && d.user) {
+                currentUser = d.user;
+                try { localStorage.setItem('kanat_user', JSON.stringify(currentUser)); } catch(e) {}
+            }
+        }).catch(() => {});
+    } catch(_) {}
+
+    bootApp();
 }
 
 function handleLogout() {
@@ -2807,7 +2831,9 @@ function handleLogout() {
 
 function bootApp() {
     const lScreen = document.getElementById('login-screen');
-    if (lScreen) lScreen.style.display = 'none';
+    if (lScreen) {
+        lScreen.style.setProperty('display', 'none', 'important');
+    }
 
     if (currentUser) {
         const uDisp = document.getElementById('user-display-name');
