@@ -2289,6 +2289,27 @@
                         </select>
                     </div>
 
+                    <!-- 3D Oda & Mekan Simülatörü (Parke, Duvar, Süpürgelik) -->
+                    <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.06); padding:4px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
+                        <button class="btn-secondary" id="btn-3d-toggle-room" onclick="toggle3DRoom()" style="padding:4px 9px; font-size:11.5px; font-weight:800; background:rgba(255,255,255,0.1); color:#FFF; border:1px solid rgba(255,255,255,0.2);" title="3D Mimari Oda ve Parke Zemin Görünümünü Aç/Kapat">🏡 Oda: Kapalı</button>
+                        <div id="room-3d-dropdowns" style="display:none; align-items:center; gap:6px;">
+                            <select id="door-3d-wall-color" onchange="change3DWallColor(this.value)" class="form-select" style="font-size:11px; padding:3px 6px; background:#1E293B; color:#F8FAFC; border:1px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer;" title="Duvar Boyası Rengi">
+                                <option value="warm_white">⚪ Mat Beyaz Duvar</option>
+                                <option value="nordic_grey" selected>🌫️ İskandinav Gri Duvar</option>
+                                <option value="warm_beige">🌾 Sıcak Bej Duvar</option>
+                                <option value="anthracite">🏢 Antrasit Loft Duvar</option>
+                                <option value="night_blue">🌌 Gece Mavisi Duvar</option>
+                                <option value="sage_green">🌿 Adaçayı Yeşili Duvar</option>
+                            </select>
+                            <select id="door-3d-floor-type" onchange="change3DFloorType(this.value)" class="form-select" style="font-size:11px; padding:3px 6px; background:#1E293B; color:#F8FAFC; border:1px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer;" title="Laminat Parke Zemin Dokusu">
+                                <option value="oak" selected>🪵 Doğal Meşe Parke</option>
+                                <option value="walnut">🌰 Koyu Ceviz Parke</option>
+                                <option value="grey">🏢 Gri Meşe Parke</option>
+                                <option value="whitewash">⚪ Beyaz Meşe Parke</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- Exploded Slider -->
                     <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:180px;">
                         <span style="font-size:11.5px; font-weight:800; color:#93C5FD; white-space:nowrap;">💥 Patlatma:</span>
@@ -2409,6 +2430,45 @@
                             <span style="font-weight:700;">PVC Kenar Bandı Çerçevesi</span>
                             <span style="margin-left:auto; font-size:10px; color:#64748B;">45x1 mm</span>
                         </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-room" onchange="toggle3DLayer('room', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#C8A882; border:1px solid #78350F;"></span>
+                            <span style="font-weight:700;">🏡 Mimari Oda (Duvar &amp; Parke)</span>
+                            <span style="margin-left:auto; font-size:10px; color:#0284C7; font-weight:800;" id="badge-room-status">Kapalı</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 🏡 İÇ MEKAN & MİMARİ DEKORASYON PALETİ -->
+                <div style="border-top:1px solid #E2E8F0; padding-top:14px;">
+                    <div style="font-size:11px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:8px;">🏡 İÇ MEKAN &amp; MİMARİ DEKORASYON</div>
+                    <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px; display:flex; flex-direction:column; gap:8px; font-size:11.5px;">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                <span style="font-weight:700; color:#334155; font-size:11px;">🧱 DUVAR BOYASI PALETİ</span>
+                                <span id="label-cur-wall-color" style="font-size:10px; color:#0284C7; font-weight:800;">İskandinav Gri</span>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button type="button" onclick="selectWallColorSwatch('warm_white')" id="swatch-wall-warm_white" title="Mat Kar Beyazı" style="width:25px; height:25px; border-radius:5px; background:#F8FAFC; border:2px solid #CBD5E1; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.1);"></button>
+                                <button type="button" onclick="selectWallColorSwatch('nordic_grey')" id="swatch-wall-nordic_grey" title="İskandinav Açık Gri" style="width:25px; height:25px; border-radius:5px; background:#CBD5E1; border:2px solid #0284C7; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.1);"></button>
+                                <button type="button" onclick="selectWallColorSwatch('warm_beige')" id="swatch-wall-warm_beige" title="Sıcak Bej" style="width:25px; height:25px; border-radius:5px; background:#E7DECD; border:2px solid #CBD5E1; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.1);"></button>
+                                <button type="button" onclick="selectWallColorSwatch('anthracite')" id="swatch-wall-anthracite" title="Loft Antrasit" style="width:25px; height:25px; border-radius:5px; background:#334155; border:2px solid #CBD5E1; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.1);"></button>
+                                <button type="button" onclick="selectWallColorSwatch('night_blue')" id="swatch-wall-night_blue" title="Gece Mavisi" style="width:25px; height:25px; border-radius:5px; background:#1E293B; border:2px solid #CBD5E1; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.1);"></button>
+                                <button type="button" onclick="selectWallColorSwatch('sage_green')" id="swatch-wall-sage_green" title="Adaçayı Yeşili" style="width:25px; height:25px; border-radius:5px; background:#9FAF9E; border:2px solid #CBD5E1; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.1);"></button>
+                            </div>
+                        </div>
+                        <div style="border-top:1px dashed #E2E8F0; padding-top:6px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                <span style="font-weight:700; color:#334155; font-size:11px;">🪵 ZEMİN PARKE SEÇENEĞİ</span>
+                                <span id="label-cur-floor-type" style="font-size:10px; color:#D97706; font-weight:800;">Doğal Meşe</span>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                                <button type="button" class="btn-secondary" onclick="selectFloorTypeSwatch('oak')" id="btn-floor-oak" style="font-size:11px; padding:4px 6px; font-weight:700; background:#FEF3C7; color:#78350F; border:1px solid #D97706;">🪵 Doğal Meşe</button>
+                                <button type="button" class="btn-secondary" onclick="selectFloorTypeSwatch('walnut')" id="btn-floor-walnut" style="font-size:11px; padding:4px 6px; font-weight:700; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0;">🌰 Koyu Ceviz</button>
+                                <button type="button" class="btn-secondary" onclick="selectFloorTypeSwatch('grey')" id="btn-floor-grey" style="font-size:11px; padding:4px 6px; font-weight:700; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0;">🏢 Gri Meşe</button>
+                                <button type="button" class="btn-secondary" onclick="selectFloorTypeSwatch('whitewash')" id="btn-floor-whitewash" style="font-size:11px; padding:4px 6px; font-weight:700; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0;">⚪ Beyaz Meşe</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -4806,6 +4866,15 @@ let three3D = {
     showFuga: true,
     showCam: true,
     showFrame: true,
+    showRoom: false,
+    roomGroup: null,
+    wallColorKey: 'nordic_grey',
+    floorKey: 'oak',
+    wallMaterials: [],
+    skirtingMaterials: [],
+    floorMesh: null,
+    roomSpotLight: null,
+    gridHelper: null,
     isDoorOpen: false,
     doorOpenAngle: 0,
     targetDoorAngle: 0,
@@ -4904,6 +4973,19 @@ function init3DScene() {
     const grid = new THREE.GridHelper(4, 20, 0x334155, 0x1E293B);
     grid.position.y = -1.15;
     scene.add(grid);
+    three3D.gridHelper = grid;
+
+    // Room Mode Warm Interior Spotlight & Downlight
+    const roomSpot = new THREE.SpotLight(0xFFF7ED, 1.8, 12, Math.PI / 4, 0.45, 1.2);
+    roomSpot.position.set(0, 2.2, 1.4);
+    roomSpot.target.position.set(0, -0.3, 0);
+    roomSpot.castShadow = true;
+    roomSpot.shadow.mapSize.width = 1024;
+    roomSpot.shadow.mapSize.height = 1024;
+    roomSpot.visible = false;
+    scene.add(roomSpot);
+    scene.add(roomSpot.target);
+    three3D.roomSpotLight = roomSpot;
 
     // Master Group for Door
     const doorGroup = new THREE.Group();
@@ -6493,8 +6575,243 @@ function render3DDoorModel(data) {
     // Initial frame visibility based on current step
     frameGroup.visible = (three3D.currentStep === 5 || three3D.currentStep === 0) && (three3D.showFrame !== false);
 
+    // ════════════════════════════════════════════════════════════
+    // ── 9. 3D GERÇEKÇİ ODA, PARKE ZEMİN, SÜPÜRGELİK VE DUVAR ──
+    // ════════════════════════════════════════════════════════════
+    create3DRoomEnvironment(W, H, jambDepth, gap, jambTh, casingW);
+
     // Set Initial Position according to current Step
     applyStepVisibility(three3D.currentStep || 1);
+}
+
+// ════════════════════════════════════════════════════════════
+// GERÇEKÇİ AHŞAP LAMİNAT PARKE DOKU MOTORU
+// Derzler, ahşap damarları ve mikropah yansımaları ile fotogerçekçi parke
+// ════════════════════════════════════════════════════════════
+const parquetTextureCache = {};
+
+function generateParquetTexture(floorType = 'oak') {
+    if (parquetTextureCache[floorType]) {
+        return parquetTextureCache[floorType];
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
+
+    let baseColor = '#C8A882';
+    let tones = ['#C29F76', '#D1B18D', '#BC966E', '#CDB08A', '#BA9265'];
+    if (floorType === 'walnut') {
+        baseColor = '#4A3326';
+        tones = ['#432E22', '#52382A', '#3C281D', '#4B3427', '#5A3E30'];
+    } else if (floorType === 'grey') {
+        baseColor = '#9CA3AF';
+        tones = ['#8E95A1', '#A8AFBB', '#848B96', '#989FA9', '#A3AAB4'];
+    } else if (floorType === 'whitewash') {
+        baseColor = '#E3DCD3';
+        tones = ['#EAE4DC', '#DDD5CA', '#F0EBE4', '#D7CED4', '#E6E0D8'];
+    }
+
+    ctx.fillStyle = baseColor;
+    ctx.fillRect(0, 0, 1024, 1024);
+
+    const rowCount = 8;
+    const rowH = 1024 / rowCount;
+
+    for (let r = 0; r < rowCount; r++) {
+        const y = r * rowH;
+        const offsets = [0, 240, 520, 120, 380, 680, 180, 460];
+        const offset = offsets[r % offsets.length];
+        const plankLengths = [340, 420, 360, 400];
+        let curX = -offset;
+        let pIdx = 0;
+
+        while (curX < 1024 + 400) {
+            const pW = plankLengths[pIdx % plankLengths.length];
+            const pTone = tones[(r * 3 + pIdx) % tones.length];
+
+            ctx.fillStyle = pTone;
+            ctx.fillRect(curX, y, pW, rowH);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(curX, y, pW, rowH);
+            ctx.clip();
+
+            for (let g = 0; g < 42; g++) {
+                const gy = y + Math.random() * rowH;
+                const alpha = 0.035 + Math.random() * 0.075;
+                ctx.strokeStyle = Math.random() > 0.5 ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha})`;
+                ctx.lineWidth = 1 + Math.random() * 2;
+                ctx.beginPath();
+                ctx.moveTo(curX, gy);
+                ctx.bezierCurveTo(curX + pW * 0.35, gy + (Math.random()-0.5)*12, curX + pW * 0.7, gy + (Math.random()-0.5)*12, curX + pW, gy);
+                ctx.stroke();
+            }
+
+            // V-Groove micro bevel and plank highlights
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+            ctx.fillRect(curX, y, pW, 2);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.32)';
+            ctx.fillRect(curX, y + rowH - 3, pW, 3);
+            ctx.fillRect(curX + pW - 3, y, 3, rowH);
+
+            ctx.restore();
+
+            curX += pW;
+            pIdx++;
+        }
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.36)';
+        ctx.fillRect(0, y + rowH - 2, 1024, 2);
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(4, 4);
+    if (tex.colorSpace !== undefined) tex.colorSpace = THREE.SRGBColorSpace;
+    parquetTextureCache[floorType] = tex;
+    return tex;
+}
+
+// ════════════════════════════════════════════════════════════
+// 3D MİMARİ ODA & MEKAN SİMÜLATÖRÜ
+// Gerçekçi duvar boşluğu, parke zemin, 80 mm süpürgelik ve tavan armatürü
+// ════════════════════════════════════════════════════════════
+function create3DRoomEnvironment(W, H, jambDepth, gap, jambTh, casingW) {
+    if (three3D.roomGroup && three3D.doorGroup) {
+        three3D.doorGroup.remove(three3D.roomGroup);
+    }
+    const roomGroup = new THREE.Group();
+    three3D.roomGroup = roomGroup;
+    three3D.doorGroup.add(roomGroup);
+
+    three3D.wallMaterials = [];
+    three3D.skirtingMaterials = [];
+
+    const wallColors = {
+        warm_white: 0xF8FAFC,
+        nordic_grey: 0xCBD5E1,
+        warm_beige: 0xE7DECD,
+        anthracite: 0x334155,
+        night_blue: 0x1E293B,
+        sage_green: 0x9FAF9E
+    };
+
+    const wallMat = new THREE.MeshStandardMaterial({
+        color: wallColors[three3D.wallColorKey] || 0xCBD5E1,
+        roughness: 0.88,
+        metalness: 0.02
+    });
+    three3D.wallMaterials.push(wallMat);
+
+    const floorY = -H/2 - 0.005;
+    const wallTh = jambDepth; // 120 mm duvar et kalınlığı
+    const outerOpeningW = W + 2 * (gap + jambTh);
+    const outerOpeningH = H + gap + jambTh;
+    const roomWidth = 5.2;
+    const roomHeight = 2.70;
+
+    function makeRoomBox(w, h, depth, mat, edgeColor = 0x000000, edgeOpacity = 0.15) {
+        const group = new THREE.Group();
+        const geo = new THREE.BoxGeometry(w, h, depth);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        group.add(mesh);
+        const edges = new THREE.EdgesGeometry(geo);
+        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: edgeColor, linewidth: 1, transparent: true, opacity: edgeOpacity }));
+        group.add(line);
+        return { group, mesh, geo, mat };
+    }
+
+    // 1. ZEMİN PARKE PLANI
+    const floorGeo = new THREE.PlaneGeometry(5.4, 4.4);
+    const floorMat = new THREE.MeshStandardMaterial({
+        map: generateParquetTexture(three3D.floorKey),
+        roughness: 0.38,
+        metalness: 0.05
+    });
+    const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+    floorMesh.rotation.x = -Math.PI / 2;
+    floorMesh.position.set(0, floorY, 0);
+    floorMesh.receiveShadow = true;
+    roomGroup.add(floorMesh);
+    three3D.floorMesh = floorMesh;
+
+    // 2. SOL DUVAR
+    const sideWallW = (roomWidth - outerOpeningW) / 2;
+    const leftWall = makeRoomBox(sideWallW, roomHeight, wallTh, wallMat);
+    leftWall.group.position.set(-outerOpeningW/2 - sideWallW/2, floorY + roomHeight/2, 0);
+    roomGroup.add(leftWall.group);
+
+    // 3. SAĞ DUVAR
+    const rightWall = makeRoomBox(sideWallW, roomHeight, wallTh, wallMat);
+    rightWall.group.position.set(outerOpeningW/2 + sideWallW/2, floorY + roomHeight/2, 0);
+    roomGroup.add(rightWall.group);
+
+    // 4. KAPI ÜSTÜ TAÇ DUVARI (LİNTEL)
+    const headerH = roomHeight - outerOpeningH;
+    if (headerH > 0) {
+        const headerWall = makeRoomBox(outerOpeningW, headerH, wallTh, wallMat);
+        headerWall.group.position.set(0, floorY + outerOpeningH + headerH/2, 0);
+        roomGroup.add(headerWall.group);
+    }
+
+    // 5. 80 MM SÜPÜRGELİKLER (Ön ve Arka Yüzler)
+    const skirtingMat = new THREE.MeshStandardMaterial({
+        color: 0xF8FAFC,
+        roughness: 0.45,
+        metalness: 0.05
+    });
+    three3D.skirtingMaterials.push(skirtingMat);
+
+    const skirtingH = 0.080;
+    const skirtingTh = 0.014;
+    const skirtingClearance = casingW + 0.010;
+    const skirtingW = sideWallW - skirtingClearance;
+
+    if (skirtingW > 0) {
+        const leftSkirtingX = -outerOpeningW/2 - casingW - skirtingW/2;
+        const rightSkirtingX = outerOpeningW/2 + casingW + skirtingW/2;
+        const skirtingY = floorY + skirtingH/2;
+        const frontZ = wallTh/2 + skirtingTh/2;
+        const backZ = -wallTh/2 - skirtingTh/2;
+
+        const sLF = makeRoomBox(skirtingW, skirtingH, skirtingTh, skirtingMat, 0x000000, 0.2);
+        sLF.group.position.set(leftSkirtingX, skirtingY, frontZ);
+        roomGroup.add(sLF.group);
+
+        const sRF = makeRoomBox(skirtingW, skirtingH, skirtingTh, skirtingMat, 0x000000, 0.2);
+        sRF.group.position.set(rightSkirtingX, skirtingY, frontZ);
+        roomGroup.add(sRF.group);
+
+        const sLB = makeRoomBox(skirtingW, skirtingH, skirtingTh, skirtingMat, 0x000000, 0.2);
+        sLB.group.position.set(leftSkirtingX, skirtingY, backZ);
+        roomGroup.add(sLB.group);
+
+        const sRB = makeRoomBox(skirtingW, skirtingH, skirtingTh, skirtingMat, 0x000000, 0.2);
+        sRB.group.position.set(rightSkirtingX, skirtingY, backZ);
+        roomGroup.add(sRB.group);
+    }
+
+    // 6. TAVAN GÖMME SPOT IŞIK ARMATÜRÜ
+    const spotFixtureGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.012, 24);
+    const spotFixtureMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, metalness: 0.8, roughness: 0.2 });
+    const spotFixture = new THREE.Mesh(spotFixtureGeo, spotFixtureMat);
+    spotFixture.position.set(0, floorY + roomHeight - 0.006, 0.35);
+    roomGroup.add(spotFixture);
+
+    const spotLensGeo = new THREE.CircleGeometry(0.045, 24);
+    const spotLensMat = new THREE.MeshBasicMaterial({ color: 0xFFF7ED });
+    const spotLens = new THREE.Mesh(spotLensGeo, spotLensMat);
+    spotLens.rotation.x = Math.PI / 2;
+    spotLens.position.set(0, floorY + roomHeight - 0.013, 0.35);
+    roomGroup.add(spotLens);
+
+    roomGroup.visible = (three3D.showRoom === true);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -6548,6 +6865,9 @@ function applyStepVisibility(step) {
         setVis('cam', false);
 
         if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.roomGroup) three3D.roomGroup.visible = false;
+        if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
+        if (three3D.gridHelper) three3D.gridHelper.visible = true;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.seren?.group) three3D.meshes.seren.group.position.set(0, 0, 0);
         if (three3D.meshes.cornerTakoz?.group) three3D.meshes.cornerTakoz.group.position.set(0, 0, 0);
@@ -6573,6 +6893,9 @@ function applyStepVisibility(step) {
         setVis('cam', false);
 
         if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.roomGroup) three3D.roomGroup.visible = false;
+        if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
+        if (three3D.gridHelper) three3D.gridHelper.visible = true;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.lockStile?.group) {
             three3D.meshes.lockStile.group.position.set(0, 0, 0);
@@ -6599,6 +6922,9 @@ function applyStepVisibility(step) {
         setVis('cam', false);
 
         if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.roomGroup) three3D.roomGroup.visible = false;
+        if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
+        if (three3D.gridHelper) three3D.gridHelper.visible = true;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.core?.group) {
             three3D.meshes.core.group.position.set(0, 0, 0);
@@ -6625,6 +6951,9 @@ function applyStepVisibility(step) {
         setVis('cam', false);
 
         if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.roomGroup) three3D.roomGroup.visible = false;
+        if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
+        if (three3D.gridHelper) three3D.gridHelper.visible = true;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
         if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
@@ -6650,6 +6979,9 @@ function applyStepVisibility(step) {
         setVis('cam', (three3D.currentData?.has_cam) && (three3D.showCam !== false));
 
         if (three3D.frameGroup) three3D.frameGroup.visible = (three3D.showFrame !== false);
+        if (three3D.roomGroup) three3D.roomGroup.visible = (three3D.showRoom === true);
+        if (three3D.roomSpotLight) three3D.roomSpotLight.visible = (three3D.showRoom === true);
+        if (three3D.gridHelper) three3D.gridHelper.visible = !three3D.showRoom;
         if (three3D.leafPivotGroup) three3D.leafPivotGroup.rotation.y = three3D.doorOpenAngle;
         if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
         if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
@@ -6658,8 +6990,8 @@ function applyStepVisibility(step) {
         if (hudBadge) hudBadge.textContent = '5. NİHAİ KANAT & MONTAJ';
         if (hudStation) hudStation.textContent = '📍 Homag & Teleskopik Kasa';
         if (hudTitle) hudTitle.textContent = '5. Adım: Teleskopik Kasa, Pervazlar & Nihai Kanat';
-        if (hudDesc) hudDesc.textContent = 'PVC bantlı kanat, 120 mm teleskopik ayarlı kasa ve 80 mm geçme pervazlar ile montaja hazır hale getirilir. 3 rulmanlı menteşe ile açılıp kapanabilir.';
-        if (hudParts) hudParts.textContent = '🎯 4 Kenar PVC Bandı • 🖼️ Teleskopik Kasa • 🪟 80 mm Pervazlar • 🔩 3x Menteşe';
+        if (hudDesc) hudDesc.textContent = 'PVC bantlı kanat, 120 mm teleskopik ayarlı kasa ve 80 mm geçme pervazlar ile montaja hazır hale getirilir. Gerçekçi Parke ve Duvar Oda modunda mimari mekan simülasyonu incelenebilir.';
+        if (hudParts) hudParts.textContent = '🎯 4 Kenar PVC Bandı • 🖼️ Teleskopik Kasa • 🪟 80 mm Pervazlar • 🔩 3x Menteşe • 🏡 Mimari Mekan';
 
         reset3DCamera('iso');
 
@@ -6676,6 +7008,9 @@ function applyStepVisibility(step) {
         setVis('cam', (three3D.currentData?.has_cam) && (three3D.showCam !== false));
 
         if (three3D.frameGroup) three3D.frameGroup.visible = (three3D.showFrame !== false);
+        if (three3D.roomGroup) three3D.roomGroup.visible = (three3D.showRoom === true);
+        if (three3D.roomSpotLight) three3D.roomSpotLight.visible = (three3D.showRoom === true);
+        if (three3D.gridHelper) three3D.gridHelper.visible = !three3D.showRoom;
         if (three3D.leafPivotGroup) three3D.leafPivotGroup.rotation.y = three3D.doorOpenAngle;
 
         if (hudBadge) hudBadge.textContent = '💥 SERBEST PATLATMA';
@@ -6683,7 +7018,6 @@ function applyStepVisibility(step) {
         if (hudTitle) hudTitle.textContent = 'Serbest Patlatma & Röntgen İnceleme';
         if (hudDesc) hudDesc.textContent = 'Kaydırıcıyı hareket ettirerek kapı katmanlarını birbirinden uzaklaştırabilir, Röntgen moduyla iç yapıyı saydam inceleyebilirsiniz.';
         if (hudParts) hudParts.textContent = 'Tüm Katmanlar ve Detaylar Canlı İncelemede';
-
         update3DExplode(document.getElementById('door-3d-explode-slider')?.value || 40);
     }
 }
@@ -6977,6 +7311,26 @@ function change3DFrameColor(key) {
 }
 
 function toggle3DLayer(layer, isVisible) {
+    if (layer === 'room') {
+        three3D.showRoom = isVisible;
+        if (three3D.roomGroup) three3D.roomGroup.visible = isVisible;
+        if (three3D.roomSpotLight) three3D.roomSpotLight.visible = isVisible;
+        if (three3D.gridHelper) three3D.gridHelper.visible = !isVisible;
+        const btn = document.getElementById('btn-3d-toggle-room');
+        if (btn) {
+            btn.textContent = isVisible ? '🏡 Oda: Açık' : '🏡 Oda: Kapalı';
+            btn.style.background = isVisible ? '#0284C7' : 'rgba(255,255,255,0.1)';
+            btn.style.borderColor = isVisible ? '#38BDF8' : 'rgba(255,255,255,0.2)';
+        }
+        const dropdowns = document.getElementById('room-3d-dropdowns');
+        if (dropdowns) dropdowns.style.display = isVisible ? 'flex' : 'none';
+        const badge = document.getElementById('badge-room-status');
+        if (badge) {
+            badge.textContent = isVisible ? 'Açık' : 'Kapalı';
+            badge.style.color = isVisible ? '#10B981' : '#0284C7';
+        }
+        return;
+    }
     if (layer === 'frame') {
         three3D.showFrame = isVisible;
         if (three3D.frameGroup) three3D.frameGroup.visible = isVisible;
@@ -7001,6 +7355,118 @@ function toggle3DLayer(layer, isVisible) {
     }
     if (three3D.meshes[layer]?.group) {
         three3D.meshes[layer].group.visible = isVisible;
+    }
+}
+
+// ════════════════════════════════════════════════════════════
+// 3D ODA & MEKAN SİMÜLATÖRÜ ETKİLEŞİM FONKSİYONLARI
+// ════════════════════════════════════════════════════════════
+function toggle3DRoom() {
+    three3D.showRoom = !three3D.showRoom;
+    if (three3D.roomGroup) {
+        three3D.roomGroup.visible = three3D.showRoom;
+    }
+    if (three3D.roomSpotLight) {
+        three3D.roomSpotLight.visible = three3D.showRoom;
+    }
+    if (three3D.gridHelper) {
+        three3D.gridHelper.visible = !three3D.showRoom;
+    }
+    const btn = document.getElementById('btn-3d-toggle-room');
+    if (btn) {
+        btn.textContent = three3D.showRoom ? '🏡 Oda: Açık' : '🏡 Oda: Kapalı';
+        btn.style.background = three3D.showRoom ? '#0284C7' : 'rgba(255,255,255,0.1)';
+        btn.style.borderColor = three3D.showRoom ? '#38BDF8' : 'rgba(255,255,255,0.2)';
+    }
+    const dropdowns = document.getElementById('room-3d-dropdowns');
+    if (dropdowns) {
+        dropdowns.style.display = three3D.showRoom ? 'flex' : 'none';
+    }
+    const chk = document.getElementById('layer-room');
+    if (chk) chk.checked = three3D.showRoom;
+    const badge = document.getElementById('badge-room-status');
+    if (badge) {
+        badge.textContent = three3D.showRoom ? 'Açık' : 'Kapalı';
+        badge.style.color = three3D.showRoom ? '#10B981' : '#0284C7';
+    }
+}
+
+function change3DWallColor(key) {
+    three3D.wallColorKey = key;
+    const wallColors = {
+        warm_white: 0xF8FAFC,
+        nordic_grey: 0xCBD5E1,
+        warm_beige: 0xE7DECD,
+        anthracite: 0x334155,
+        night_blue: 0x1E293B,
+        sage_green: 0x9FAF9E
+    };
+    const col = wallColors[key] || 0xCBD5E1;
+    if (three3D.wallMaterials) {
+        three3D.wallMaterials.forEach(m => {
+            m.color.setHex(col);
+            m.needsUpdate = true;
+        });
+    }
+    const sel = document.getElementById('door-3d-wall-color');
+    if (sel) sel.value = key;
+    const lbl = document.getElementById('label-cur-wall-color');
+    const names = {
+        warm_white: 'Mat Beyaz',
+        nordic_grey: 'İskandinav Gri',
+        warm_beige: 'Sıcak Bej',
+        anthracite: 'Loft Antrasit',
+        night_blue: 'Gece Mavisi',
+        sage_green: 'Adaçayı Yeşili'
+    };
+    if (lbl) lbl.textContent = names[key] || key;
+
+    ['warm_white', 'nordic_grey', 'warm_beige', 'anthracite', 'night_blue', 'sage_green'].forEach(k => {
+        const sw = document.getElementById(`swatch-wall-${k}`);
+        if (sw) sw.style.borderColor = (k === key) ? '#0284C7' : '#CBD5E1';
+    });
+}
+
+function selectWallColorSwatch(key) {
+    change3DWallColor(key);
+    if (!three3D.showRoom) {
+        toggle3DRoom();
+    }
+}
+
+function change3DFloorType(key) {
+    three3D.floorKey = key;
+    if (three3D.floorMesh) {
+        const tex = generateParquetTexture(key);
+        three3D.floorMesh.material.map = tex;
+        three3D.floorMesh.material.needsUpdate = true;
+    }
+    const sel = document.getElementById('door-3d-floor-type');
+    if (sel) sel.value = key;
+    const lbl = document.getElementById('label-cur-floor-type');
+    const names = {
+        oak: 'Doğal Meşe',
+        walnut: 'Koyu Ceviz',
+        grey: 'Gri Meşe',
+        whitewash: 'Beyaz Meşe'
+    };
+    if (lbl) lbl.textContent = names[key] || key;
+
+    ['oak', 'walnut', 'grey', 'whitewash'].forEach(k => {
+        const b = document.getElementById(`btn-floor-${k}`);
+        if (b) {
+            const isActive = (k === key);
+            b.style.background = isActive ? '#FEF3C7' : '#F8FAFC';
+            b.style.color = isActive ? '#78350F' : '#334155';
+            b.style.borderColor = isActive ? '#D97706' : '#E2E8F0';
+        }
+    });
+}
+
+function selectFloorTypeSwatch(key) {
+    change3DFloorType(key);
+    if (!three3D.showRoom) {
+        toggle3DRoom();
     }
 }
 </script>
