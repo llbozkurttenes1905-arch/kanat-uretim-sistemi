@@ -655,8 +655,10 @@ class UserUpdate(BaseModel):
 @app.post("/api/auth/login")
 def login(req: LoginRequest):
     users = load_users()
+    in_user = (req.username or "").strip().lower()
+    in_pass = (req.password or "").strip()
     for uid, u in users.items():
-        if u["username"] == req.username and u["password"] == req.password:
+        if u.get("username", "").strip().lower() == in_user and u.get("password", "").strip() == in_pass:
             return {"status": "success", "user": {k: v for k, v in u.items() if k != "password"}}
     raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı")
 
