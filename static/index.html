@@ -4867,6 +4867,281 @@ function populate3DSidebar(data) {
     if (lblCam) lblCam.style.display = data.has_cam ? 'flex' : 'none';
 }
 
+// ════════════════════════════════════════════════════════════
+// ERDOOR VEKTÖREL CNC DESEN & DOKU ÇİZİM MOTORU (PROCEDURAL)
+// Panel üzerine doğrudan CNC deseni, ayna, göbek ve tarak çizer!
+// ════════════════════════════════════════════════════════════
+function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 2048;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 1. Taban Kapı Rengi (WPC / Ahşap Kaplama)
+    ctx.fillStyle = colorHexStr || '#D4B185';
+    ctx.fillRect(0, 0, W, H);
+
+    // 2. Doğal Ahşap / Kompozit Hare & Doku Çizgileri
+    ctx.save();
+    for (let i = 0; i < 400; i++) {
+        const gx = Math.random() * W;
+        const gAlpha = 0.018 + Math.random() * 0.035;
+        ctx.strokeStyle = (Math.random() > 0.5) ? `rgba(255,255,255,${gAlpha})` : `rgba(0,0,0,${gAlpha})`;
+        ctx.lineWidth = 1 + Math.random() * 2;
+        ctx.beginPath();
+        ctx.moveTo(gx, 0);
+        ctx.bezierCurveTo(gx + (Math.random()-0.5)*16, H*0.35, gx + (Math.random()-0.5)*16, H*0.7, gx + (Math.random()-0.5)*10, H);
+        ctx.stroke();
+    }
+
+    // Dış Kenar Pah & Ortam Gölgelendirmesi (Ambient Occlusion)
+    const gL = ctx.createLinearGradient(0, 0, 24, 0);
+    gL.addColorStop(0, 'rgba(0,0,0,0.20)');
+    gL.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gL; ctx.fillRect(0, 0, 24, H);
+
+    const gR = ctx.createLinearGradient(W, 0, W - 24, 0);
+    gR.addColorStop(0, 'rgba(0,0,0,0.20)');
+    gR.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gR; ctx.fillRect(W - 24, 0, 24, H);
+
+    const gT = ctx.createLinearGradient(0, 0, 0, 24);
+    gT.addColorStop(0, 'rgba(0,0,0,0.18)');
+    gT.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gT; ctx.fillRect(0, 0, W, 24);
+
+    const gB = ctx.createLinearGradient(0, H, 0, H - 24);
+    gB.addColorStop(0, 'rgba(0,0,0,0.22)');
+    gB.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gB; ctx.fillRect(0, H - 24, W, 24);
+    ctx.restore();
+
+    // Kol ve Kilit Barel Yuvası (Standart 1000mm kilit aksında CNC boşaltması)
+    const handleY = H * 0.505;
+    const handleX = W * 0.86;
+    ctx.save();
+    ctx.fillStyle = '#0F172A';
+    ctx.beginPath();
+    ctx.arc(handleX, handleY - 45, 11, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(handleX, handleY + 22, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(handleX - 4, handleY + 22, 8, 14);
+    ctx.restore();
+
+    if (!showPattern) {
+        return canvas; // Sadece ham düz WPC panel
+    }
+
+    // ── MODEL ALGILAMA & DOĞRUDAN PANEL ÜZERİNE CNC ÇİZİMİ ──
+    const mCode = (data.model_code || '').toUpperCase();
+    const fType = data.fuga_pattern?.type || 'none';
+
+    function drawCNCH(y, widthRatio = 0.88, h = 14) {
+        const gw = W * widthRatio;
+        const gx = (W - gw) / 2;
+        ctx.save();
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+        ctx.fillRect(gx, y - h/2, gw, 3);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.80)';
+        ctx.fillRect(gx, y - h/2 + 2, gw, h - 4);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.fillRect(gx, y + h/2 - 2, gw, 3);
+        ctx.restore();
+    }
+
+    function drawCNCV(x, startY = 120, endY = H - 120, w = 14) {
+        ctx.save();
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+        ctx.fillRect(x - w/2, startY, 3, endY - startY);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.80)';
+        ctx.fillRect(x - w/2 + 2, startY, w - 4, endY - startY);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.fillRect(x + w/2 - 2, startY, 3, endY - startY);
+        ctx.restore();
+    }
+
+    function drawMoldedPanel(rx, ry, rw, rh) {
+        ctx.save();
+        // Dış freze kanalı
+        ctx.lineWidth = 7;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.70)';
+        ctx.strokeRect(rx, ry, rw, rh);
+        
+        // Işık pah kırma yansıması
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.strokeRect(rx - 3, ry - 3, rw + 6, rh + 6);
+
+        // Kademeli iç profil
+        const in1 = 20;
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+        ctx.strokeRect(rx + in1, ry + in1, rw - in1*2, rh - in1*2);
+
+        // İç ayna / göbek yükseltisi
+        const in2 = 36;
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+        ctx.fillRect(rx + in2, ry + in2, rw - in2*2, rh - in2*2);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+        ctx.strokeRect(rx + in2, ry + in2, rw - in2*2, rh - in2*2);
+        ctx.restore();
+    }
+
+    function drawFlutedGrille(gx, gy, gw, gh, count = 15) {
+        ctx.save();
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+        ctx.fillRect(gx, gy, gw, 6);
+        ctx.fillRect(gx, gy + gh - 6, gw, 6);
+        
+        const step = gw / (count + 1);
+        for (let i = 1; i <= count; i++) {
+            const vx = gx + i * step;
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+            ctx.fillRect(vx - 5, gy + 8, 3, gh - 16);
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+            ctx.fillRect(vx - 2, gy + 8, 5, gh - 16);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.38)';
+            ctx.fillRect(vx + 3, gy + 8, 2, gh - 16);
+        }
+        ctx.restore();
+    }
+
+    function drawGlass(gx, gy, gw, gh) {
+        ctx.save();
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = '#0F172A';
+        ctx.strokeRect(gx, gy, gw, gh);
+        
+        const glassGrad = ctx.createLinearGradient(gx, gy, gx + gw, gy + gh);
+        glassGrad.addColorStop(0, '#BAE6FD');
+        glassGrad.addColorStop(0.3, '#E0F2FE');
+        glassGrad.addColorStop(0.7, '#93C5FD');
+        glassGrad.addColorStop(1, '#CFFAFE');
+        ctx.fillStyle = glassGrad;
+        ctx.fillRect(gx + 7, gy + 7, gw - 14, gh - 14);
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.beginPath();
+        ctx.moveTo(gx + 25, gy + 7);
+        ctx.lineTo(gx + 80, gy + 7);
+        ctx.lineTo(gx + 7, gy + 130);
+        ctx.lineTo(gx + 7, gy + 50);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // MODELLERİ KATEGORİLE:
+    const isClassic = (
+        mCode === 'ER220' || mCode === 'ER250' || mCode === 'ER520' || mCode === 'ER540' ||
+        mCode === 'ER550' || mCode === 'ER560' || mCode === 'ER570' || mCode === 'ER590' ||
+        mCode.startsWith('ER100') || mCode.startsWith('ER101') || mCode === 'EROZL001' ||
+        mCode === 'EROZL009' || mCode === 'EROZL011' || mCode === 'EROZL013' || mCode === 'EROZL020'
+    );
+
+    if (isClassic && !data.has_cam) {
+        // Üst Ayna Göbek
+        drawMoldedPanel(150, 160, W - 300, 680);
+        // Orta Dikey Tarak Çıtaları (Kullanıcının görselindeki model!)
+        drawFlutedGrille(200, 890, W - 400, 260, 15);
+        // Alt Ayna Göbek
+        drawMoldedPanel(150, 1200, W - 300, 680);
+
+    } else if (data.has_cam) {
+        if (mCode === 'ER103' || mCode === 'ER511') {
+            drawCNCH(H * 0.28);
+            drawGlass(180, H * 0.28 - 90, W - 360, 180);
+            drawCNCH(H * 0.50);
+            drawGlass(180, H * 0.50 - 90, W - 360, 180);
+            drawCNCH(H * 0.72);
+            drawGlass(180, H * 0.72 - 90, W - 360, 180);
+        } else if (mCode === 'ER261' || mCode === 'ER301' || mCode === 'ER941' || mCode === 'ER951') {
+            [0.24, 0.40, 0.60, 0.76].forEach(p => {
+                drawCNCH(H * p);
+                drawGlass(160, H * p - 35, W - 320, 70);
+            });
+        } else {
+            const gw = (mCode === 'ER601') ? W * 0.36 : W * 0.28;
+            const gx = (W - gw) / 2;
+            drawGlass(gx, 220, gw, H - 440);
+        }
+
+    } else if (fType === '2_horizontal' || mCode === 'ER102' || mCode === 'ER602') {
+        drawCNCH(H * 0.30);
+        drawCNCH(H * 0.70);
+
+    } else if (fType === '3_horizontal' || mCode === 'ER510' || mCode === 'ER5000') {
+        drawCNCH(H * 0.26);
+        drawCNCH(H * 0.50);
+        drawCNCH(H * 0.74);
+
+    } else if (fType === '3_horizontal_wide' || mCode === 'ER300') {
+        drawCNCH(H * 0.26, 0.88, 26);
+        drawCNCH(H * 0.50, 0.88, 26);
+        drawCNCH(H * 0.74, 0.88, 26);
+
+    } else if (fType === '4_horizontal' || mCode === 'ER260' || mCode === 'ER940') {
+        [0.22, 0.40, 0.60, 0.78].forEach(p => drawCNCH(H * p));
+
+    } else if (fType === '5_horizontal' || mCode === 'ER210' || mCode === 'ER950') {
+        [0.18, 0.34, 0.50, 0.66, 0.82].forEach(p => drawCNCH(H * p));
+
+    } else if (fType === '6_horizontal' || mCode === 'ER600') {
+        [0.16, 0.30, 0.44, 0.58, 0.72, 0.86].forEach(p => drawCNCH(H * p));
+
+    } else if (fType === 'vertical' || mCode === 'ER610') {
+        drawCNCV(W * 0.26);
+
+    } else if (fType === 'cross' || mCode === 'ER230' || mCode === 'ER620' || mCode === 'ER5012') {
+        drawCNCV(W * 0.26);
+        drawCNCH(H * 0.32);
+        drawCNCH(H * 0.68);
+
+    } else if (fType === 'frame' || mCode === 'ER700' || mCode === 'ER5014') {
+        drawMoldedPanel(130, 180, W - 260, H - 360);
+
+    } else if (fType === 'frame_double' || mCode === 'ER800') {
+        drawMoldedPanel(120, 160, W - 240, H - 320);
+        drawMoldedPanel(200, 240, W - 400, H - 480);
+
+    } else if (fType === 'block' || mCode === 'ER500' || mCode === 'ER960') {
+        drawMoldedPanel(140, 200, W - 280, 480);
+        drawMoldedPanel(140, 780, W - 280, 480);
+        drawMoldedPanel(140, 1360, W - 280, 480);
+
+    } else if (fType === 'asymmetric' || mCode === 'ER930') {
+        drawCNCV(W * 0.30, 200, H - 200);
+        drawCNCH(H * 0.25, 0.65);
+        drawCNCH(H * 0.42, 0.85);
+        drawCNCH(H * 0.60, 0.55);
+        drawCNCH(H * 0.78, 0.85);
+
+    } else if (fType === 'geometric' || mCode === 'ER900' || mCode === 'ER5020' || mCode === 'ER400') {
+        drawMoldedPanel(140, 180, W - 280, 720);
+        drawMoldedPanel(140, 1140, W - 280, 720);
+        drawCNCH(H * 0.48);
+        drawCNCH(H * 0.52);
+
+    } else {
+        // Düz Standart (ER100, ER200)
+        ctx.save();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.12)';
+        ctx.strokeRect(30, 30, W - 60, H - 60);
+        ctx.restore();
+    }
+
+    return canvas;
+}
+
 function render3DDoorModel(data) {
     if (!three3D.doorGroup) return;
 
@@ -4942,51 +5217,53 @@ function render3DDoorModel(data) {
     };
     three3D.doorGroup.add(serenGroup);
 
-    // ── 2. 4 ADET PLASTİK KÖŞE TAKOZU (L-TAKVIYE GÖNYE TAKOZLARI) ──
+    // ── 2. 4 ADET PLASTİK KÖŞE TAKOZU (GERÇEK L-ŞEKLİNDE GÖNYE TAKOZLARI - KESİNLİKLE '+' DEĞİL, NET 'L') ──
     const plasticMat = new THREE.MeshStandardMaterial({
-        color: 0x1E293B, // Sert siyah mühendislik plastiği
+        color: 0x0F172A, // Sert teknik siyah enjeksiyon plastiği
         roughness: 0.35,
         metalness: 0.15
     });
     const cornerGroup = new THREE.Group();
-    const cW = 0.065; // 65mm
-    const cH = 0.065; // 65mm
-    const cTh = STH * 0.92; // 29.5mm (seren içine tam gömülür)
+    const cL = 0.075; // 75 mm kol boyu
+    const cT = 0.020; // 20 mm et kalınlığı (seren genişliği 42mm içine oturur)
+    const cTh = STH * 0.90; // 28.8 mm derinlik (32mm seren içine tam gömülür)
 
-    function makeCornerTakoz(posX, posY, rotZ) {
+    function makeLCornerTakoz(cornerX, cornerY, signX, signY) {
         const takozGrp = new THREE.Group();
-        const leg1 = makeBox(cW, 0.018, cTh, plasticMat, 0x38BDF8, 0.5);
-        leg1.group.position.set(0, 0, 0);
-        takozGrp.add(leg1.group);
+        
+        // 1. Yatay Kol (X ekseni kolu)
+        const hLeg = makeBox(cL, cT, cTh, plasticMat, 0x38BDF8, 0.45);
+        hLeg.group.position.set(signX * cL / 2, signY * cT / 2, 0);
+        takozGrp.add(hLeg.group);
 
-        const leg2 = makeBox(0.018, cH, cTh, plasticMat, 0x38BDF8, 0.5);
-        leg2.group.position.set(0, 0, 0);
-        takozGrp.add(leg2.group);
+        // 2. Dikey Kol (Y ekseni kolu) - Yatay kol ile çakışmayan temiz L bağlantısı
+        const vLeg = makeBox(cT, cL - cT, cTh, plasticMat, 0x38BDF8, 0.45);
+        vLeg.group.position.set(signX * cT / 2, signY * (cT + (cL - cT) / 2), 0);
+        takozGrp.add(vLeg.group);
 
-        const gusset = makeBox(0.025, 0.025, cTh, plasticMat, 0x64748B, 0.6);
-        gusset.group.position.set(0, 0, 0);
-        gusset.group.rotation.z = Math.PI / 4;
+        // 3. İç Köşe 45° Rijitlik Takviye Kirişi (Gusset Rib)
+        const gW = 0.024;
+        const gusset = makeBox(gW, 0.006, cTh, plasticMat, 0x38BDF8, 0.5);
+        gusset.group.position.set(signX * (cT + gW * 0.38), signY * (cT + gW * 0.38), 0);
+        gusset.group.rotation.z = (signX * signY > 0) ? -Math.PI / 4 : Math.PI / 4;
         takozGrp.add(gusset.group);
 
-        takozGrp.position.set(posX, posY, 0);
-        takozGrp.rotation.z = rotZ;
+        takozGrp.position.set(cornerX, cornerY, 0);
         return takozGrp;
     }
 
-    // Sol Üst Köşe Takozu
-    const cTL = makeCornerTakoz(-W/2 + SW + cW/2, H/2 - SW - cH/2, 0);
+    // 4 Köşe (Sol Üst, Sağ Üst, Sol Alt, Sağ Alt)
+    // Seren iç köşeleri: X = +- (W/2 - SW), Y = +- (H/2 - SW)
+    const cTL = makeLCornerTakoz(-W/2 + SW, H/2 - SW, 1, -1);
     cornerGroup.add(cTL);
 
-    // Sağ Üst Köşe Takozu
-    const cTR = makeCornerTakoz(W/2 - SW - cW/2, H/2 - SW - cH/2, Math.PI / 2);
+    const cTR = makeLCornerTakoz(W/2 - SW, H/2 - SW, -1, -1);
     cornerGroup.add(cTR);
 
-    // Sol Alt Köşe Takozu
-    const cBL = makeCornerTakoz(-W/2 + SW + cW/2, -H/2 + SW + cH/2, -Math.PI / 2);
+    const cBL = makeLCornerTakoz(-W/2 + SW, -H/2 + SW, 1, 1);
     cornerGroup.add(cBL);
 
-    // Sağ Alt Köşe Takozu
-    const cBR = makeCornerTakoz(W/2 - SW - cW/2, -H/2 + SW + cH/2, Math.PI);
+    const cBR = makeLCornerTakoz(W/2 - SW, -H/2 + SW, -1, 1);
     cornerGroup.add(cBR);
 
     three3D.meshes.cornerTakoz = { group: cornerGroup, cTL, cTR, cBL, cBR };
@@ -5036,220 +5313,255 @@ function render3DDoorModel(data) {
     three3D.meshes.core = { group: coreGroup, mesh: singleCore.mesh };
     three3D.doorGroup.add(coreGroup);
 
-    // ── 5. ÖN VE ARKA WPC/KOMPOZİT PANELLER ──
-    const backPanelMat = new THREE.MeshStandardMaterial({
-        color: colorHex,
-        roughness: 0.35,
-        metalness: 0.08,
-        transparent: true,
-        opacity: three3D.isXRay ? 0.22 : 1.0
-    });
+    // ── 5. ÖN VE ARKA WPC/KOMPOZİT PANELLER (İKİ TARAFI DA AYNI DESENLİ!) ──
+    const colorHexStr = data.color_hex || '#D4B185';
+    const colorHexInt = parseInt(colorHexStr.replace('#', '0x'), 16);
 
-    const frontEdgeMat = new THREE.MeshStandardMaterial({
-        color: colorHex,
+    // Procedural canvas generating vector CNC drawings directly on the panel surface
+    const procCanvas = generateProceduralDoorTexture(data, colorHexStr, three3D.showPattern !== false);
+    const proceduralTexture = new THREE.CanvasTexture(procCanvas);
+    proceduralTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const edgeMat = new THREE.MeshStandardMaterial({
+        color: colorHexInt,
         roughness: 0.35,
-        metalness: 0.08,
+        metalness: 0.05,
         transparent: true,
         opacity: three3D.isXRay ? 0.22 : 1.0
     });
 
     const frontFaceMat = new THREE.MeshStandardMaterial({
-        color: (data.pattern_url && three3D.showPattern !== false) ? 0xFFFFFF : colorHex,
+        color: 0xFFFFFF,
         roughness: 0.38,
         metalness: 0.04,
+        map: proceduralTexture,
         transparent: true,
         opacity: three3D.isXRay ? 0.22 : 1.0
     });
 
-    // Texture loader for authentic Erdoor pattern image
-    if (data.pattern_url && three3D.showPattern !== false) {
-        const texLoader = new THREE.TextureLoader();
-        texLoader.load(data.pattern_url, (tex) => {
-            tex.colorSpace = THREE.SRGBColorSpace;
-            tex.generateMipmaps = true;
-            frontFaceMat.map = tex;
-            frontFaceMat.color.setHex(0xFFFFFF);
-            frontFaceMat.needsUpdate = true;
-        }, undefined, (err) => {
-            console.warn('Pattern texture load failed, fallback to solid color:', err);
-            frontFaceMat.color.setHex(colorHex);
-            frontFaceMat.needsUpdate = true;
-        });
-    }
+    const backFaceMat = new THREE.MeshStandardMaterial({
+        color: 0xFFFFFF,
+        roughness: 0.38,
+        metalness: 0.04,
+        map: proceduralTexture, // "iki tarafı da aynı desenli"
+        transparent: true,
+        opacity: three3D.isXRay ? 0.22 : 1.0
+    });
 
-    // Three.js BoxGeometry Face Order: +X, -X, +Y, -Y, +Z (Front), -Z (Back)
+    // Ön Panel (+Z Yüzü Desenli)
     const frontBoxMaterials = [
-        frontEdgeMat, // +X
-        frontEdgeMat, // -X
-        frontEdgeMat, // +Y
-        frontEdgeMat, // -Y
-        frontFaceMat, // +Z (Ön Yüz Dokusu)
-        frontEdgeMat  // -Z
+        edgeMat, edgeMat, edgeMat, edgeMat, frontFaceMat, edgeMat
     ];
-
     const frontBox = makeBox(W, H, PTH, frontBoxMaterials);
     three3D.meshes.front = frontBox;
     three3D.frontFaceMat = frontFaceMat;
+    three3D.backFaceMat = backFaceMat;
     three3D.doorGroup.add(frontBox.group);
 
-    const backBox = makeBox(W, H, PTH, backPanelMat);
+    // Arka Panel (-Z Yüzü Aynı Desenli)
+    const backBoxMaterials = [
+        edgeMat, edgeMat, edgeMat, edgeMat, edgeMat, backFaceMat
+    ];
+    const backBox = makeBox(W, H, PTH, backBoxMaterials);
     three3D.meshes.back = backBox;
     three3D.doorGroup.add(backBox.group);
 
-    // ── 5.B FİZİKSEL 3D CNC FUGA DERZLERİ VE ÇİZGİLERİ ──
-    const fugaGroup = new THREE.Group();
-    const fugaMat = new THREE.MeshStandardMaterial({
-        color: 0x1E293B, // CNC freze kanal rengi (koyu antrasit / derz)
-        roughness: 0.75,
-        metalness: 0.25
-    });
+    // ── 5.B FİZİKSEL 3D CNC FREZE KANALLARI VE RÖLYEFLERİ (ÖN VE ARKA İKİ TARAFA DA EKLENİR!) ──
+    const allFugaGroups = [];
+    const allCamGroups = [];
 
-    const fType = data.fuga_pattern?.type || (data.has_fuga ? '3_horizontal' : 'none');
-    const fZ = (PTH / 2) + 0.0006; // Ön panel yüzeyinin hemen üzerinde
-    const fTh = 0.0016; // 1.6mm kabartma/oyuk kalınlığı
-    const fH = 0.008; // 8mm standart fuga genişliği
-    const fW = W * 0.90; // Kapı eninin %90'ı genişliğinde
+    function build3DCarvingsAndGlass(parentGroup, isBack) {
+        const signZ = isBack ? -1 : 1;
+        const fZ = (PTH / 2 + 0.0006) * signZ;
+        const fTh = 0.0016; // 1.6mm kabartma/oyuk derinliği
+        const fH = 0.008; // 8mm standart fuga genişliği
+        const fW = W * 0.90;
 
-    function addHGroove(posY, customW = fW, customH = fH) {
-        const groove = makeBox(customW, customH, fTh, fugaMat, 0x0F172A, 0.4);
-        groove.group.position.set(0, posY, fZ);
-        fugaGroup.add(groove.group);
-    }
-
-    function addVGroove(posX, customH = H * 0.88, customW = fH) {
-        const groove = makeBox(customW, customH, fTh, fugaMat, 0x0F172A, 0.4);
-        groove.group.position.set(posX, 0, fZ);
-        fugaGroup.add(groove.group);
-    }
-
-    if (fType === '2_horizontal') {
-        addHGroove(H * 0.25);
-        addHGroove(-H * 0.25);
-    } else if (fType === '3_horizontal') {
-        addHGroove(H * 0.28);
-        addHGroove(0);
-        addHGroove(-H * 0.28);
-    } else if (fType === '3_horizontal_wide') {
-        addHGroove(H * 0.28, fW, 0.016);
-        addHGroove(0, fW, 0.016);
-        addHGroove(-H * 0.28, fW, 0.016);
-    } else if (fType === '4_horizontal') {
-        [-0.36, -0.12, 0.12, 0.36].forEach(p => addHGroove(H * p));
-    } else if (fType === '5_horizontal') {
-        [-0.40, -0.20, 0, 0.20, 0.40].forEach(p => addHGroove(H * p));
-    } else if (fType === '6_horizontal') {
-        [-0.42, -0.25, -0.08, 0.08, 0.25, 0.42].forEach(p => addHGroove(H * p));
-    } else if (fType === 'vertical') {
-        addVGroove(W * 0.22);
-    } else if (fType === 'cross') {
-        addVGroove(W * 0.20);
-        addHGroove(H * 0.22);
-        addHGroove(-H * 0.22);
-    } else if (fType === 'frame') {
-        const frW = W * 0.72;
-        const frH = H * 0.82;
-        addHGroove(frH / 2, frW);
-        addHGroove(-frH / 2, frW);
-        addVGroove(frW / 2, frH);
-        addVGroove(-frW / 2, frH);
-    } else if (fType === 'frame_double') {
-        [0.72, 0.60].forEach((ratio) => {
-            const frW = W * ratio;
-            const frH = H * (ratio + 0.10);
-            addHGroove(frH / 2, frW);
-            addHGroove(-frH / 2, frW);
-            addVGroove(frW / 2, frH);
-            addVGroove(-frW / 2, frH);
-        });
-    } else if (fType === 'geometric') {
-        addHGroove(H * 0.30, W * 0.75);
-        addHGroove(-H * 0.30, W * 0.75);
-        const diag1 = makeBox(W * 0.50, fH, fTh, fugaMat, 0x0F172A, 0.4);
-        diag1.group.position.set(0, 0, fZ);
-        diag1.group.rotation.z = Math.PI / 6;
-        fugaGroup.add(diag1.group);
-        const diag2 = makeBox(W * 0.50, fH, fTh, fugaMat, 0x0F172A, 0.4);
-        diag2.group.position.set(0, 0, fZ);
-        diag2.group.rotation.z = -Math.PI / 6;
-        fugaGroup.add(diag2.group);
-    } else if (fType === 'asymmetric') {
-        addHGroove(H * 0.32, W * 0.60);
-        addHGroove(H * 0.15, W * 0.85);
-        addHGroove(-H * 0.10, W * 0.70);
-        addHGroove(-H * 0.35, W * 0.85);
-        addVGroove(-W * 0.25, H * 0.70);
-    } else if (fType === 'block') {
-        [-0.30, 0, 0.30].forEach(p => {
-            const block = makeBox(W * 0.85, 0.045, fTh, fugaMat, 0x0F172A, 0.4);
-            block.group.position.set(0, H * p, fZ);
-            fugaGroup.add(block.group);
-        });
-    }
-
-    fugaGroup.visible = (data.has_fuga && three3D.showFuga !== false);
-    frontBox.group.add(fugaGroup);
-    three3D.meshes.fuga = { group: fugaGroup };
-
-    // ── 5.C CAMLI MODELLER İÇİN 3D BUZLU GÜVENLİK CAMI & ÇITA MONTAJI ──
-    const camGroup = new THREE.Group();
-    if (data.has_cam) {
-        const glassMat = new THREE.MeshStandardMaterial({
-            color: 0xBAE6FD,
-            roughness: 0.1,
-            metalness: 0.85,
-            transparent: true,
-            opacity: 0.65
-        });
-        const trimMat = new THREE.MeshStandardMaterial({
-            color: 0x0F172A,
-            roughness: 0.4,
-            metalness: 0.1
+        const fGrp = new THREE.Group();
+        const fugaMat = new THREE.MeshStandardMaterial({
+            color: 0x1E293B, // CNC freze kanal koyu rengi
+            roughness: 0.75,
+            metalness: 0.25
         });
 
-        function makeGlassWithTrim(gw, gh, posX, posY) {
-            const gGrp = new THREE.Group();
-            const glass = makeBox(gw, gh, 0.006, glassMat, 0x38BDF8, 0.8);
-            glass.group.position.set(0, 0, fZ + 0.001);
-            gGrp.add(glass.group);
-
-            const tW = 0.014;
-            const tTh = 0.008;
-            const trimTop = makeBox(gw + 2*tW, tW, tTh, trimMat);
-            trimTop.group.position.set(0, gh/2 + tW/2, fZ + 0.002);
-            gGrp.add(trimTop.group);
-            const trimBot = makeBox(gw + 2*tW, tW, tTh, trimMat);
-            trimBot.group.position.set(0, -gh/2 - tW/2, fZ + 0.002);
-            gGrp.add(trimBot.group);
-            const trimLeft = makeBox(tW, gh, tTh, trimMat);
-            trimLeft.group.position.set(-gw/2 - tW/2, 0, fZ + 0.002);
-            gGrp.add(trimLeft.group);
-            const trimRight = makeBox(tW, gh, tTh, trimMat);
-            trimRight.group.position.set(gw/2 + tW/2, 0, fZ + 0.002);
-            gGrp.add(trimRight.group);
-
-            gGrp.position.set(posX, posY, 0);
-            return gGrp;
+        function addH(posY, customW = fW, customH = fH) {
+            const m = makeBox(customW, customH, fTh, fugaMat, 0x0F172A, 0.4);
+            m.group.position.set(0, posY, fZ);
+            fGrp.add(m.group);
         }
 
-        const mCode = data.model_code || '';
-        if (mCode === 'ER103' || mCode === 'ER511') {
-            [-0.28, 0, 0.28].forEach(p => {
-                camGroup.add(makeGlassWithTrim(W * 0.55, 0.18, 0, H * p));
-            });
-        } else if (mCode === 'ER261' || mCode === 'ER301' || mCode === 'ER941' || mCode === 'ER951') {
-            [-0.30, -0.10, 0.10, 0.30].forEach(p => {
-                camGroup.add(makeGlassWithTrim(W * 0.60, 0.06, 0, H * p));
-            });
-        } else {
-            const cWidth = (mCode === 'ER601') ? W * 0.30 : W * 0.24;
-            const cHeight = H * 0.75;
-            camGroup.add(makeGlassWithTrim(cWidth, cHeight, 0, 0));
+        function addV(posX, customH = H * 0.88, customW = fH, posY = 0) {
+            const m = makeBox(customW, customH, fTh, fugaMat, 0x0F172A, 0.4);
+            m.group.position.set(posX, posY, fZ);
+            fGrp.add(m.group);
         }
 
-        camGroup.visible = three3D.showCam !== false;
-        frontBox.group.add(camGroup);
-        three3D.meshes.cam = { group: camGroup };
+        const mCode = (data.model_code || '').toUpperCase();
+        const fType = data.fuga_pattern?.type || 'none';
+        const isClassic = (
+            mCode === 'ER220' || mCode === 'ER250' || mCode === 'ER520' || mCode === 'ER540' ||
+            mCode === 'ER550' || mCode === 'ER560' || mCode === 'ER570' || mCode === 'ER590' ||
+            mCode.startsWith('ER100') || mCode.startsWith('ER101') || mCode === 'EROZL001' ||
+            mCode === 'EROZL009' || mCode === 'EROZL011' || mCode === 'EROZL013' || mCode === 'EROZL020'
+        );
+
+        if (isClassic && !data.has_cam) {
+            // Üst Ayna / Göbek Çerçevesi
+            const uW = W * 0.68;
+            const uH = H * 0.32;
+            const uY = H * 0.28;
+            addH(uY + uH/2, uW);
+            addH(uY - uH/2, uW);
+            addV(uW/2, uH, fH, uY);
+            addV(-uW/2, uH, fH, uY);
+
+            // Orta Tarak Dikey Çıtaları (Fluted Grille) - 13 adet dikey CNC freze kanalı
+            const gCount = 13;
+            const gStep = (W * 0.52) / gCount;
+            for (let i = -Math.floor(gCount/2); i <= Math.floor(gCount/2); i++) {
+                addV(i * gStep, H * 0.12, 0.005, -H * 0.005);
+            }
+            addH(H * 0.055, W * 0.60);
+            addH(-H * 0.065, W * 0.60);
+
+            // Alt Ayna / Göbek Çerçevesi
+            const lW = W * 0.68;
+            const lH = H * 0.32;
+            const lY = -H * 0.28;
+            addH(lY + lH/2, lW);
+            addH(lY - lH/2, lW);
+            addV(lW/2, lH, fH, lY);
+            addV(-lW/2, lH, fH, lY);
+
+        } else if (fType === '2_horizontal' || mCode === 'ER102' || mCode === 'ER602') {
+            addH(H * 0.25);
+            addH(-H * 0.25);
+        } else if (fType === '3_horizontal' || mCode === 'ER510' || mCode === 'ER5000') {
+            addH(H * 0.28);
+            addH(0);
+            addH(-H * 0.28);
+        } else if (fType === '3_horizontal_wide' || mCode === 'ER300') {
+            addH(H * 0.28, fW, 0.016);
+            addH(0, fW, 0.016);
+            addH(-H * 0.28, fW, 0.016);
+        } else if (fType === '4_horizontal' || mCode === 'ER260' || mCode === 'ER940') {
+            [-0.36, -0.12, 0.12, 0.36].forEach(p => addH(H * p));
+        } else if (fType === '5_horizontal' || mCode === 'ER210' || mCode === 'ER950') {
+            [-0.40, -0.20, 0, 0.20, 0.40].forEach(p => addH(H * p));
+        } else if (fType === '6_horizontal' || mCode === 'ER600') {
+            [-0.42, -0.25, -0.08, 0.08, 0.25, 0.42].forEach(p => addH(H * p));
+        } else if (fType === 'vertical' || mCode === 'ER610') {
+            addV(W * 0.22);
+        } else if (fType === 'cross' || mCode === 'ER230' || mCode === 'ER620' || mCode === 'ER5012') {
+            addV(W * 0.20);
+            addH(H * 0.22);
+            addH(-H * 0.22);
+        } else if (fType === 'frame' || mCode === 'ER700' || mCode === 'ER5014') {
+            const frW = W * 0.72;
+            const frH = H * 0.82;
+            addH(frH / 2, frW);
+            addH(-frH / 2, frW);
+            addV(frW / 2, frH);
+            addV(-frW / 2, frH);
+        } else if (fType === 'frame_double' || mCode === 'ER800') {
+            [0.72, 0.60].forEach((ratio) => {
+                const frW = W * ratio;
+                const frH = H * (ratio + 0.10);
+                addH(frH / 2, frW);
+                addH(-frH / 2, frW);
+                addV(frW / 2, frH);
+                addV(-frW / 2, frH);
+            });
+        } else if (fType === 'block' || mCode === 'ER500' || mCode === 'ER960') {
+            [-0.30, 0, 0.30].forEach(p => {
+                const block = makeBox(W * 0.85, 0.045, fTh, fugaMat, 0x0F172A, 0.4);
+                block.group.position.set(0, H * p, fZ);
+                fGrp.add(block.group);
+            });
+        } else if (fType === 'asymmetric' || mCode === 'ER930') {
+            addH(H * 0.32, W * 0.60);
+            addH(H * 0.15, W * 0.85);
+            addH(-H * 0.10, W * 0.70);
+            addH(-H * 0.35, W * 0.85);
+            addV(-W * 0.25, H * 0.70);
+        }
+
+        fGrp.visible = (data.has_fuga || isClassic) && three3D.showFuga !== false;
+        parentGroup.add(fGrp);
+        allFugaGroups.push(fGrp);
+
+        // 3D Buzlu Cam Modülü
+        if (data.has_cam) {
+            const cGrp = new THREE.Group();
+            const glassMat = new THREE.MeshStandardMaterial({
+                color: 0xBAE6FD,
+                roughness: 0.1,
+                metalness: 0.85,
+                transparent: true,
+                opacity: 0.65
+            });
+            const trimMat = new THREE.MeshStandardMaterial({
+                color: 0x0F172A,
+                roughness: 0.4,
+                metalness: 0.1
+            });
+
+            function makeGlass(gw, gh, posX, posY) {
+                const g = new THREE.Group();
+                const glass = makeBox(gw, gh, 0.006, glassMat, 0x38BDF8, 0.8);
+                glass.group.position.set(0, 0, fZ + 0.001 * signZ);
+                g.add(glass.group);
+
+                const tW = 0.014;
+                const tTh = 0.008;
+                const trimTop = makeBox(gw + 2*tW, tW, tTh, trimMat);
+                trimTop.group.position.set(0, gh/2 + tW/2, fZ + 0.002 * signZ);
+                g.add(trimTop.group);
+                const trimBot = makeBox(gw + 2*tW, tW, tTh, trimMat);
+                trimBot.group.position.set(0, -gh/2 - tW/2, fZ + 0.002 * signZ);
+                g.add(trimBot.group);
+                const trimLeft = makeBox(tW, gh, tTh, trimMat);
+                trimLeft.group.position.set(-gw/2 - tW/2, 0, fZ + 0.002 * signZ);
+                g.add(trimLeft.group);
+                const trimRight = makeBox(tW, gh, tTh, trimMat);
+                trimRight.group.position.set(gw/2 + tW/2, 0, fZ + 0.002 * signZ);
+                g.add(trimRight.group);
+
+                g.position.set(posX, posY, 0);
+                return g;
+            }
+
+            if (mCode === 'ER103' || mCode === 'ER511') {
+                [-0.28, 0, 0.28].forEach(p => cGrp.add(makeGlass(W * 0.55, 0.18, 0, H * p)));
+            } else if (mCode === 'ER261' || mCode === 'ER301' || mCode === 'ER941' || mCode === 'ER951') {
+                [-0.30, -0.10, 0.10, 0.30].forEach(p => cGrp.add(makeGlass(W * 0.60, 0.06, 0, H * p)));
+            } else {
+                const cWidth = (mCode === 'ER601') ? W * 0.30 : W * 0.24;
+                const cHeight = H * 0.75;
+                cGrp.add(makeGlass(cWidth, cHeight, 0, 0));
+            }
+
+            cGrp.visible = three3D.showCam !== false;
+            parentGroup.add(cGrp);
+            allCamGroups.push(cGrp);
+        }
     }
+
+    build3DCarvingsAndGlass(frontBox.group, false);
+    build3DCarvingsAndGlass(backBox.group, true); // İKİ TARAFI DA AYNI DESENLİ!
+
+    three3D.meshes.fuga = {
+        group: {
+            set visible(v) { allFugaGroups.forEach(g => g.visible = v); },
+            get visible() { return allFugaGroups[0]?.visible ?? true; }
+        }
+    };
+    three3D.meshes.cam = {
+        group: {
+            set visible(v) { allCamGroups.forEach(g => g.visible = v); },
+            get visible() { return allCamGroups[0]?.visible ?? true; }
+        }
+    };
 
     // ── 6. 4 KENAR PVC KENAR BANDI ÇERÇEVESİ ──
     const pvcMat = new THREE.MeshStandardMaterial({
@@ -5574,26 +5886,24 @@ function toggle3DPattern() {
         btn.style.borderColor = three3D.showPattern ? '#38BDF8' : 'rgba(255,255,255,0.2)';
     }
 
-    if (three3D.frontFaceMat && three3D.currentData) {
-        const colorHex = parseInt((three3D.currentData.color_hex || '#D4B185').replace('#', '0x'), 16);
-        if (three3D.showPattern && three3D.currentData.pattern_url) {
-            const texLoader = new THREE.TextureLoader();
-            texLoader.load(three3D.currentData.pattern_url, (tex) => {
-                tex.colorSpace = THREE.SRGBColorSpace;
-                tex.generateMipmaps = true;
-                three3D.frontFaceMat.map = tex;
-                three3D.frontFaceMat.color.setHex(0xFFFFFF);
-                three3D.frontFaceMat.needsUpdate = true;
-            });
-        } else {
-            three3D.frontFaceMat.map = null;
-            three3D.frontFaceMat.color.setHex(colorHex);
+    if (three3D.currentData) {
+        const colorHexStr = three3D.currentData.color_hex || '#D4B185';
+        const canvas = generateProceduralDoorTexture(three3D.currentData, colorHexStr, three3D.showPattern);
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.colorSpace = THREE.SRGBColorSpace;
+
+        if (three3D.frontFaceMat) {
+            three3D.frontFaceMat.map = tex;
             three3D.frontFaceMat.needsUpdate = true;
+        }
+        if (three3D.backFaceMat) {
+            three3D.backFaceMat.map = tex; // İki tarafı da aynı desenli!
+            three3D.backFaceMat.needsUpdate = true;
         }
     }
 
     if (three3D.meshes.fuga?.group) {
-        three3D.meshes.fuga.group.visible = (three3D.showPattern && three3D.currentData?.has_fuga && three3D.showFuga !== false);
+        three3D.meshes.fuga.group.visible = (three3D.showPattern && three3D.showFuga !== false);
     }
 }
 
