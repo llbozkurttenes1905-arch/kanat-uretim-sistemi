@@ -2310,6 +2310,11 @@
                         </div>
                     </div>
 
+                    <!-- Canlı Karakter Şovu (Sarışın Straplez & Ponpon Kızlar) -->
+                    <div style="display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.06); padding:4px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
+                        <button class="btn-secondary" id="btn-3d-toggle-show" onclick="toggle3DCharacterShow()" style="padding:4px 9px; font-size:11.5px; font-weight:800; background:rgba(255,255,255,0.1); color:#FFF; border:1px solid rgba(255,255,255,0.2);" title="Kapıyı açıp girip çıkan sarışın straplez kadın ve ponpon kızlar şovunu aç/kapat">💃 Şov &amp; Ponponlar: Kapalı</button>
+                    </div>
+
                     <!-- Exploded Slider -->
                     <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:180px;">
                         <span style="font-size:11.5px; font-weight:800; color:#93C5FD; white-space:nowrap;">💥 Patlatma:</span>
@@ -2436,6 +2441,12 @@
                             <span style="font-weight:700;">🏡 Mimari Oda (Duvar &amp; Parke)</span>
                             <span style="margin-left:auto; font-size:10px; color:#0284C7; font-weight:800;" id="badge-room-status">Kapalı</span>
                         </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-characters" onchange="toggle3DLayer('characters', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#E11D48; border:1px solid #9F1239;"></span>
+                            <span style="font-weight:700;">💃 Karakter Şovu (Sarışın &amp; Ponpon Kızlar)</span>
+                            <span style="margin-left:auto; font-size:10px; color:#E11D48; font-weight:800;" id="badge-characters-status">Kapalı</span>
+                        </label>
                     </div>
                 </div>
 
@@ -2469,6 +2480,23 @@
                                 <button type="button" class="btn-secondary" onclick="selectFloorTypeSwatch('whitewash')" id="btn-floor-whitewash" style="font-size:11px; padding:4px 6px; font-weight:700; background:#F8FAFC; color:#334155; border:1px solid #E2E8F0;">⚪ Beyaz Meşe</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- 💃 CANLI KARAKTER ŞOVU KARTI -->
+                <div style="border-top:1px solid #E2E8F0; padding-top:14px;">
+                    <div style="font-size:11px; font-weight:800; color:#E11D48; text-transform:uppercase; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                        <span>💃 CANLI KARAKTER ŞOVU</span>
+                        <span class="badge" style="background:#FFE4E6; color:#E11D48; font-size:9.5px; font-weight:800;">3D ANİMASYON</span>
+                    </div>
+                    <div style="background:#FFF1F2; border:1px solid #FECDD3; border-radius:8px; padding:10px; display:flex; flex-direction:column; gap:8px; font-size:11.5px;">
+                        <div style="font-size:11px; color:#9F1239; line-height:1.4;">
+                            👩‍🦰 <strong>Sarışın Straplez Kadın:</strong> Kapı koluna uzanıp kapıyı açar, odadan içeri ve dışarı yürüyüş yapar.<br>
+                            📣 <strong>2x Ponpon Kız:</strong> Girişin sağ ve solunda coşkulu ponpon dansıyla karşılar!
+                        </div>
+                        <button type="button" class="btn-primary" id="btn-sidebar-char-show" onclick="toggle3DCharacterShow()" style="background:#E11D48; border-color:#BE123C; padding:7px 12px; font-size:12px; font-weight:800; border-radius:6px; cursor:pointer; width:100%; text-align:center;">
+                            💃 Şovu Başlat (Sarışın &amp; Ponponlar)
+                        </button>
                     </div>
                 </div>
 
@@ -4875,6 +4903,9 @@ let three3D = {
     floorMesh: null,
     roomSpotLight: null,
     gridHelper: null,
+    showCharacters: false,
+    charactersGroup: null,
+    charAnimTime: 0,
     isDoorOpen: false,
     doorOpenAngle: 0,
     targetDoorAngle: 0,
@@ -5019,6 +5050,11 @@ function init3DScene() {
                 if (degLabel) degLabel.textContent = `${deg}°`;
             }
         }
+        // Update Character & Cheerleader Animation Loop
+        if (three3D.showCharacters && typeof update3DCharactersAnimation === 'function') {
+            update3DCharactersAnimation();
+        }
+
         if (three3D.controls) {
             three3D.controls.update();
         }
@@ -6580,6 +6616,11 @@ function render3DDoorModel(data) {
     // ════════════════════════════════════════════════════════════
     create3DRoomEnvironment(W, H, jambDepth, gap, jambTh, casingW);
 
+    // ════════════════════════════════════════════════════════════
+    // ── 10. 3D CANLI KARAKTER ŞOVU (SARIŞIN KADIN & PONPON KIZLAR) ──
+    // ════════════════════════════════════════════════════════════
+    create3DCharacterShow(W, H);
+
     // Set Initial Position according to current Step
     applyStepVisibility(three3D.currentStep || 1);
 }
@@ -6815,6 +6856,412 @@ function create3DRoomEnvironment(W, H, jambDepth, gap, jambTh, casingW) {
 }
 
 // ════════════════════════════════════════════════════════════
+// 3D CANLI KARAKTER ŞOVU (SARIŞIN STRAPLEZ KADIN & 2x PONPON KIZLAR)
+// Kapıyı açıp içeri-dışarı yürüyen kadın ve coşkulu ponponlu dans
+// ════════════════════════════════════════════════════════════
+let charAnimState = {
+    womanRoot: null,
+    womanBody: null,
+    womanLimbs: {},
+    cheerL: null,
+    cheerR: null
+};
+
+function create3DCharacterShow(W = 0.80, H = 2.02) {
+    if (three3D.charactersGroup && three3D.doorGroup) {
+        three3D.doorGroup.remove(three3D.charactersGroup);
+    }
+
+    const charactersGroup = new THREE.Group();
+    three3D.charactersGroup = charactersGroup;
+    three3D.doorGroup.add(charactersGroup);
+
+    const floorY = -H / 2 - 0.005;
+
+    const skinMat = new THREE.MeshStandardMaterial({
+        color: 0xFCD5B5,
+        roughness: 0.55,
+        metalness: 0.05
+    });
+
+    const blondeHairMat = new THREE.MeshStandardMaterial({
+        color: 0xFDE047,
+        roughness: 0.35,
+        metalness: 0.12
+    });
+
+    const straplessDressMat = new THREE.MeshStandardMaterial({
+        color: 0xE11D48,
+        roughness: 0.30,
+        metalness: 0.18
+    });
+
+    const heelsMat = new THREE.MeshStandardMaterial({
+        color: 0xBE123C,
+        roughness: 0.25,
+        metalness: 0.35
+    });
+
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0x1E3A8A });
+    const lipMat = new THREE.MeshBasicMaterial({ color: 0xF43F5E });
+
+    function makeCBox(w, h, depth, mat, px=0, py=0, pz=0) {
+        const geo = new THREE.BoxGeometry(w, h, depth);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.position.set(px, py, pz);
+        return mesh;
+    }
+
+    // 1. SARIŞIN STRAPLEZ ELBİSELİ KADIN
+    const womanRoot = new THREE.Group();
+    charactersGroup.add(womanRoot);
+    womanRoot.position.set(0.12, floorY, 1.5);
+    womanRoot.rotation.y = Math.PI;
+
+    const womanBody = new THREE.Group();
+    womanRoot.add(womanBody);
+
+    // Kafa
+    const headGroup = new THREE.Group();
+    headGroup.position.set(0, 1.48, 0);
+    womanBody.add(headGroup);
+
+    const headGeo = new THREE.SphereGeometry(0.088, 20, 20);
+    const headMesh = new THREE.Mesh(headGeo, skinMat);
+    headMesh.castShadow = true;
+    headGroup.add(headMesh);
+
+    const eyeGeo = new THREE.SphereGeometry(0.012, 10, 10);
+    const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeL.position.set(-0.028, 0.012, 0.080);
+    headGroup.add(eyeL);
+
+    const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeR.position.set(0.028, 0.012, 0.080);
+    headGroup.add(eyeR);
+
+    const lipGeo = new THREE.BoxGeometry(0.024, 0.008, 0.012);
+    const lipMesh = new THREE.Mesh(lipGeo, lipMat);
+    lipMesh.position.set(0, -0.034, 0.082);
+    headGroup.add(lipMesh);
+
+    // Sarışın Saçlar
+    const hairTop = new THREE.Mesh(new THREE.SphereGeometry(0.096, 20, 20), blondeHairMat);
+    hairTop.position.set(0, 0.015, -0.015);
+    headGroup.add(hairTop);
+
+    const bangs = makeCBox(0.12, 0.035, 0.04, blondeHairMat, 0, 0.075, 0.065);
+    headGroup.add(bangs);
+
+    const lockL = makeCBox(0.035, 0.32, 0.045, blondeHairMat, -0.075, -0.10, 0.01);
+    headGroup.add(lockL);
+    const lockR = makeCBox(0.035, 0.32, 0.045, blondeHairMat, 0.075, -0.10, 0.01);
+    headGroup.add(lockR);
+    const lockBack = makeCBox(0.15, 0.38, 0.045, blondeHairMat, 0, -0.12, -0.065);
+    headGroup.add(lockBack);
+
+    // Straplez Boyun & Açık Omuzlar
+    const neck = makeCBox(0.05, 0.07, 0.05, skinMat, 0, 1.38, 0);
+    womanBody.add(neck);
+
+    const shoulders = makeCBox(0.26, 0.05, 0.12, skinMat, 0, 1.33, 0);
+    womanBody.add(shoulders);
+
+    // Straplez Korse Gövde & Bel
+    const corsetTop = makeCBox(0.24, 0.15, 0.13, straplessDressMat, 0, 1.22, 0);
+    womanBody.add(corsetTop);
+
+    const waist = makeCBox(0.20, 0.12, 0.12, straplessDressMat, 0, 1.09, 0);
+    womanBody.add(waist);
+
+    // Straplez Etek
+    const skirtGeo = new THREE.CylinderGeometry(0.12, 0.22, 0.28, 16);
+    const skirtMesh = new THREE.Mesh(skirtGeo, straplessDressMat);
+    skirtMesh.position.set(0, 0.89, 0);
+    skirtMesh.castShadow = true;
+    womanBody.add(skirtMesh);
+
+    // Kollar
+    const armL = new THREE.Group();
+    armL.position.set(-0.16, 1.33, 0);
+    womanBody.add(armL);
+    const armLMesh = makeCBox(0.05, 0.42, 0.05, skinMat, 0, -0.21, 0);
+    armL.add(armLMesh);
+
+    const armR = new THREE.Group();
+    armR.position.set(0.16, 1.33, 0);
+    womanBody.add(armR);
+    const armRMesh = makeCBox(0.05, 0.42, 0.05, skinMat, 0, -0.21, 0);
+    armR.add(armRMesh);
+
+    // Bacaklar
+    const legL = new THREE.Group();
+    legL.position.set(-0.07, 0.78, 0);
+    womanBody.add(legL);
+    const legLMesh = makeCBox(0.065, 0.70, 0.07, skinMat, 0, -0.35, 0);
+    legL.add(legLMesh);
+    const heelL = makeCBox(0.07, 0.08, 0.11, heelsMat, 0, -0.73, 0.02);
+    legL.add(heelL);
+
+    const legR = new THREE.Group();
+    legR.position.set(0.07, 0.78, 0);
+    womanBody.add(legR);
+    const legRMesh = makeCBox(0.065, 0.70, 0.07, skinMat, 0, -0.35, 0);
+    legR.add(legRMesh);
+    const heelR = makeCBox(0.07, 0.08, 0.11, heelsMat, 0, -0.73, 0.02);
+    legR.add(heelR);
+
+    // 2. 2x PONPON KIZ (CHEERLEADERS)
+    const cheerUniformMat = new THREE.MeshStandardMaterial({ color: 0x2563EB, roughness: 0.45, metalness: 0.1 });
+    const cheerWhiteMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.5 });
+    const pomGoldMat = new THREE.MeshStandardMaterial({ color: 0xFBBF24, roughness: 0.25, metalness: 0.5 });
+    const pomBlueMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, roughness: 0.25, metalness: 0.5 });
+
+    function createCheerleader(posX, posZ, rotY, isLeft) {
+        const cRoot = new THREE.Group();
+        cRoot.position.set(posX, floorY, posZ);
+        cRoot.rotation.y = rotY;
+        charactersGroup.add(cRoot);
+
+        const cBody = new THREE.Group();
+        cRoot.add(cBody);
+
+        const cHead = new THREE.Group();
+        cHead.position.set(0, 1.45, 0);
+        cBody.add(cHead);
+
+        const hM = new THREE.Mesh(new THREE.SphereGeometry(0.085, 18, 18), skinMat);
+        hM.castShadow = true;
+        cHead.add(hM);
+
+        const cheerHairMat = new THREE.MeshStandardMaterial({ color: isLeft ? 0x92400E : 0xD97706, roughness: 0.4 });
+        const cHair = new THREE.Mesh(new THREE.SphereGeometry(0.092, 18, 18), cheerHairMat);
+        cHair.position.set(0, 0.01, -0.015);
+        cHead.add(cHair);
+
+        const ponyTail = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.05, 0.28, 12), cheerHairMat);
+        ponyTail.rotation.x = -Math.PI / 4;
+        ponyTail.position.set(0, 0.06, -0.14);
+        cHead.add(ponyTail);
+
+        const ribbon = makeCBox(0.08, 0.03, 0.03, isLeft ? cheerUniformMat : straplessDressMat, 0, 0.08, -0.08);
+        cHead.add(ribbon);
+
+        const topM = makeCBox(0.24, 0.24, 0.13, cheerUniformMat, 0, 1.20, 0);
+        cBody.add(topM);
+        const stripeM = makeCBox(0.245, 0.05, 0.135, cheerWhiteMat, 0, 1.22, 0);
+        cBody.add(stripeM);
+
+        const skirtM = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.24, 0.22, 16), cheerUniformMat);
+        skirtM.position.set(0, 0.95, 0);
+        skirtM.castShadow = true;
+        cBody.add(skirtM);
+
+        function makePompom() {
+            const pomGrp = new THREE.Group();
+            for (let i = 0; i < 7; i++) {
+                const pGeo = new THREE.SphereGeometry(0.055, 8, 8);
+                const pMat = (i % 2 === 0) ? pomGoldMat : pomBlueMat;
+                const pM = new THREE.Mesh(pGeo, pMat);
+                pM.position.set((Math.random() - 0.5) * 0.08, (Math.random() - 0.5) * 0.08, (Math.random() - 0.5) * 0.08);
+                pomGrp.add(pM);
+            }
+            return pomGrp;
+        }
+
+        const cArmL = new THREE.Group();
+        cArmL.position.set(-0.16, 1.28, 0);
+        cBody.add(cArmL);
+        const cArmLMesh = makeCBox(0.05, 0.38, 0.05, skinMat, 0, -0.19, 0);
+        cArmL.add(cArmLMesh);
+        const pomL = makePompom();
+        pomL.position.set(0, -0.40, 0);
+        cArmL.add(pomL);
+
+        const cArmR = new THREE.Group();
+        cArmR.position.set(0.16, 1.28, 0);
+        cBody.add(cArmR);
+        const cArmRMesh = makeCBox(0.05, 0.38, 0.05, skinMat, 0, -0.19, 0);
+        cArmR.add(cArmRMesh);
+        const pomR = makePompom();
+        pomR.position.set(0, -0.40, 0);
+        cArmR.add(pomR);
+
+        const cLegL = makeCBox(0.065, 0.70, 0.07, skinMat, -0.07, 0.44, 0);
+        cBody.add(cLegL);
+        const sockL = makeCBox(0.07, 0.12, 0.075, cheerWhiteMat, -0.07, 0.15, 0);
+        cBody.add(sockL);
+        const shoeL = makeCBox(0.075, 0.08, 0.12, cheerWhiteMat, -0.07, 0.04, 0.02);
+        cBody.add(shoeL);
+
+        const cLegR = makeCBox(0.065, 0.70, 0.07, skinMat, 0.07, 0.44, 0);
+        cBody.add(cLegR);
+        const sockR = makeCBox(0.07, 0.12, 0.075, cheerWhiteMat, 0.07, 0.15, 0);
+        cBody.add(sockR);
+        const shoeR = makeCBox(0.075, 0.08, 0.12, cheerWhiteMat, 0.07, 0.04, 0.02);
+        cBody.add(shoeR);
+
+        return { root: cRoot, body: cBody, armL: cArmL, armR: cArmR, pomL, pomR };
+    }
+
+    const cheerL = createCheerleader(-1.05, 0.55, 0.35, true);
+    const cheerR = createCheerleader(1.05, 0.55, -0.35, false);
+
+    charAnimState = {
+        womanRoot,
+        womanBody,
+        womanLimbs: { armL, armR, legL, legR, head: headGroup },
+        cheerL,
+        cheerR
+    };
+
+    charactersGroup.visible = (three3D.showCharacters === true);
+}
+
+function update3DCharactersAnimation() {
+    if (!three3D.showCharacters || !charAnimState.womanRoot) return;
+
+    three3D.charAnimTime = (three3D.charAnimTime || 0) + 0.016;
+    const t = three3D.charAnimTime;
+    const cycleDuration = 11.0;
+    const phase = (t % cycleDuration) / cycleDuration;
+
+    const wRoot = charAnimState.womanRoot;
+    const wBody = charAnimState.womanBody;
+    const limbs = charAnimState.womanLimbs;
+
+    if (phase < 0.28) {
+        const p1 = phase / 0.28;
+        wRoot.position.z = 1.5 - (p1 * 1.18);
+        wRoot.position.x = 0.14;
+        wRoot.rotation.y = Math.PI;
+
+        const walkCycle = Math.sin(t * 8.5);
+        limbs.legL.rotation.x = walkCycle * 0.45;
+        limbs.legR.rotation.x = -walkCycle * 0.45;
+        limbs.armL.rotation.x = -walkCycle * 0.35;
+        limbs.armR.rotation.x = walkCycle * 0.35;
+        limbs.armL.rotation.z = 0.08;
+        limbs.armR.rotation.z = -0.08;
+        wBody.position.y = Math.abs(Math.sin(t * 8.5)) * 0.03;
+
+        three3D.targetDoorAngle = 0;
+
+    } else if (phase < 0.38) {
+        wRoot.position.z = 0.32;
+        wRoot.position.x = 0.14;
+        wRoot.rotation.y = Math.PI;
+
+        limbs.legL.rotation.x = 0;
+        limbs.legR.rotation.x = 0;
+        wBody.position.y = 0;
+
+        limbs.armR.rotation.x = -1.15;
+        limbs.armR.rotation.y = 0.30;
+        limbs.armL.rotation.x = 0;
+        limbs.armL.rotation.z = 0.1;
+
+        three3D.targetDoorAngle = 1.62;
+
+    } else if (phase < 0.62) {
+        const p3 = (phase - 0.38) / 0.24;
+        wRoot.position.z = 0.32 - (p3 * 1.62);
+        wRoot.position.x = 0.10;
+        wRoot.rotation.y = Math.PI;
+
+        const walkCycle = Math.sin(t * 8.5);
+        limbs.legL.rotation.x = walkCycle * 0.45;
+        limbs.legR.rotation.x = -walkCycle * 0.45;
+        limbs.armR.rotation.x = walkCycle * 0.35;
+        limbs.armR.rotation.y = 0;
+
+        limbs.armL.rotation.x = 0;
+        limbs.armL.rotation.z = 2.15 + Math.sin(t * 11) * 0.25;
+        wBody.position.y = Math.abs(Math.sin(t * 8.5)) * 0.03;
+
+        three3D.targetDoorAngle = 1.62;
+
+    } else if (phase < 0.70) {
+        const p4 = (phase - 0.62) / 0.08;
+        wRoot.position.z = -1.30;
+        wRoot.position.x = 0.10;
+        wRoot.rotation.y = Math.PI - (p4 * Math.PI);
+
+        limbs.legL.rotation.x = 0;
+        limbs.legR.rotation.x = 0;
+        limbs.armL.rotation.z = 0.1;
+        limbs.armR.rotation.z = -0.1;
+        wBody.position.y = 0;
+
+        three3D.targetDoorAngle = 1.62;
+
+    } else if (phase < 0.92) {
+        const p5 = (phase - 0.70) / 0.22;
+        wRoot.position.z = -1.30 + (p5 * 2.80);
+        wRoot.position.x = 0.12;
+        wRoot.rotation.y = 0;
+
+        const walkCycle = Math.sin(t * 8.5);
+        limbs.legL.rotation.x = walkCycle * 0.45;
+        limbs.legR.rotation.x = -walkCycle * 0.45;
+        limbs.armL.rotation.x = -walkCycle * 0.35;
+        limbs.armR.rotation.x = walkCycle * 0.35;
+        limbs.armL.rotation.z = 0.1;
+        limbs.armR.rotation.z = -0.1;
+        wBody.position.y = Math.abs(Math.sin(t * 8.5)) * 0.03;
+
+        if (wRoot.position.z > 0.45) {
+            three3D.targetDoorAngle = 0;
+        } else {
+            three3D.targetDoorAngle = 1.62;
+        }
+
+    } else {
+        const p6 = (phase - 0.92) / 0.08;
+        wRoot.position.z = 1.50;
+        wRoot.position.x = 0.12;
+        wRoot.rotation.y = p6 * Math.PI;
+
+        limbs.legL.rotation.x = 0;
+        limbs.legR.rotation.x = 0;
+        limbs.armL.rotation.x = 0;
+        limbs.armR.rotation.x = 0;
+        wBody.position.y = 0;
+
+        three3D.targetDoorAngle = 0;
+    }
+
+    const cheerJump = Math.abs(Math.sin(t * 9.5)) * 0.06;
+    const cheerWaveL = Math.sin(t * 9.5) * 0.45;
+    const cheerWaveR = Math.cos(t * 9.5) * 0.45;
+    const pomScale = 1.0 + Math.sin(t * 18) * 0.10;
+
+    if (charAnimState.cheerL) {
+        const cL = charAnimState.cheerL;
+        cL.body.position.y = cheerJump;
+        cL.armL.rotation.z = 1.95 + cheerWaveL;
+        cL.armL.rotation.x = Math.sin(t * 5) * 0.2;
+        cL.armR.rotation.z = -1.95 - cheerWaveR;
+        cL.armR.rotation.x = Math.cos(t * 5) * 0.2;
+        cL.pomL.scale.setScalar(pomScale);
+        cL.pomR.scale.setScalar(pomScale);
+    }
+
+    if (charAnimState.cheerR) {
+        const cR = charAnimState.cheerR;
+        cR.body.position.y = Math.abs(Math.sin(t * 9.5 + 0.5)) * 0.06;
+        cR.armL.rotation.z = 1.95 - cheerWaveR;
+        cR.armL.rotation.x = Math.cos(t * 5) * 0.2;
+        cR.armR.rotation.z = -1.95 + cheerWaveL;
+        cR.armR.rotation.x = Math.sin(t * 5) * 0.2;
+        cR.pomL.scale.setScalar(pomScale);
+        cR.pomR.scale.setScalar(pomScale);
+    }
+}
+
+// ════════════════════════════════════════════════════════════
 // ADIM ADIM MONTAJ SİMÜLASYONU KONTROLCÜSÜ (5 ADIM + SERBEST)
 // ════════════════════════════════════════════════════════════
 function set3DAssemblyStep(step) {
@@ -6868,6 +7315,7 @@ function applyStepVisibility(step) {
         if (three3D.roomGroup) three3D.roomGroup.visible = false;
         if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
         if (three3D.gridHelper) three3D.gridHelper.visible = true;
+        if (three3D.charactersGroup) three3D.charactersGroup.visible = false;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.seren?.group) three3D.meshes.seren.group.position.set(0, 0, 0);
         if (three3D.meshes.cornerTakoz?.group) three3D.meshes.cornerTakoz.group.position.set(0, 0, 0);
@@ -6896,6 +7344,7 @@ function applyStepVisibility(step) {
         if (three3D.roomGroup) three3D.roomGroup.visible = false;
         if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
         if (three3D.gridHelper) three3D.gridHelper.visible = true;
+        if (three3D.charactersGroup) three3D.charactersGroup.visible = false;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.lockStile?.group) {
             three3D.meshes.lockStile.group.position.set(0, 0, 0);
@@ -6925,6 +7374,7 @@ function applyStepVisibility(step) {
         if (three3D.roomGroup) three3D.roomGroup.visible = false;
         if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
         if (three3D.gridHelper) three3D.gridHelper.visible = true;
+        if (three3D.charactersGroup) three3D.charactersGroup.visible = false;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.core?.group) {
             three3D.meshes.core.group.position.set(0, 0, 0);
@@ -6954,6 +7404,7 @@ function applyStepVisibility(step) {
         if (three3D.roomGroup) three3D.roomGroup.visible = false;
         if (three3D.roomSpotLight) three3D.roomSpotLight.visible = false;
         if (three3D.gridHelper) three3D.gridHelper.visible = true;
+        if (three3D.charactersGroup) three3D.charactersGroup.visible = false;
         if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
         if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
@@ -6982,6 +7433,7 @@ function applyStepVisibility(step) {
         if (three3D.roomGroup) three3D.roomGroup.visible = (three3D.showRoom === true);
         if (three3D.roomSpotLight) three3D.roomSpotLight.visible = (three3D.showRoom === true);
         if (three3D.gridHelper) three3D.gridHelper.visible = !three3D.showRoom;
+        if (three3D.charactersGroup) three3D.charactersGroup.visible = (three3D.showCharacters === true);
         if (three3D.leafPivotGroup) three3D.leafPivotGroup.rotation.y = three3D.doorOpenAngle;
         if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
         if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
@@ -7011,6 +7463,7 @@ function applyStepVisibility(step) {
         if (three3D.roomGroup) three3D.roomGroup.visible = (three3D.showRoom === true);
         if (three3D.roomSpotLight) three3D.roomSpotLight.visible = (three3D.showRoom === true);
         if (three3D.gridHelper) three3D.gridHelper.visible = !three3D.showRoom;
+        if (three3D.charactersGroup) three3D.charactersGroup.visible = (three3D.showCharacters === true);
         if (three3D.leafPivotGroup) three3D.leafPivotGroup.rotation.y = three3D.doorOpenAngle;
 
         if (hudBadge) hudBadge.textContent = '💥 SERBEST PATLATMA';
@@ -7311,6 +7764,35 @@ function change3DFrameColor(key) {
 }
 
 function toggle3DLayer(layer, isVisible) {
+    if (layer === 'characters') {
+        three3D.showCharacters = isVisible;
+        if (three3D.charactersGroup) {
+            three3D.charactersGroup.visible = isVisible;
+        } else if (isVisible) {
+            const d = three3D.currentData?.dimensions || { width: 800, height: 2020 };
+            create3DCharacterShow(d.width * 0.001, d.height * 0.001);
+        }
+        if (isVisible && !three3D.showRoom) {
+            toggle3DRoom();
+        }
+        const btnToolbar = document.getElementById('btn-3d-toggle-show');
+        if (btnToolbar) {
+            btnToolbar.textContent = isVisible ? '💃 Şov & Ponponlar: Açık' : '💃 Şov & Ponponlar: Kapalı';
+            btnToolbar.style.background = isVisible ? '#E11D48' : 'rgba(255,255,255,0.1)';
+            btnToolbar.style.borderColor = isVisible ? '#FB7185' : 'rgba(255,255,255,0.2)';
+        }
+        const btnSidebar = document.getElementById('btn-sidebar-char-show');
+        if (btnSidebar) {
+            btnSidebar.textContent = isVisible ? '⏸️ Karakter Şovunu Durdur' : '💃 Şovu Başlat (Sarışın & Ponponlar)';
+            btnSidebar.style.background = isVisible ? '#475569' : '#E11D48';
+        }
+        const badge = document.getElementById('badge-characters-status');
+        if (badge) {
+            badge.textContent = isVisible ? 'Açık' : 'Kapalı';
+            badge.style.color = isVisible ? '#10B981' : '#E11D48';
+        }
+        return;
+    }
     if (layer === 'room') {
         three3D.showRoom = isVisible;
         if (three3D.roomGroup) three3D.roomGroup.visible = isVisible;
@@ -7467,6 +7949,46 @@ function selectFloorTypeSwatch(key) {
     change3DFloorType(key);
     if (!three3D.showRoom) {
         toggle3DRoom();
+    }
+}
+
+// ════════════════════════════════════════════════════════════
+// CANLI KARAKTER ŞOVU AÇMA / KAPATMA FONKSİYONU
+// ════════════════════════════════════════════════════════════
+function toggle3DCharacterShow() {
+    three3D.showCharacters = !three3D.showCharacters;
+
+    if (three3D.charactersGroup) {
+        three3D.charactersGroup.visible = three3D.showCharacters;
+    } else if (three3D.showCharacters) {
+        const d = three3D.currentData?.dimensions || { width: 800, height: 2020 };
+        create3DCharacterShow(d.width * 0.001, d.height * 0.001);
+    }
+
+    if (three3D.showCharacters && !three3D.showRoom) {
+        toggle3DRoom();
+    }
+
+    const btnToolbar = document.getElementById('btn-3d-toggle-show');
+    if (btnToolbar) {
+        btnToolbar.textContent = three3D.showCharacters ? '💃 Şov & Ponponlar: Açık' : '💃 Şov & Ponponlar: Kapalı';
+        btnToolbar.style.background = three3D.showCharacters ? '#E11D48' : 'rgba(255,255,255,0.1)';
+        btnToolbar.style.borderColor = three3D.showCharacters ? '#FB7185' : 'rgba(255,255,255,0.2)';
+    }
+
+    const btnSidebar = document.getElementById('btn-sidebar-char-show');
+    if (btnSidebar) {
+        btnSidebar.textContent = three3D.showCharacters ? '⏸️ Karakter Şovunu Durdur' : '💃 Şovu Başlat (Sarışın & Ponponlar)';
+        btnSidebar.style.background = three3D.showCharacters ? '#475569' : '#E11D48';
+    }
+
+    const chk = document.getElementById('layer-characters');
+    if (chk) chk.checked = three3D.showCharacters;
+
+    const badge = document.getElementById('badge-characters-status');
+    if (badge) {
+        badge.textContent = three3D.showCharacters ? 'Açık' : 'Kapalı';
+        badge.style.color = three3D.showCharacters ? '#10B981' : '#E11D48';
     }
 }
 </script>
