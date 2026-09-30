@@ -6859,6 +6859,157 @@ function create3DRoomEnvironment(W, H, jambDepth, gap, jambTh, casingW) {
 // 3D CANLI KARAKTER ŞOVU (SARIŞIN STRAPLEZ KADIN & 2x PONPON KIZLAR)
 // Kapıyı açıp içeri-dışarı yürüyen kadın ve coşkulu ponponlu dans
 // ════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════
+// FOTOGERÇEKÇİ YÜZ DOKU MOTORU (REALISTIC PROCEDURAL FACE TEXTURE)
+// Detaylı gözler, gözbebeği, kirpikler, kontür, allık ve dolgun dudaklar
+// ════════════════════════════════════════════════════════════
+const realisticFaceCache = {};
+
+function generateRealisticFaceTexture(isCheer = false) {
+    const key = isCheer ? 'cheer' : 'woman';
+    if (realisticFaceCache[key]) return realisticFaceCache[key];
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+
+    // 1. Sıcak Doğal Ten Rengi Tabanı
+    ctx.fillStyle = '#FAD0B0';
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Yumuşak anatomik gölgelendirme (Radial ambient occlusion)
+    const ao = ctx.createRadialGradient(256, 256, 70, 256, 256, 255);
+    ao.addColorStop(0, 'rgba(255, 245, 238, 0.25)');
+    ao.addColorStop(0.65, 'rgba(235, 175, 145, 0.18)');
+    ao.addColorStop(1, 'rgba(180, 115, 85, 0.55)');
+    ctx.fillStyle = ao;
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Yanak Kontürü ve Gül Kurusu Allık (Cheek blush)
+    const drawBlush = (cx, cy) => {
+        const bl = ctx.createRadialGradient(cx, cy, 4, cx, cy, 50);
+        bl.addColorStop(0, 'rgba(244, 63, 94, 0.40)');
+        bl.addColorStop(1, 'rgba(244, 63, 94, 0)');
+        ctx.fillStyle = bl;
+        ctx.beginPath(); ctx.arc(cx, cy, 50, 0, Math.PI * 2); ctx.fill();
+    };
+    drawBlush(165, 305);
+    drawBlush(347, 305);
+
+    // Kavisli Zarif Kaşlar (Delicate Arched Eyebrows)
+    ctx.strokeStyle = isCheer ? '#78350F' : '#92400E';
+    ctx.lineWidth = 4.5;
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(135, 212);
+    ctx.quadraticCurveTo(172, 192, 218, 208);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(377, 212);
+    ctx.quadraticCurveTo(340, 192, 294, 208);
+    ctx.stroke();
+
+    // Badem Gözler (Almond-shaped eyes with iris, pupil & sparkle)
+    function drawRealisticEye(cx, cy, isLeft) {
+        ctx.save();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 28, 15, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        const irisGrad = ctx.createRadialGradient(cx, cy, 2, cx, cy, 14);
+        irisGrad.addColorStop(0, isLeft ? '#60A5FA' : '#38BDF8');
+        irisGrad.addColorStop(0.5, '#2563EB');
+        irisGrad.addColorStop(0.85, '#1E3A8A');
+        irisGrad.addColorStop(1, '#0F172A');
+        ctx.fillStyle = irisGrad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 13.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#090D16';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+        ctx.beginPath();
+        ctx.arc(cx - 3.5, cy - 3.5, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#0F172A';
+        ctx.lineWidth = 3.8;
+        ctx.beginPath();
+        ctx.moveTo(cx - 28, cy);
+        ctx.quadraticCurveTo(cx, cy - 18, cx + 28, cy);
+        ctx.stroke();
+
+        ctx.beginPath();
+        if (isLeft) {
+            ctx.moveTo(cx - 28, cy);
+            ctx.lineTo(cx - 35, cy - 6);
+        } else {
+            ctx.moveTo(cx + 28, cy);
+            ctx.lineTo(cx + 35, cy - 6);
+        }
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    drawRealisticEye(178, 235, true);
+    drawRealisticEye(334, 235, false);
+
+    // Burun Sırtı ve Doğal Burun Gölgesi
+    ctx.save();
+    ctx.fillStyle = 'rgba(200, 130, 100, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(256, 290, 11, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.beginPath();
+    ctx.arc(256, 284, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Dolgun Parlak Dudaklar
+    ctx.save();
+    const lipGrad = ctx.createLinearGradient(256, 335, 256, 375);
+    lipGrad.addColorStop(0, '#E11D48');
+    lipGrad.addColorStop(0.5, '#BE123C');
+    lipGrad.addColorStop(1, '#9F1239');
+    ctx.fillStyle = lipGrad;
+
+    ctx.beginPath();
+    ctx.moveTo(212, 350);
+    ctx.quadraticCurveTo(236, 335, 256, 341);
+    ctx.quadraticCurveTo(276, 335, 300, 350);
+    ctx.quadraticCurveTo(256, 354, 212, 350);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(212, 350);
+    ctx.quadraticCurveTo(256, 376, 300, 350);
+    ctx.quadraticCurveTo(256, 356, 212, 350);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.beginPath();
+    ctx.ellipse(256, 362, 14, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    const tex = new THREE.CanvasTexture(canvas);
+    if (tex.colorSpace !== undefined) tex.colorSpace = THREE.SRGBColorSpace;
+    realisticFaceCache[key] = tex;
+    return tex;
+}
+
+// ════════════════════════════════════════════════════════════
+// 3D CANLI KARAKTER ŞOVU (ORGANİK ANATOMİK GERÇEKÇİ MODELLER)
+// ════════════════════════════════════════════════════════════
 let charAnimState = {
     womanRoot: null,
     womanBody: null,
@@ -6878,43 +7029,46 @@ function create3DCharacterShow(W = 0.80, H = 2.02) {
 
     const floorY = -H / 2 - 0.005;
 
+    // Organik Malzemeler
     const skinMat = new THREE.MeshStandardMaterial({
-        color: 0xFCD5B5,
-        roughness: 0.55,
+        color: 0xFAD0B0,
+        roughness: 0.45,
+        metalness: 0.05
+    });
+
+    const womanFaceMat = new THREE.MeshStandardMaterial({
+        map: generateRealisticFaceTexture(false),
+        roughness: 0.45,
+        metalness: 0.05
+    });
+
+    const cheerFaceMat = new THREE.MeshStandardMaterial({
+        map: generateRealisticFaceTexture(true),
+        roughness: 0.45,
         metalness: 0.05
     });
 
     const blondeHairMat = new THREE.MeshStandardMaterial({
-        color: 0xFDE047,
-        roughness: 0.35,
-        metalness: 0.12
+        color: 0xFACC15, // Sıcak altın sarısı parlak saç
+        roughness: 0.28,
+        metalness: 0.22
     });
 
     const straplessDressMat = new THREE.MeshStandardMaterial({
-        color: 0xE11D48,
-        roughness: 0.30,
-        metalness: 0.18
+        color: 0xE11D48, // Göz alıcı saten kırmızı straplez kokteyl elbisesi
+        roughness: 0.24,
+        metalness: 0.24
     });
 
     const heelsMat = new THREE.MeshStandardMaterial({
-        color: 0xBE123C,
-        roughness: 0.25,
-        metalness: 0.35
+        color: 0x9F1239,
+        roughness: 0.20,
+        metalness: 0.45
     });
 
-    const eyeMat = new THREE.MeshBasicMaterial({ color: 0x1E3A8A });
-    const lipMat = new THREE.MeshBasicMaterial({ color: 0xF43F5E });
-
-    function makeCBox(w, h, depth, mat, px=0, py=0, pz=0) {
-        const geo = new THREE.BoxGeometry(w, h, depth);
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        mesh.position.set(px, py, pz);
-        return mesh;
-    }
-
-    // 1. SARIŞIN STRAPLEZ ELBİSELİ KADIN
+    // ──────────────────────────────────────────────────────────
+    // 1. SARIŞIN STRAPLEZ ELBİSELİ KADIN (ORGANİK ANATOMİK VÜCUT)
+    // ──────────────────────────────────────────────────────────
     const womanRoot = new THREE.Group();
     charactersGroup.add(womanRoot);
     womanRoot.position.set(0.12, floorY, 1.5);
@@ -6923,103 +7077,160 @@ function create3DCharacterShow(W = 0.80, H = 2.02) {
     const womanBody = new THREE.Group();
     womanRoot.add(womanBody);
 
-    // Kafa
+    // Kafa & Boyun
     const headGroup = new THREE.Group();
     headGroup.position.set(0, 1.48, 0);
     womanBody.add(headGroup);
 
-    const headGeo = new THREE.SphereGeometry(0.088, 20, 20);
-    const headMesh = new THREE.Mesh(headGeo, skinMat);
+    // Gerçekçi kavisli baş küresi
+    const headGeo = new THREE.SphereGeometry(0.092, 32, 32);
+    const headMesh = new THREE.Mesh(headGeo, womanFaceMat);
     headMesh.castShadow = true;
     headGroup.add(headMesh);
 
-    const eyeGeo = new THREE.SphereGeometry(0.012, 10, 10);
-    const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
-    eyeL.position.set(-0.028, 0.012, 0.080);
-    headGroup.add(eyeL);
-
-    const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
-    eyeR.position.set(0.028, 0.012, 0.080);
-    headGroup.add(eyeR);
-
-    const lipGeo = new THREE.BoxGeometry(0.024, 0.008, 0.012);
-    const lipMesh = new THREE.Mesh(lipGeo, lipMat);
-    lipMesh.position.set(0, -0.034, 0.082);
-    headGroup.add(lipMesh);
-
-    // Sarışın Saçlar
-    const hairTop = new THREE.Mesh(new THREE.SphereGeometry(0.096, 20, 20), blondeHairMat);
+    // Hacimli Sarışın Saç Tepe Bölgesi
+    const hairTop = new THREE.Mesh(new THREE.SphereGeometry(0.100, 24, 24), blondeHairMat);
     hairTop.position.set(0, 0.015, -0.015);
     headGroup.add(hairTop);
 
-    const bangs = makeCBox(0.12, 0.035, 0.04, blondeHairMat, 0, 0.075, 0.065);
-    headGroup.add(bangs);
-
-    const lockL = makeCBox(0.035, 0.32, 0.045, blondeHairMat, -0.075, -0.10, 0.01);
+    // Yan Dalgalı Bukleler (Önden omuzlara inen saçlar)
+    const lockL = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.014, 0.32, 12), blondeHairMat);
+    lockL.position.set(-0.082, -0.11, 0.02);
     headGroup.add(lockL);
-    const lockR = makeCBox(0.035, 0.32, 0.045, blondeHairMat, 0.075, -0.10, 0.01);
-    headGroup.add(lockR);
-    const lockBack = makeCBox(0.15, 0.38, 0.045, blondeHairMat, 0, -0.12, -0.065);
-    headGroup.add(lockBack);
 
-    // Straplez Boyun & Açık Omuzlar
-    const neck = makeCBox(0.05, 0.07, 0.05, skinMat, 0, 1.38, 0);
+    const lockR = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.014, 0.32, 12), blondeHairMat);
+    lockR.position.set(0.082, -0.11, 0.02);
+    headGroup.add(lockR);
+
+    // Arka Dolgun Dalgalar
+    const hairBack = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.12, 0.42, 16), blondeHairMat);
+    hairBack.position.set(0, -0.14, -0.055);
+    headGroup.add(hairBack);
+
+    // Zarif Pürüzsüz Boyun (Smooth Neck)
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.046, 0.09, 20), skinMat);
+    neck.position.set(0, 1.39, 0);
     womanBody.add(neck);
 
-    const shoulders = makeCBox(0.26, 0.05, 0.12, skinMat, 0, 1.33, 0);
+    // Açık Omuzlar ve Köprücük Kemiği Bölgesi (Strapless Bare Shoulders)
+    const shoulders = new THREE.Mesh(new THREE.CylinderGeometry(0.135, 0.125, 0.06, 24), skinMat);
+    shoulders.position.set(0, 1.33, 0);
     womanBody.add(shoulders);
 
-    // Straplez Korse Gövde & Bel
-    const corsetTop = makeCBox(0.24, 0.15, 0.13, straplessDressMat, 0, 1.22, 0);
-    womanBody.add(corsetTop);
+    // Straplez Kalp Yaka Göğüs Kıvrımları (Sweetheart bust contours)
+    const bustL = new THREE.Mesh(new THREE.SphereGeometry(0.056, 18, 18), straplessDressMat);
+    bustL.position.set(-0.058, 1.25, 0.045);
+    womanBody.add(bustL);
 
-    const waist = makeCBox(0.20, 0.12, 0.12, straplessDressMat, 0, 1.09, 0);
-    womanBody.add(waist);
+    const bustR = new THREE.Mesh(new THREE.SphereGeometry(0.056, 18, 18), straplessDressMat);
+    bustR.position.set(0.058, 1.25, 0.045);
+    womanBody.add(bustR);
 
-    // Straplez Etek
-    const skirtGeo = new THREE.CylinderGeometry(0.12, 0.22, 0.28, 16);
-    const skirtMesh = new THREE.Mesh(skirtGeo, straplessDressMat);
-    skirtMesh.position.set(0, 0.89, 0);
-    skirtMesh.castShadow = true;
-    womanBody.add(skirtMesh);
+    // İnce Kum Saati Beli ve Straplez Korse (Curved Waist Bodice)
+    const bodice = new THREE.Mesh(new THREE.CylinderGeometry(0.122, 0.096, 0.18, 24), straplessDressMat);
+    bodice.position.set(0, 1.17, 0);
+    womanBody.add(bodice);
 
-    // Kollar
+    const hips = new THREE.Mesh(new THREE.CylinderGeometry(0.096, 0.145, 0.14, 24), straplessDressMat);
+    hips.position.set(0, 1.01, 0);
+    womanBody.add(hips);
+
+    // Uçuşan Saten Kloş Etek (Flared Satin Cocktail Skirt)
+    const skirt = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.25, 0.32, 24), straplessDressMat);
+    skirt.position.set(0, 0.86, 0);
+    skirt.castShadow = true;
+    womanBody.add(skirt);
+
+    // ORGANİK KOLLAR (PÜRÜZSÜZ CYLINDER KOL & BİLEKLER)
+    // Sol Kol (Left Arm)
     const armL = new THREE.Group();
-    armL.position.set(-0.16, 1.33, 0);
+    armL.position.set(-0.165, 1.32, 0);
     womanBody.add(armL);
-    const armLMesh = makeCBox(0.05, 0.42, 0.05, skinMat, 0, -0.21, 0);
-    armL.add(armLMesh);
+    const upperArmL = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.030, 0.24, 18), skinMat);
+    upperArmL.position.set(0, -0.12, 0);
+    armL.add(upperArmL);
+    const elbowL = new THREE.Mesh(new THREE.SphereGeometry(0.030, 14, 14), skinMat);
+    elbowL.position.set(0, -0.24, 0);
+    armL.add(elbowL);
+    const foreArmL = new THREE.Mesh(new THREE.CylinderGeometry(0.030, 0.022, 0.24, 18), skinMat);
+    foreArmL.position.set(0, -0.36, 0);
+    armL.add(foreArmL);
+    const handL = new THREE.Mesh(new THREE.SphereGeometry(0.024, 12, 12), skinMat);
+    handL.scale.set(0.7, 1.4, 0.6);
+    handL.position.set(0, -0.49, 0);
+    armL.add(handL);
 
+    // Sağ Kol (Right Arm - Kapı koluna uzanan kol)
     const armR = new THREE.Group();
-    armR.position.set(0.16, 1.33, 0);
+    armR.position.set(0.165, 1.32, 0);
     womanBody.add(armR);
-    const armRMesh = makeCBox(0.05, 0.42, 0.05, skinMat, 0, -0.21, 0);
-    armR.add(armRMesh);
+    const upperArmR = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.030, 0.24, 18), skinMat);
+    upperArmR.position.set(0, -0.12, 0);
+    armR.add(upperArmR);
+    const elbowR = new THREE.Mesh(new THREE.SphereGeometry(0.030, 14, 14), skinMat);
+    elbowR.position.set(0, -0.24, 0);
+    armR.add(elbowR);
+    const foreArmR = new THREE.Mesh(new THREE.CylinderGeometry(0.030, 0.022, 0.24, 18), skinMat);
+    foreArmR.position.set(0, -0.36, 0);
+    armR.add(foreArmR);
+    const handR = new THREE.Mesh(new THREE.SphereGeometry(0.024, 12, 12), skinMat);
+    handR.scale.set(0.7, 1.4, 0.6);
+    handR.position.set(0, -0.49, 0);
+    armR.add(handR);
 
-    // Bacaklar
+    // ORGANİK KAVİSLİ BACAKLAR & STILETTO TOPUKLULAR
+    // Sol Bacak (Left Leg)
     const legL = new THREE.Group();
-    legL.position.set(-0.07, 0.78, 0);
+    legL.position.set(-0.075, 0.74, 0);
     womanBody.add(legL);
-    const legLMesh = makeCBox(0.065, 0.70, 0.07, skinMat, 0, -0.35, 0);
-    legL.add(legLMesh);
-    const heelL = makeCBox(0.07, 0.08, 0.11, heelsMat, 0, -0.73, 0.02);
-    legL.add(heelL);
+    const thighL = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.046, 0.36, 20), skinMat);
+    thighL.position.set(0, -0.18, 0);
+    legL.add(thighL);
+    const kneeL = new THREE.Mesh(new THREE.SphereGeometry(0.046, 16, 16), skinMat);
+    kneeL.position.set(0, -0.36, 0);
+    legL.add(kneeL);
+    const calfL = new THREE.Mesh(new THREE.CylinderGeometry(0.046, 0.030, 0.36, 20), skinMat);
+    calfL.position.set(0, -0.54, 0);
+    legL.add(calfL);
+    // Stiletto Ayakkabı
+    const shoeL = new THREE.Mesh(new THREE.ConeGeometry(0.038, 0.12, 14), heelsMat);
+    shoeL.rotation.x = Math.PI / 2.3;
+    shoeL.position.set(0, -0.71, 0.04);
+    legL.add(shoeL);
+    const pinL = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.004, 0.075, 8), heelsMat);
+    pinL.position.set(0, -0.71, -0.015);
+    legL.add(pinL);
 
+    // Sağ Bacak (Right Leg)
     const legR = new THREE.Group();
-    legR.position.set(0.07, 0.78, 0);
+    legR.position.set(0.075, 0.74, 0);
     womanBody.add(legR);
-    const legRMesh = makeCBox(0.065, 0.70, 0.07, skinMat, 0, -0.35, 0);
-    legR.add(legRMesh);
-    const heelR = makeCBox(0.07, 0.08, 0.11, heelsMat, 0, -0.73, 0.02);
-    legR.add(heelR);
+    const thighR = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.046, 0.36, 20), skinMat);
+    thighR.position.set(0, -0.18, 0);
+    legR.add(thighR);
+    const kneeR = new THREE.Mesh(new THREE.SphereGeometry(0.046, 16, 16), skinMat);
+    kneeR.position.set(0, -0.36, 0);
+    legR.add(kneeR);
+    const calfR = new THREE.Mesh(new THREE.CylinderGeometry(0.046, 0.030, 0.36, 20), skinMat);
+    calfR.position.set(0, -0.54, 0);
+    legR.add(calfR);
+    const shoeR = new THREE.Mesh(new THREE.ConeGeometry(0.038, 0.12, 14), heelsMat);
+    shoeR.rotation.x = Math.PI / 2.3;
+    shoeR.position.set(0, -0.71, 0.04);
+    legR.add(shoeR);
+    const pinR = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.004, 0.075, 8), heelsMat);
+    pinR.position.set(0, -0.71, -0.015);
+    legR.add(pinR);
 
-    // 2. 2x PONPON KIZ (CHEERLEADERS)
-    const cheerUniformMat = new THREE.MeshStandardMaterial({ color: 0x2563EB, roughness: 0.45, metalness: 0.1 });
-    const cheerWhiteMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.5 });
-    const pomGoldMat = new THREE.MeshStandardMaterial({ color: 0xFBBF24, roughness: 0.25, metalness: 0.5 });
-    const pomBlueMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, roughness: 0.25, metalness: 0.5 });
+    // ──────────────────────────────────────────────────────────
+    // 2. 2x PONPON KIZ (ORGANİK AMİGO KIZLAR VE IŞILTILI PONPONLAR)
+    // ──────────────────────────────────────────────────────────
+    const cheerUniformMat = new THREE.MeshStandardMaterial({ color: 0x1D4ED8, roughness: 0.35, metalness: 0.15 });
+    const cheerWhiteMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.45 });
+    const pomGoldMat = new THREE.MeshStandardMaterial({ color: 0xFBBF24, roughness: 0.20, metalness: 0.65 });
+    const pomBlueMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, roughness: 0.20, metalness: 0.65 });
 
-    function createCheerleader(posX, posZ, rotY, isLeft) {
+    function createRealisticCheerleader(posX, posZ, rotY, isLeft) {
         const cRoot = new THREE.Group();
         cRoot.position.set(posX, floorY, posZ);
         cRoot.rotation.y = rotY;
@@ -7028,86 +7239,106 @@ function create3DCharacterShow(W = 0.80, H = 2.02) {
         const cBody = new THREE.Group();
         cRoot.add(cBody);
 
+        // Kafa
         const cHead = new THREE.Group();
         cHead.position.set(0, 1.45, 0);
         cBody.add(cHead);
 
-        const hM = new THREE.Mesh(new THREE.SphereGeometry(0.085, 18, 18), skinMat);
+        const hM = new THREE.Mesh(new THREE.SphereGeometry(0.088, 28, 28), cheerFaceMat);
         hM.castShadow = true;
         cHead.add(hM);
 
-        const cheerHairMat = new THREE.MeshStandardMaterial({ color: isLeft ? 0x92400E : 0xD97706, roughness: 0.4 });
-        const cHair = new THREE.Mesh(new THREE.SphereGeometry(0.092, 18, 18), cheerHairMat);
+        const cheerHairMat = new THREE.MeshStandardMaterial({
+            color: isLeft ? 0x92400E : 0xD97706,
+            roughness: 0.35
+        });
+        const cHair = new THREE.Mesh(new THREE.SphereGeometry(0.095, 24, 24), cheerHairMat);
         cHair.position.set(0, 0.01, -0.015);
         cHead.add(cHair);
 
-        const ponyTail = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.05, 0.28, 12), cheerHairMat);
-        ponyTail.rotation.x = -Math.PI / 4;
-        ponyTail.position.set(0, 0.06, -0.14);
-        cHead.add(ponyTail);
+        // Yüksek At Kuyruğu (High ponytail)
+        const pony = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.30, 16), cheerHairMat);
+        pony.rotation.x = -Math.PI / 3.5;
+        pony.position.set(0, 0.07, -0.16);
+        cHead.add(pony);
 
-        const ribbon = makeCBox(0.08, 0.03, 0.03, isLeft ? cheerUniformMat : straplessDressMat, 0, 0.08, -0.08);
+        const ribbon = new THREE.Mesh(new THREE.TorusGeometry(0.035, 0.014, 12, 20), straplessDressMat);
+        ribbon.position.set(0, 0.08, -0.085);
         cHead.add(ribbon);
 
-        const topM = makeCBox(0.24, 0.24, 0.13, cheerUniformMat, 0, 1.20, 0);
+        // Gövde (Cheerleader Top)
+        const topM = new THREE.Mesh(new THREE.CylinderGeometry(0.125, 0.098, 0.24, 20), cheerUniformMat);
+        topM.position.set(0, 1.20, 0);
         cBody.add(topM);
-        const stripeM = makeCBox(0.245, 0.05, 0.135, cheerWhiteMat, 0, 1.22, 0);
+
+        const stripeM = new THREE.Mesh(new THREE.CylinderGeometry(0.128, 0.122, 0.05, 20), cheerWhiteMat);
+        stripeM.position.set(0, 1.22, 0);
         cBody.add(stripeM);
 
-        const skirtM = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.24, 0.22, 16), cheerUniformMat);
-        skirtM.position.set(0, 0.95, 0);
+        // Pileli Mini Etek (Pleated Flared Mini Skirt)
+        const skirtM = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.24, 0.24, 24), cheerUniformMat);
+        skirtM.position.set(0, 0.96, 0);
         skirtM.castShadow = true;
         cBody.add(skirtM);
 
-        function makePompom() {
+        // Kabarık ve Işıltılı 3D Ponpon (Fluffy Sparkling 3D Pompom)
+        function makeRealisticPompom() {
             const pomGrp = new THREE.Group();
-            for (let i = 0; i < 7; i++) {
-                const pGeo = new THREE.SphereGeometry(0.055, 8, 8);
+            for (let i = 0; i < 14; i++) {
+                const pGeo = new THREE.IcosahedronGeometry(0.042, 1);
                 const pMat = (i % 2 === 0) ? pomGoldMat : pomBlueMat;
                 const pM = new THREE.Mesh(pGeo, pMat);
-                pM.position.set((Math.random() - 0.5) * 0.08, (Math.random() - 0.5) * 0.08, (Math.random() - 0.5) * 0.08);
+                pM.position.set(
+                    (Math.random() - 0.5) * 0.10,
+                    (Math.random() - 0.5) * 0.10,
+                    (Math.random() - 0.5) * 0.10
+                );
                 pomGrp.add(pM);
             }
             return pomGrp;
         }
 
+        // Kollar & Ponponlar
         const cArmL = new THREE.Group();
         cArmL.position.set(-0.16, 1.28, 0);
         cBody.add(cArmL);
-        const cArmLMesh = makeCBox(0.05, 0.38, 0.05, skinMat, 0, -0.19, 0);
+        const cArmLMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.024, 0.40, 16), skinMat);
+        cArmLMesh.position.set(0, -0.20, 0);
         cArmL.add(cArmLMesh);
-        const pomL = makePompom();
-        pomL.position.set(0, -0.40, 0);
+        const pomL = makeRealisticPompom();
+        pomL.position.set(0, -0.42, 0);
         cArmL.add(pomL);
 
         const cArmR = new THREE.Group();
         cArmR.position.set(0.16, 1.28, 0);
         cBody.add(cArmR);
-        const cArmRMesh = makeCBox(0.05, 0.38, 0.05, skinMat, 0, -0.19, 0);
+        const cArmRMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.024, 0.40, 16), skinMat);
+        cArmRMesh.position.set(0, -0.20, 0);
         cArmR.add(cArmRMesh);
-        const pomR = makePompom();
-        pomR.position.set(0, -0.40, 0);
+        const pomR = makeRealisticPompom();
+        pomR.position.set(0, -0.42, 0);
         cArmR.add(pomR);
 
-        const cLegL = makeCBox(0.065, 0.70, 0.07, skinMat, -0.07, 0.44, 0);
+        // Bacaklar & Beyaz Spor Ayakkabılar
+        const cLegL = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.032, 0.65, 18), skinMat);
+        cLegL.position.set(-0.07, 0.46, 0);
         cBody.add(cLegL);
-        const sockL = makeCBox(0.07, 0.12, 0.075, cheerWhiteMat, -0.07, 0.15, 0);
-        cBody.add(sockL);
-        const shoeL = makeCBox(0.075, 0.08, 0.12, cheerWhiteMat, -0.07, 0.04, 0.02);
+        const shoeL = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.07, 0.14), cheerWhiteMat);
+        shoeL.position.set(-0.07, 0.035, 0.02);
         cBody.add(shoeL);
 
-        const cLegR = makeCBox(0.065, 0.70, 0.07, skinMat, 0.07, 0.44, 0);
+        const cLegR = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.032, 0.65, 18), skinMat);
+        cLegR.position.set(0.07, 0.46, 0);
         cBody.add(cLegR);
-        const sockR = makeCBox(0.07, 0.12, 0.075, cheerWhiteMat, 0.07, 0.15, 0);
-        cBody.add(sockR);
-        const shoeR = makeCBox(0.075, 0.08, 0.12, cheerWhiteMat, 0.07, 0.04, 0.02);
+        const shoeR = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.07, 0.14), cheerWhiteMat);
+        shoeR.position.set(0.07, 0.035, 0.02);
         cBody.add(shoeR);
 
         return { root: cRoot, body: cBody, armL: cArmL, armR: cArmR, pomL, pomR };
     }
 
-    const cheerL = createCheerleader(-1.05, 0.55, 0.35, true);
-    const cheerR = createCheerleader(1.05, 0.55, -0.35, false);
+    const cheerL = createRealisticCheerleader(-1.05, 0.55, 0.35, true);
+    const cheerR = createRealisticCheerleader(1.05, 0.55, -0.35, false);
 
     charAnimState = {
         womanRoot,
