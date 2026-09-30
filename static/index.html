@@ -5083,7 +5083,6 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
     }
 
     // ── MODEL ALGILAMA & DOĞRUDAN PANEL ÜZERİNE CNC ÇİZİMİ ──
-    const mCode = (data.model_code || '').toUpperCase();
     const fType = data.fuga_pattern?.type || 'none';
 
     function drawCNCH(y, widthRatio = 0.88, h = 14) {
