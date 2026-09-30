@@ -4967,7 +4967,7 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
         ctx.restore();
     }
 
-    function drawMoldedPanel(rx, ry, rw, rh) {
+    function drawMoldedPanel(rx, ry, rw, rh, innerInset = 20) {
         ctx.save();
         // Dış freze kanalı
         ctx.lineWidth = 7;
@@ -4980,18 +4980,19 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
         ctx.strokeRect(rx - 3, ry - 3, rw + 6, rh + 6);
 
         // Kademeli iç profil
-        const in1 = 20;
         ctx.lineWidth = 4;
         ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
-        ctx.strokeRect(rx + in1, ry + in1, rw - in1*2, rh - in1*2);
+        ctx.strokeRect(rx + innerInset, ry + innerInset, rw - innerInset*2, rh - innerInset*2);
 
         // İç ayna / göbek yükseltisi
-        const in2 = 36;
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-        ctx.fillRect(rx + in2, ry + in2, rw - in2*2, rh - in2*2);
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
-        ctx.strokeRect(rx + in2, ry + in2, rw - in2*2, rh - in2*2);
+        const in2 = innerInset + 16;
+        if (rw > in2*2 && rh > in2*2) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(rx + in2, ry + in2, rw - in2*2, rh - in2*2);
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.22)';
+            ctx.strokeRect(rx + in2, ry + in2, rw - in2*2, rh - in2*2);
+        }
         ctx.restore();
     }
 
@@ -5010,6 +5011,77 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
             ctx.fillRect(vx - 2, gy + 8, 5, gh - 16);
             ctx.fillStyle = 'rgba(255, 255, 255, 0.38)';
             ctx.fillRect(vx + 3, gy + 8, 2, gh - 16);
+        }
+        ctx.restore();
+    }
+
+    function drawArchedMoldedPanel(rx, ry, rw, rh, archH = 140) {
+        ctx.save();
+        function makeArchPath(x, y, w, h, ah) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + ah);
+            ctx.quadraticCurveTo(x + w / 2, y - ah * 0.4, x + w, y + ah);
+            ctx.lineTo(x + w, y + h);
+            ctx.lineTo(x, y + h);
+            ctx.closePath();
+        }
+        // Dış freze
+        ctx.lineWidth = 7;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.70)';
+        makeArchPath(rx, ry, rw, rh, archH);
+        ctx.stroke();
+
+        // Işık pah
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        makeArchPath(rx - 3, ry - 3, rw + 6, rh + 6, archH);
+        ctx.stroke();
+
+        // İç kademe
+        const in1 = 20;
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+        makeArchPath(rx + in1, ry + in1, rw - in1*2, rh - in1*2, archH * 0.85);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function drawWaveCNC(x1, y1, x2, y2, amp = 60, freq = 2, w = 12) {
+        ctx.save();
+        ctx.lineWidth = w;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.80)';
+        ctx.beginPath();
+        const steps = 100;
+        for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            const curY = y1 + (y2 - y1) * t;
+            const curX = x1 + (x2 - x1) * t + Math.sin(t * Math.PI * freq) * amp;
+            if (i === 0) ctx.moveTo(curX, curY);
+            else ctx.lineTo(curX, curY);
+        }
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function drawChevronCNC(cy, w = 460, h = 90, count = 3, gap = 200) {
+        ctx.save();
+        for (let i = 0; i < count; i++) {
+            const y = cy + (i - (count - 1)/2) * gap;
+            ctx.lineWidth = 12;
+            ctx.strokeStyle = 'rgba(15, 23, 42, 0.80)';
+            ctx.beginPath();
+            ctx.moveTo((W - w)/2, y - h/2);
+            ctx.lineTo(W / 2, y + h/2);
+            ctx.lineTo((W + w)/2, y - h/2);
+            ctx.stroke();
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.40)';
+            ctx.beginPath();
+            ctx.moveTo((W - w)/2, y - h/2 + 5);
+            ctx.lineTo(W / 2, y + h/2 + 5);
+            ctx.lineTo((W + w)/2, y - h/2 + 5);
+            ctx.stroke();
         }
         ctx.restore();
     }
@@ -5039,21 +5111,207 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
         ctx.restore();
     }
 
-    // MODELLERİ KATEGORİLE:
-    const isClassic = (
-        mCode === 'ER220' || mCode === 'ER250' || mCode === 'ER520' || mCode === 'ER540' ||
-        mCode === 'ER550' || mCode === 'ER560' || mCode === 'ER570' || mCode === 'ER590' ||
-        mCode.startsWith('ER100') || mCode.startsWith('ER101') || mCode === 'EROZL001' ||
-        mCode === 'EROZL009' || mCode === 'EROZL011' || mCode === 'EROZL013' || mCode === 'EROZL020'
-    );
+    // ── MODELLERE ÖZEL AYRIŞTIRILMIŞ VEKTÖREL CNC ÇİZİMLERİ ──
+    if (mCode === 'ER550' || mCode === 'EROZL001') {
+        // ER550: Daphne Özel Taraklı Klasik Model (Kullanıcının görselindeki model)
+        drawMoldedPanel(140, 160, W - 280, 680, 20);
+        drawFlutedGrille(180, 890, W - 360, 260, 15);
+        drawMoldedPanel(140, 1200, W - 280, 680, 20);
 
-    if (isClassic && !data.has_cam) {
-        // Üst Ayna Göbek
-        drawMoldedPanel(150, 160, W - 300, 680);
-        // Orta Dikey Tarak Çıtaları (Kullanıcının görselindeki model!)
-        drawFlutedGrille(200, 890, W - 400, 260, 15);
-        // Alt Ayna Göbek
-        drawMoldedPanel(150, 1200, W - 300, 680);
+    } else if (mCode === 'ER520' || mCode === 'EROZL020') {
+        // ER520: İkili Klasik Ayna (Büyük Üst Panel + Çift Orta Derz + Küçük Alt Panel)
+        drawMoldedPanel(140, 160, W - 280, 1080, 20);
+        drawCNCH(1290, 0.88, 12);
+        drawCNCH(1330, 0.88, 12);
+        drawMoldedPanel(140, 1390, W - 280, 490, 18);
+
+    } else if (mCode === 'ER540' || mCode === 'EROZL011') {
+        // ER540: 4 Eşit Kare Ayna Göbek
+        [160, 600, 1040, 1480].forEach(py => {
+            drawMoldedPanel(150, py, W - 300, 380, 16);
+        });
+
+    } else if (mCode === 'ER560' || mCode === 'EROZL013') {
+        // ER560: Çift Dikey Boy CNC Hattı
+        drawCNCV(W/2 - 45, 140, H - 140, 14);
+        drawCNCV(W/2 + 45, 140, H - 140, 14);
+        drawCNCH(140, 0.35, 12);
+        drawCNCH(H - 140, 0.35, 12);
+
+    } else if (mCode === 'ER570' || mCode === 'EROZL017') {
+        // ER570: 3 Eşit Yatay Dikdörtgen Ayna Göbek
+        [170, 740, 1310].forEach(py => {
+            drawMoldedPanel(140, py, W - 280, 510, 18);
+        });
+
+    } else if (mCode === 'ER590' || mCode === 'EROZL009') {
+        // ER590: Kemerli Üst Ayna + Düz Alt Ayna
+        drawArchedMoldedPanel(140, 160, W - 280, 820, 140);
+        drawMoldedPanel(140, 1080, W - 280, 780, 18);
+
+    } else if (mCode === 'ER220') {
+        // ER220: 3 Kademeli Dikdörtgen Ayna Göbek
+        [180, 750, 1320].forEach(py => {
+            drawMoldedPanel(150, py, W - 300, 490, 16);
+        });
+
+    } else if (mCode === 'ER230') {
+        // ER230: Kesişen Çizgisel CNC Fuga
+        drawCNCV(W * 0.28, 140, H - 140, 14);
+        drawCNCH(H * 0.32, 0.88, 14);
+        drawCNCH(H * 0.68, 0.88, 14);
+
+    } else if (mCode === 'ER250') {
+        // ER250: Tek Büyük Dikdörtgen CNC Çerçeve
+        drawMoldedPanel(130, 170, W - 260, H - 340, 24);
+
+    } else if (mCode === 'ER280') {
+        // ER280: Asimetrik İkili Dikey Hat & Üst Kavis
+        drawCNCV(W * 0.22, 160, H - 160, 12);
+        drawCNCV(W * 0.28, 160, H - 160, 12);
+        ctx.save();
+        ctx.lineWidth = 12;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.80)';
+        ctx.beginPath();
+        ctx.arc(W * 0.25, 160, (W * 0.06)/2, Math.PI, 0);
+        ctx.stroke();
+        ctx.restore();
+
+    } else if (mCode === 'ER330') {
+        // ER330: Akıcı S-Dalga CNC Fuga
+        drawWaveCNC(W * 0.35, 140, W * 0.65, H - 140, 80, 2.5, 14);
+
+    } else if (mCode === 'ER400') {
+        // ER400: Modern Çapraz / Geometrik CNC
+        ctx.save();
+        ctx.lineWidth = 12;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.80)';
+        ctx.beginPath(); ctx.moveTo(140, H*0.25); ctx.lineTo(W - 140, H*0.45); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W - 140, H*0.55); ctx.lineTo(140, H*0.75); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W/2, 140); ctx.lineTo(W/2, H - 140); ctx.stroke();
+        ctx.restore();
+
+    } else if (mCode === 'ER900') {
+        // ER900: 3 Kademeli V-Kanal / Zikzak CNC
+        drawChevronCNC(H * 0.50, W * 0.65, 110, 3, 240);
+
+    } else if (mCode === 'ER901') {
+        // ER901: Zikzak CNC + Cam Kombinasyonu
+        drawChevronCNC(H * 0.28, W * 0.65, 90, 2, 200);
+        drawGlass(W * 0.34, H * 0.40, W * 0.32, 280);
+        drawChevronCNC(H * 0.72, W * 0.65, 90, 2, 200);
+
+    } else if (mCode === 'ER930') {
+        // ER930: Asimetrik Kademeli Fuga
+        drawCNCV(W * 0.25, 160, H - 160, 14);
+        drawCNCH(H * 0.24, 0.60, 12);
+        drawCNCH(H * 0.42, 0.85, 12);
+        drawCNCH(H * 0.60, 0.50, 12);
+        drawCNCH(H * 0.78, 0.85, 12);
+
+    } else if (mCode === 'ER931') {
+        // ER931: Asimetrik Çizgi + Cam
+        drawCNCV(W * 0.25, 160, H - 160, 14);
+        drawCNCH(H * 0.24, 0.60, 12);
+        drawGlass(W * 0.36, H * 0.38, W * 0.32, 260);
+        drawCNCH(H * 0.78, 0.85, 12);
+
+    } else if (mCode === 'ER1004') {
+        // ER1004: Daphne S-Wave Kavis & Yatay Aks
+        drawWaveCNC(W * 0.30, 140, W * 0.30, H - 140, 60, 2, 14);
+        drawCNCH(H * 0.35, 0.70, 12);
+        drawCNCH(H * 0.65, 0.70, 12);
+
+    } else if (mCode === 'ER1005') {
+        // ER1005: Kemer Başlıklı Çift Dikey CNC
+        drawCNCV(W * 0.42, 240, H - 160, 12);
+        drawCNCV(W * 0.58, 240, H - 160, 12);
+        ctx.save();
+        ctx.lineWidth = 12;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.80)';
+        ctx.beginPath();
+        ctx.arc(W * 0.50, 240, (W * 0.16)/2, Math.PI, 0);
+        ctx.stroke();
+        ctx.restore();
+        drawCNCH(H * 0.40, 0.40, 10);
+        drawCNCH(H * 0.60, 0.40, 10);
+        drawCNCH(H * 0.80, 0.40, 10);
+
+    } else if (mCode === 'ER1006') {
+        // ER1006: Daphne Basamaklı Asimetrik Çizgi
+        ctx.save();
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = 'rgba(15, 23, 42, 0.80)';
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(W*0.25, 200);
+        ctx.lineTo(W*0.75, 200);
+        ctx.lineTo(W*0.75, H*0.48);
+        ctx.lineTo(W*0.25, H*0.52);
+        ctx.lineTo(W*0.25, H - 200);
+        ctx.lineTo(W*0.75, H - 200);
+        ctx.stroke();
+        ctx.restore();
+
+    } else if (mCode === 'ER1007') {
+        // ER1007: 3 İnce Merkezi Dikey Hat + Kesişen Fuga
+        drawCNCV(W * 0.44, 150, H - 150, 10);
+        drawCNCV(W * 0.50, 150, H - 150, 10);
+        drawCNCV(W * 0.56, 150, H - 150, 10);
+        drawCNCH(H * 0.35, 0.85, 12);
+        drawCNCH(H * 0.65, 0.85, 12);
+
+    } else if (mCode === 'ER1008') {
+        // ER1008: Kilit Yanı Çift Dikey + 4 Yatay Bağlantı (Merdiven Fuga)
+        drawCNCV(W * 0.70, 160, H - 160, 12);
+        drawCNCV(W * 0.78, 160, H - 160, 12);
+        ctx.save();
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.80)';
+        [0.34, 0.44, 0.54, 0.64].forEach(p => {
+            ctx.fillRect(W * 0.70, H * p - 6, W * 0.08, 12);
+        });
+        ctx.restore();
+
+    } else if (mCode === 'ER1012') {
+        // ER1012: Menteşe Yanı Minimalist İkili Hat
+        drawCNCV(W * 0.18, 140, H - 140, 10);
+        drawCNCV(W * 0.24, 140, H - 140, 10);
+
+    } else if (mCode === 'ER1014') {
+        // ER1014: İkili Geniş Kare Ayna & Çift Orta Derz Bandı
+        drawMoldedPanel(140, 180, W - 280, 720, 20);
+        drawCNCH(H * 0.48, 0.90, 12);
+        drawCNCH(H * 0.52, 0.90, 12);
+        drawMoldedPanel(140, 1140, W - 280, 720, 20);
+
+    } else if (mCode === 'ER1014 ÖZEL') {
+        // ER1014 ÖZEL: ER1014 + İnce Dikey Cam Yuvası
+        drawMoldedPanel(140, 180, W - 280, 720, 20);
+        drawMoldedPanel(140, 1140, W - 280, 720, 20);
+        drawGlass(W * 0.40, 260, W * 0.20, H - 520);
+
+    } else if (mCode === 'ER5000') {
+        // ER5000: Titus Standart 3x Yatay Fuga
+        [0.28, 0.50, 0.72].forEach(p => drawCNCH(H * p));
+
+    } else if (mCode === 'ER5012') {
+        // ER5012: Titus Kesişen Çizgisel CNC
+        drawCNCV(W * 0.25, 140, H - 140, 14);
+        drawCNCH(H * 0.30, 0.88, 14);
+        drawCNCH(H * 0.70, 0.88, 14);
+
+    } else if (mCode === 'ER5014') {
+        // ER5014: Titus Çift Dikdörtgen Çerçeve
+        drawMoldedPanel(130, 160, W - 260, H - 320, 20);
+        drawMoldedPanel(210, 240, W - 420, H - 480, 16);
+        drawCNCH(H * 0.50, 0.75, 12);
+
+    } else if (mCode === 'ER5020') {
+        // ER5020: Titus Modern Dikey Merkez Hat + 3 Kesişen Fuga
+        drawCNCV(W * 0.50, 140, H - 140, 14);
+        drawCNCH(H * 0.25, 0.85, 12);
+        drawCNCH(H * 0.50, 0.85, 12);
+        drawCNCH(H * 0.75, 0.85, 12);
 
     } else if (data.has_cam) {
         if (mCode === 'ER103' || mCode === 'ER511') {
@@ -5068,6 +5326,8 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
                 drawCNCH(H * p);
                 drawGlass(160, H * p - 35, W - 320, 70);
             });
+        } else if (mCode === 'ER201') {
+            drawGlass(W * 0.68, 200, W * 0.16, H - 400);
         } else {
             const gw = (mCode === 'ER601') ? W * 0.36 : W * 0.28;
             const gx = (W - gw) / 2;
@@ -5078,7 +5338,7 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
         drawCNCH(H * 0.30);
         drawCNCH(H * 0.70);
 
-    } else if (fType === '3_horizontal' || mCode === 'ER510' || mCode === 'ER5000') {
+    } else if (fType === '3_horizontal' || mCode === 'ER510') {
         drawCNCH(H * 0.26);
         drawCNCH(H * 0.50);
         drawCNCH(H * 0.74);
@@ -5100,35 +5360,22 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
     } else if (fType === 'vertical' || mCode === 'ER610') {
         drawCNCV(W * 0.26);
 
-    } else if (fType === 'cross' || mCode === 'ER230' || mCode === 'ER620' || mCode === 'ER5012') {
+    } else if (fType === 'cross' || mCode === 'ER620') {
         drawCNCV(W * 0.26);
         drawCNCH(H * 0.32);
         drawCNCH(H * 0.68);
 
-    } else if (fType === 'frame' || mCode === 'ER700' || mCode === 'ER5014') {
-        drawMoldedPanel(130, 180, W - 260, H - 360);
+    } else if (fType === 'frame' || mCode === 'ER700') {
+        drawMoldedPanel(130, 180, W - 260, H - 360, 20);
 
     } else if (fType === 'frame_double' || mCode === 'ER800') {
-        drawMoldedPanel(120, 160, W - 240, H - 320);
-        drawMoldedPanel(200, 240, W - 400, H - 480);
+        drawMoldedPanel(120, 160, W - 240, H - 320, 20);
+        drawMoldedPanel(200, 240, W - 400, H - 480, 16);
 
     } else if (fType === 'block' || mCode === 'ER500' || mCode === 'ER960') {
-        drawMoldedPanel(140, 200, W - 280, 480);
-        drawMoldedPanel(140, 780, W - 280, 480);
-        drawMoldedPanel(140, 1360, W - 280, 480);
-
-    } else if (fType === 'asymmetric' || mCode === 'ER930') {
-        drawCNCV(W * 0.30, 200, H - 200);
-        drawCNCH(H * 0.25, 0.65);
-        drawCNCH(H * 0.42, 0.85);
-        drawCNCH(H * 0.60, 0.55);
-        drawCNCH(H * 0.78, 0.85);
-
-    } else if (fType === 'geometric' || mCode === 'ER900' || mCode === 'ER5020' || mCode === 'ER400') {
-        drawMoldedPanel(140, 180, W - 280, 720);
-        drawMoldedPanel(140, 1140, W - 280, 720);
-        drawCNCH(H * 0.48);
-        drawCNCH(H * 0.52);
+        drawMoldedPanel(140, 200, W - 280, 480, 20);
+        drawMoldedPanel(140, 780, W - 280, 480, 20);
+        drawMoldedPanel(140, 1360, W - 280, 480, 20);
 
     } else {
         // Düz Standart (ER100, ER200)
@@ -5396,26 +5643,59 @@ function render3DDoorModel(data) {
             fGrp.add(m.group);
         }
 
+        function addFrame(posX, posY, fw, fh, barW = fH) {
+            addH(posY + fh/2, fw, barW);
+            addH(posY - fh/2, fw, barW);
+            addV(posX + fw/2, fh, barW, posY);
+            addV(posX - fw/2, fh, barW, posY);
+        }
+
+        function addChevron(posY, cw = W * 0.65, ch = 0.08) {
+            const len = Math.sqrt(Math.pow(cw/2, 2) + Math.pow(ch, 2));
+            const angle = Math.atan2(ch, cw/2);
+            
+            const leftArm = makeBox(len, fH, fTh, fugaMat, 0x0F172A, 0.4);
+            leftArm.group.position.set(-cw/4, posY - ch/4, fZ);
+            leftArm.group.rotation.z = angle;
+            fGrp.add(leftArm.group);
+
+            const rightArm = makeBox(len, fH, fTh, fugaMat, 0x0F172A, 0.4);
+            rightArm.group.position.set(cw/4, posY - ch/4, fZ);
+            rightArm.group.rotation.z = -angle;
+            fGrp.add(rightArm.group);
+        }
+
+        function addWave(startX, startY, endX, endY, amp = 0.06, segments = 16) {
+            let prevX = startX;
+            let prevY = startY;
+            for (let i = 1; i <= segments; i++) {
+                const t = i / segments;
+                const nextY = startY + (endY - startY) * t;
+                const nextX = startX + (endX - startX) * t + Math.sin(t * Math.PI * 2) * amp;
+                const dx = nextX - prevX;
+                const dy = nextY - prevY;
+                const segLen = Math.sqrt(dx*dx + dy*dy);
+                const segAngle = Math.atan2(dy, dx);
+
+                const seg = makeBox(segLen, fH, fTh, fugaMat, 0x0F172A, 0.4);
+                seg.group.position.set((prevX + nextX)/2, (prevY + nextY)/2, fZ);
+                seg.group.rotation.z = segAngle;
+                fGrp.add(seg.group);
+
+                prevX = nextX;
+                prevY = nextY;
+            }
+        }
+
         const mCode = (data.model_code || '').toUpperCase();
         const fType = data.fuga_pattern?.type || 'none';
-        const isClassic = (
-            mCode === 'ER220' || mCode === 'ER250' || mCode === 'ER520' || mCode === 'ER540' ||
-            mCode === 'ER550' || mCode === 'ER560' || mCode === 'ER570' || mCode === 'ER590' ||
-            mCode.startsWith('ER100') || mCode.startsWith('ER101') || mCode === 'EROZL001' ||
-            mCode === 'EROZL009' || mCode === 'EROZL011' || mCode === 'EROZL013' || mCode === 'EROZL020'
-        );
 
-        if (isClassic && !data.has_cam) {
-            // Üst Ayna / Göbek Çerçevesi
+        if (mCode === 'ER550' || mCode === 'EROZL001') {
+            // ER550: Üst Ayna + Orta 13 Tarak Çıtası + Alt Ayna
             const uW = W * 0.68;
             const uH = H * 0.32;
-            const uY = H * 0.28;
-            addH(uY + uH/2, uW);
-            addH(uY - uH/2, uW);
-            addV(uW/2, uH, fH, uY);
-            addV(-uW/2, uH, fH, uY);
+            addFrame(0, H * 0.28, uW, uH);
 
-            // Orta Tarak Dikey Çıtaları (Fluted Grille) - 13 adet dikey CNC freze kanalı
             const gCount = 13;
             const gStep = (W * 0.52) / gCount;
             for (let i = -Math.floor(gCount/2); i <= Math.floor(gCount/2); i++) {
@@ -5424,61 +5704,205 @@ function render3DDoorModel(data) {
             addH(H * 0.055, W * 0.60);
             addH(-H * 0.065, W * 0.60);
 
-            // Alt Ayna / Göbek Çerçevesi
-            const lW = W * 0.68;
-            const lH = H * 0.32;
-            const lY = -H * 0.28;
-            addH(lY + lH/2, lW);
-            addH(lY - lH/2, lW);
-            addV(lW/2, lH, fH, lY);
-            addV(-lW/2, lH, fH, lY);
+            addFrame(0, -H * 0.28, uW, uH);
+
+        } else if (mCode === 'ER520' || mCode === 'EROZL020') {
+            // ER520: Büyük Üst Panel + Çift Orta Derz + Küçük Alt Panel
+            addFrame(0, H * 0.18, W * 0.68, H * 0.50);
+            addH(-H * 0.14, W * 0.88);
+            addH(-H * 0.18, W * 0.88);
+            addFrame(0, -H * 0.33, W * 0.68, H * 0.22);
+
+        } else if (mCode === 'ER540' || mCode === 'EROZL011') {
+            // ER540: 4 Eşit Kare Ayna Göbek
+            [0.34, 0.11, -0.11, -0.34].forEach(py => {
+                addFrame(0, H * py, W * 0.68, H * 0.18);
+            });
+
+        } else if (mCode === 'ER560' || mCode === 'EROZL013') {
+            // ER560: Çift Dikey Boy CNC Hattı
+            addV(-0.045, H * 0.85);
+            addV(0.045, H * 0.85);
+            addH(H * 0.425, 0.14);
+            addH(-H * 0.425, 0.14);
+
+        } else if (mCode === 'ER570' || mCode === 'EROZL017') {
+            // ER570: 3 Eşit Yatay Ayna Göbek
+            [0.28, 0, -0.28].forEach(py => {
+                addFrame(0, H * py, W * 0.68, H * 0.23);
+            });
+
+        } else if (mCode === 'ER590' || mCode === 'EROZL009') {
+            // ER590: Kemerli Üst Ayna + Düz Alt Ayna
+            addFrame(0, H * 0.20, W * 0.68, H * 0.42);
+            addFrame(0, -H * 0.28, W * 0.68, H * 0.34);
+
+        } else if (mCode === 'ER220') {
+            // ER220: 3 Eşit Kademeli Ayna Göbek
+            [0.28, 0, -0.28].forEach(py => {
+                addFrame(0, H * py, W * 0.68, H * 0.23);
+            });
+
+        } else if (mCode === 'ER230') {
+            // ER230: Kesişen Çizgiler
+            addV(-W * 0.22, H * 0.88);
+            addH(H * 0.20, W * 0.88);
+            addH(-H * 0.20, W * 0.88);
+
+        } else if (mCode === 'ER250' || mCode === 'ER700') {
+            // ER250 / ER700: Tek Büyük Dikdörtgen Çerçeve
+            addFrame(0, 0, W * 0.72, H * 0.82);
+
+        } else if (mCode === 'ER280') {
+            // ER280: Asimetrik İkili Dikey Hat & Üst Kavis
+            addV(-W * 0.28, H * 0.85);
+            addV(-W * 0.22, H * 0.85);
+            addH(H * 0.425, W * 0.08);
+
+        } else if (mCode === 'ER330') {
+            // ER330: Akıcı S-Dalga CNC Fuga
+            addWave(0, H * 0.42, 0, -H * 0.42, 0.07, 18);
+
+        } else if (mCode === 'ER400') {
+            // ER400: Modern Çapraz / Geometrik CNC
+            addChevron(H * 0.15, W * 0.70, 0.10);
+            addChevron(-H * 0.15, W * 0.70, -0.10);
+            addV(0, H * 0.85);
+
+        } else if (mCode === 'ER900') {
+            // ER900: 3 Kademeli Zikzak / V-Kanal
+            [0.20, 0, -0.20].forEach(py => addChevron(H * py, W * 0.65, 0.08));
+
+        } else if (mCode === 'ER930') {
+            // ER930: Asimetrik Kademeli Fuga
+            addV(-W * 0.25, H * 0.85);
+            addH(H * 0.32, W * 0.60);
+            addH(H * 0.15, W * 0.85);
+            addH(-H * 0.10, W * 0.70);
+            addH(-H * 0.35, W * 0.85);
+
+        } else if (mCode === 'ER1004') {
+            // ER1004: Daphne S-Wave Kavis & Yatay Aks
+            addWave(-W * 0.20, H * 0.42, -W * 0.20, -H * 0.42, 0.05, 16);
+            addH(H * 0.22, W * 0.70);
+            addH(-H * 0.22, W * 0.70);
+
+        } else if (mCode === 'ER1005') {
+            // ER1005: Kemer Başlıklı Çift Dikey CNC
+            addV(-0.06, H * 0.78, fH, -H * 0.04);
+            addV(0.06, H * 0.78, fH, -H * 0.04);
+            addH(H * 0.35, 0.14);
+            [-0.15, 0.05, 0.25].forEach(py => addH(H * py, 0.30));
+
+        } else if (mCode === 'ER1006') {
+            // ER1006: Daphne Basamaklı Asimetrik Çizgi
+            addH(H * 0.35, W * 0.50);
+            addV(W * 0.25, H * 0.35, fH, H * 0.175);
+            addH(0, W * 0.50);
+            addV(-W * 0.25, H * 0.35, fH, -H * 0.175);
+            addH(-H * 0.35, W * 0.50);
+
+        } else if (mCode === 'ER1007') {
+            // ER1007: 3 İnce Merkezi Dikey Hat + Kesişen Fuga
+            addV(-0.045, H * 0.85);
+            addV(0, H * 0.85);
+            addV(0.045, H * 0.85);
+            addH(H * 0.20, W * 0.85);
+            addH(-H * 0.20, W * 0.85);
+
+        } else if (mCode === 'ER1008') {
+            // ER1008: Kilit Yanı Çift Dikey + 4 Yatay Bağlantı (Merdiven Fuga)
+            addV(W * 0.20, H * 0.85);
+            addV(W * 0.28, H * 0.85);
+            [-0.18, -0.06, 0.06, 0.18].forEach(py => {
+                const rung = makeBox(W * 0.08, fH, fTh, fugaMat, 0x0F172A, 0.4);
+                rung.group.position.set(W * 0.24, H * py, fZ);
+                fGrp.add(rung.group);
+            });
+
+        } else if (mCode === 'ER1012') {
+            // ER1012: Menteşe Yanı Minimalist İkili Hat
+            addV(-W * 0.30, H * 0.85);
+            addV(-W * 0.24, H * 0.85);
+
+        } else if (mCode === 'ER1014' || mCode === 'ER1014 ÖZEL') {
+            // ER1014 / ER1014 ÖZEL: İkili Geniş Kare Ayna & Çift Orta Derz Bandı
+            addFrame(0, H * 0.24, W * 0.68, H * 0.36);
+            addH(H * 0.02, W * 0.88);
+            addH(-H * 0.02, W * 0.88);
+            addFrame(0, -H * 0.24, W * 0.68, H * 0.36);
+
+        } else if (mCode === 'ER5000') {
+            // ER5000: Titus Standart 3x Yatay Fuga
+            addH(H * 0.28);
+            addH(0);
+            addH(-H * 0.28);
+
+        } else if (mCode === 'ER5012') {
+            // ER5012: Titus Kesişen Çizgisel CNC
+            addV(-W * 0.25, H * 0.88);
+            addH(H * 0.22);
+            addH(-H * 0.22);
+
+        } else if (mCode === 'ER5014') {
+            // ER5014: Titus Çift Dikdörtgen Çerçeve
+            addFrame(0, 0, W * 0.72, H * 0.82);
+            addFrame(0, 0, W * 0.56, H * 0.68);
+            addH(0, W * 0.56);
+
+        } else if (mCode === 'ER5020') {
+            // ER5020: Titus Modern Dikey Merkez Hat + 3 Kesişen Fuga
+            addV(0, H * 0.88);
+            addH(H * 0.25, W * 0.85);
+            addH(0, W * 0.85);
+            addH(-H * 0.25, W * 0.85);
 
         } else if (fType === '2_horizontal' || mCode === 'ER102' || mCode === 'ER602') {
             addH(H * 0.25);
             addH(-H * 0.25);
-        } else if (fType === '3_horizontal' || mCode === 'ER510' || mCode === 'ER5000') {
+
+        } else if (fType === '3_horizontal' || mCode === 'ER510') {
             addH(H * 0.28);
             addH(0);
             addH(-H * 0.28);
+
         } else if (fType === '3_horizontal_wide' || mCode === 'ER300') {
             addH(H * 0.28, fW, 0.016);
             addH(0, fW, 0.016);
             addH(-H * 0.28, fW, 0.016);
+
         } else if (fType === '4_horizontal' || mCode === 'ER260' || mCode === 'ER940') {
             [-0.36, -0.12, 0.12, 0.36].forEach(p => addH(H * p));
+
         } else if (fType === '5_horizontal' || mCode === 'ER210' || mCode === 'ER950') {
             [-0.40, -0.20, 0, 0.20, 0.40].forEach(p => addH(H * p));
+
         } else if (fType === '6_horizontal' || mCode === 'ER600') {
             [-0.42, -0.25, -0.08, 0.08, 0.25, 0.42].forEach(p => addH(H * p));
+
         } else if (fType === 'vertical' || mCode === 'ER610') {
-            addV(W * 0.22);
-        } else if (fType === 'cross' || mCode === 'ER230' || mCode === 'ER620' || mCode === 'ER5012') {
-            addV(W * 0.20);
+            addV(-W * 0.25);
+
+        } else if (fType === 'cross' || mCode === 'ER620') {
+            addV(-W * 0.20);
             addH(H * 0.22);
             addH(-H * 0.22);
-        } else if (fType === 'frame' || mCode === 'ER700' || mCode === 'ER5014') {
-            const frW = W * 0.72;
-            const frH = H * 0.82;
-            addH(frH / 2, frW);
-            addH(-frH / 2, frW);
-            addV(frW / 2, frH);
-            addV(-frW / 2, frH);
+
         } else if (fType === 'frame_double' || mCode === 'ER800') {
             [0.72, 0.60].forEach((ratio) => {
                 const frW = W * ratio;
                 const frH = H * (ratio + 0.10);
-                addH(frH / 2, frW);
-                addH(-frH / 2, frW);
-                addV(frW / 2, frH);
-                addV(-frW / 2, frH);
+                addFrame(0, 0, frW, frH);
             });
+
         } else if (fType === 'block' || mCode === 'ER500' || mCode === 'ER960') {
             [-0.30, 0, 0.30].forEach(p => {
                 const block = makeBox(W * 0.85, 0.045, fTh, fugaMat, 0x0F172A, 0.4);
                 block.group.position.set(0, H * p, fZ);
                 fGrp.add(block.group);
             });
-        } else if (fType === 'asymmetric' || mCode === 'ER930') {
+
+        } else if (fType === 'asymmetric') {
             addH(H * 0.32, W * 0.60);
             addH(H * 0.15, W * 0.85);
             addH(-H * 0.10, W * 0.70);
@@ -5486,7 +5910,8 @@ function render3DDoorModel(data) {
             addV(-W * 0.25, H * 0.70);
         }
 
-        fGrp.visible = (data.has_fuga || isClassic) && three3D.showFuga !== false;
+        const isFlat = (mCode === 'ER100' || mCode === 'ER200');
+        fGrp.visible = (!isFlat) && three3D.showFuga !== false;
         parentGroup.add(fGrp);
         allFugaGroups.push(fGrp);
 
@@ -5535,6 +5960,14 @@ function render3DDoorModel(data) {
                 [-0.28, 0, 0.28].forEach(p => cGrp.add(makeGlass(W * 0.55, 0.18, 0, H * p)));
             } else if (mCode === 'ER261' || mCode === 'ER301' || mCode === 'ER941' || mCode === 'ER951') {
                 [-0.30, -0.10, 0.10, 0.30].forEach(p => cGrp.add(makeGlass(W * 0.60, 0.06, 0, H * p)));
+            } else if (mCode === 'ER901') {
+                cGrp.add(makeGlass(W * 0.32, 0.28, 0, 0));
+            } else if (mCode === 'ER931') {
+                cGrp.add(makeGlass(W * 0.35, 0.28, W * 0.08, 0));
+            } else if (mCode === 'ER1014 ÖZEL') {
+                cGrp.add(makeGlass(W * 0.18, H * 0.70, 0, 0));
+            } else if (mCode === 'ER201') {
+                cGrp.add(makeGlass(W * 0.18, H * 0.80, W * 0.20, 0));
             } else {
                 const cWidth = (mCode === 'ER601') ? W * 0.30 : W * 0.24;
                 const cHeight = H * 0.75;
