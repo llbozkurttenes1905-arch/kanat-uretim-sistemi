@@ -2267,27 +2267,48 @@
                 </div>
 
                 <!-- Floating Toolbar On 3D Scene Bottom -->
-                <div style="position:absolute; bottom:16px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:center; background:rgba(15, 23, 42, 0.85); backdrop-filter:blur(8px); padding:10px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); color:#FFFFFF; gap:16px; flex-wrap:wrap;">
+                <div style="position:absolute; bottom:16px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:center; background:rgba(15, 23, 42, 0.90); backdrop-filter:blur(10px); padding:10px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); color:#FFFFFF; gap:12px; flex-wrap:wrap; z-index:15;">
+                    <!-- Kapı Açma / Kapatma Swing Kontrolleri -->
+                    <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.06); padding:4px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
+                        <button class="btn-secondary" id="btn-3d-toggle-open" onclick="toggleDoorOpen()" style="padding:4px 11px; font-size:11.5px; font-weight:800; background:#0284C7; color:#FFF; border:1px solid #38BDF8;" title="Menteşe ekseninde kapıyı 90 derece aç / kapat">🚪 Kapıyı Aç (90°)</button>
+                        <span style="font-size:11px; color:#94A3B8; font-weight:700;">Açı:</span>
+                        <input type="range" id="door-3d-swing-slider" min="0" max="110" value="0" oninput="updateDoorSwingAngle(this.value)" style="width:75px; accent-color:#38BDF8; cursor:pointer;" title="Kapı Açıklık Açısı (0° - 110°)">
+                        <span id="door-3d-swing-val" style="font-size:11px; font-family:monospace; font-weight:800; width:28px;">0°</span>
+                    </div>
+
+                    <!-- Kasa & Pervaz ve Renk Seçimi -->
+                    <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.06); padding:4px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
+                        <button class="btn-secondary" id="btn-3d-toggle-frame" onclick="toggle3DFrame()" style="padding:4px 9px; font-size:11.5px; font-weight:800; background:#0284C7; color:#FFF; border:1px solid #38BDF8;" title="Teleskopik Kasa ve Pervazları Göster/Gizle">🖼️ Kasa &amp; Pervaz: Açık</button>
+                        <select id="door-3d-frame-color" onchange="change3DFrameColor(this.value)" class="form-select" style="font-size:11px; padding:3px 6px; background:#1E293B; color:#F8FAFC; border:1px solid rgba(255,255,255,0.2); border-radius:6px; cursor:pointer;" title="Kasa &amp; Pervaz Rengi Kombinasyonu">
+                            <option value="same">🎨 Kasa: Kanatla Aynı</option>
+                            <option value="anthracite">🏢 Antrasit Kasa (RAL 7016)</option>
+                            <option value="white">⚪ Mat Kar Beyazı Kasa</option>
+                            <option value="black">⚫ Siyah Mat Endüstriyel Kasa</option>
+                            <option value="walnut">🪵 Sıcak Amerikan Ceviz Kasa</option>
+                            <option value="oak">🌾 Doğal İskandinav Meşe Kasa</option>
+                        </select>
+                    </div>
+
                     <!-- Exploded Slider -->
-                    <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:240px;">
-                        <span style="font-size:12px; font-weight:800; color:#93C5FD; white-space:nowrap;">💥 Katman Patlatma:</span>
+                    <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:180px;">
+                        <span style="font-size:11.5px; font-weight:800; color:#93C5FD; white-space:nowrap;">💥 Patlatma:</span>
                         <input type="range" id="door-3d-explode-slider" min="0" max="100" value="0" oninput="update3DExplode(this.value)" style="flex:1; accent-color:#38BDF8; cursor:pointer;">
-                        <span id="door-3d-explode-val" style="font-size:12px; font-family:monospace; font-weight:800; width:40px; text-align:right;">0%</span>
+                        <span id="door-3d-explode-val" style="font-size:11.5px; font-family:monospace; font-weight:800; width:34px; text-align:right;">0%</span>
                     </div>
 
                     <!-- Action Controls -->
-                    <div style="display:flex; gap:6px; align-items:center;">
-                        <button class="btn-secondary" id="btn-3d-toggle-pattern" onclick="toggle3DPattern()" style="padding:4px 9px; font-size:11px; background:#0284C7; color:#FFF; border-color:#38BDF8;" title="Model Deseni / Dokusunu Aç/Kapat">✨ Model Deseni: Açık</button>
-                        <button class="btn-secondary" id="btn-3d-xray" onclick="toggle3DXRay()" style="padding:4px 9px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);">🩻 Röntgen</button>
-                        <button class="btn-secondary" id="btn-3d-autorotate" onclick="toggle3DAutoRotate()" style="padding:4px 9px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);">🔄 Dönüş</button>
-                        <button class="btn-secondary" onclick="reset3DCamera('iso')" style="padding:4px 8px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" title="İzometrik">🎯 İzometrik</button>
-                        <button class="btn-secondary" onclick="reset3DCamera('front')" style="padding:4px 8px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" title="Ön Yüz">↔️ Ön</button>
-                        <button class="btn-secondary" onclick="reset3DCamera('top')" style="padding:4px 8px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" title="Üstten Bakış">↕️ Üst</button>
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <button class="btn-secondary" id="btn-3d-toggle-pattern" onclick="toggle3DPattern()" style="padding:4px 8px; font-size:11px; background:#0284C7; color:#FFF; border-color:#38BDF8;" title="Model Deseni / Dokusunu Aç/Kapat">✨ Desen</button>
+                        <button class="btn-secondary" id="btn-3d-xray" onclick="toggle3DXRay()" style="padding:4px 8px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);">🩻 Röntgen</button>
+                        <button class="btn-secondary" id="btn-3d-autorotate" onclick="toggle3DAutoRotate()" style="padding:4px 8px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);">🔄 Dönüş</button>
+                        <button class="btn-secondary" onclick="reset3DCamera('iso')" style="padding:4px 7px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" title="İzometrik Bakış">🎯 İzo</button>
+                        <button class="btn-secondary" onclick="reset3DCamera('front')" style="padding:4px 7px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" title="Ön Yüz">↔️ Ön</button>
+                        <button class="btn-secondary" onclick="reset3DCamera('top')" style="padding:4px 7px; font-size:11px; background:rgba(255,255,255,0.1); color:#FFF; border-color:rgba(255,255,255,0.2);" title="Üstten Bakış">↕️ Üst</button>
                     </div>
                 </div>
 
                 <div style="position:absolute; bottom:64px; left:16px; font-size:11px; color:#94A3B8; background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:6px; pointer-events:none;">
-                    💡 Sol Tık: Döndür • Sağ Tık: Kaydır • Tekerlek: Yakınlaştır
+                    💡 Sol Tık: Döndür • Sağ Tık: Kaydır • Tekerlek: Yakınlaştır • Kapıyı Aç butonuyla kanadı menteşesinden açın
                 </div>
             </div>
 
@@ -2310,6 +2331,24 @@
                 <div>
                     <div style="font-size:11px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:8px;">KATMAN GÖRÜNÜRLÜĞÜ</div>
                     <div style="display:flex; flex-direction:column; gap:8px;">
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-frame" checked onchange="toggle3DLayer('frame', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#334155;" id="legend-frame-box"></span>
+                            <span style="font-weight:700;">Teleskopik Kasa (120 mm)</span>
+                            <span style="margin-left:auto; font-size:10px; color:#0284C7; font-weight:800;">Ayarlı</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-casing" checked onchange="toggle3DLayer('casing', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#475569;"></span>
+                            <span style="font-weight:700;">Ön &amp; Arka Pervazlar</span>
+                            <span style="margin-left:auto; font-size:10px; color:#64748B;">80 mm</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                            <input type="checkbox" id="layer-hinges" checked onchange="toggle3DLayer('hinges', this.checked)">
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#E2E8F0; border:1px solid #94A3B8;"></span>
+                            <span style="font-weight:700;">3x Rulmanlı Çelik Menteşe</span>
+                            <span style="margin-left:auto; font-size:10px; color:#64748B;">Krom</span>
+                        </label>
                         <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;" id="layer-label-fuga">
                             <input type="checkbox" id="layer-fuga" checked onchange="toggle3DLayer('fuga', this.checked)">
                             <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:#0F172A; border:1px solid #38BDF8;"></span>
@@ -2428,6 +2467,17 @@
                         </div>
                         <div style="font-size:11px; color:#64748B; padding-left:10px;">
                             80x250 mm kilit + 80x120 mm kol takozu
+                        </div>
+
+                        <div style="font-weight:800; color:#0F172A; margin-top:8px; display:flex; justify-content:space-between; border-top:1px dashed #CBD5E1; padding-top:6px;">
+                            <span>🖼️ Teleskopik Kasa &amp; Pervaz:</span>
+                            <span style="color:#0284C7; font-weight:800;">120 mm WPC</span>
+                        </div>
+                        <div style="color:#475569; padding-left:10px; font-size:11px; display:flex; flex-direction:column; gap:2px;">
+                            <div>• Kasa Duvar Genişliği: <strong>100 - 140 mm Ayarlı</strong></div>
+                            <div>• Pervaz Tipi: <strong>80 mm L-Geçme Pervaz</strong></div>
+                            <div>• Fitil: <strong>EPDM Akustik Ses &amp; Darbe Contası</strong></div>
+                            <div>• Menteşe: <strong>3x Rulmanlı Çelik Menteşe</strong></div>
                         </div>
                     </div>
                 </div>
@@ -4742,6 +4792,9 @@ let three3D = {
     renderer: null,
     controls: null,
     doorGroup: null,
+    leafPivotGroup: null,
+    leafContentGroup: null,
+    frameGroup: null,
     meshes: {},
     currentData: null,
     currentStep: 1, // 1: 4 Seren & Plastik Takoz, 2: Kilit Takviye, 3: Tek Parça EPS Köpük, 4: WPC Pres, 5: PVC Bitiş, 0: Serbest
@@ -4752,6 +4805,13 @@ let three3D = {
     showPattern: true,
     showFuga: true,
     showCam: true,
+    showFrame: true,
+    isDoorOpen: false,
+    doorOpenAngle: 0,
+    targetDoorAngle: 0,
+    isDraggingSwing: false,
+    frameColorKey: 'same',
+    frameMaterials: [],
     frontFaceMat: null,
     explodeVal: 0,
     animId: null
@@ -4864,6 +4924,18 @@ function init3DScene() {
         three3D.animId = requestAnimationFrame(animate);
         if (three3D.isAutoRotate && three3D.doorGroup) {
             three3D.doorGroup.rotation.y += 0.006;
+        }
+        // Smooth Door Swing Animation
+        if (three3D.leafPivotGroup && typeof three3D.doorOpenAngle === 'number' && typeof three3D.targetDoorAngle === 'number') {
+            if (Math.abs(three3D.doorOpenAngle - three3D.targetDoorAngle) > 0.002) {
+                three3D.doorOpenAngle += (three3D.targetDoorAngle - three3D.doorOpenAngle) * 0.12;
+                three3D.leafPivotGroup.rotation.y = three3D.doorOpenAngle;
+                const deg = Math.round((three3D.doorOpenAngle / Math.PI) * 180);
+                const slider = document.getElementById('door-3d-swing-slider');
+                if (slider && !three3D.isDraggingSwing) slider.value = deg;
+                const degLabel = document.getElementById('door-3d-swing-val');
+                if (degLabel) degLabel.textContent = `${deg}°`;
+            }
         }
         if (three3D.controls) {
             three3D.controls.update();
@@ -5569,6 +5641,19 @@ function render3DDoorModel(data) {
         return { group, mesh, geo, mat };
     }
 
+    // ── KANAT MENTEŞE PİVOT GRUBU (SOL EKSEN: x = -W/2) ──
+    const leafPivotGroup = new THREE.Group();
+    leafPivotGroup.position.set(-W/2, 0, 0);
+    leafPivotGroup.rotation.y = three3D.doorOpenAngle || 0;
+    three3D.leafPivotGroup = leafPivotGroup;
+    three3D.doorGroup.add(leafPivotGroup);
+
+    // Kanat Gövde İçerik Grubu (+W/2 ofset ile merkezlenir)
+    const leafContentGroup = new THREE.Group();
+    leafContentGroup.position.set(W/2, 0, 0);
+    three3D.leafContentGroup = leafContentGroup;
+    leafPivotGroup.add(leafContentGroup);
+
     // ── 1. 4 ADET KOMPOZİT SEREN (KARKAS ÇERÇEVESİ) ──
     const serenMat = new THREE.MeshStandardMaterial({
         color: 0x78716C, // Kompozit ahşap seren dokusu
@@ -5604,7 +5689,7 @@ function render3DDoorModel(data) {
         topRail: topRail.group,
         botRail: botRail.group
     };
-    three3D.doorGroup.add(serenGroup);
+    leafContentGroup.add(serenGroup);
 
     // ── 2. 4 ADET PLASTİK KÖŞE TAKOZU (GERÇEK L-ŞEKLİNDE GÖNYE TAKOZLARI - KESİNLİKLE '+' DEĞİL, NET 'L') ──
     const plasticMat = new THREE.MeshStandardMaterial({
@@ -5656,7 +5741,7 @@ function render3DDoorModel(data) {
     cornerGroup.add(cBR);
 
     three3D.meshes.cornerTakoz = { group: cornerGroup, cTL, cTR, cBL, cBR };
-    three3D.doorGroup.add(cornerGroup);
+    leafContentGroup.add(cornerGroup);
 
     // ── 3. KİLİT TAKVİYE BOY SERENİ & MASİF AHŞAP TAKOZLAR (3.5 BOY SEREN) ──
     const lockGroup = new THREE.Group();
@@ -5682,7 +5767,7 @@ function render3DDoorModel(data) {
 
     three3D.meshes.lockStile = { group: lockGroup };
     three3D.meshes.takoz = { group: lockGroup };
-    three3D.doorGroup.add(lockGroup);
+    leafContentGroup.add(lockGroup);
 
     // ── 4. TEK PARÇA YEKPARE EPS STRAFOR DOLGU KÖPÜĞÜ (KULLANICI TALEBİ: 2 AYRI PARÇA DEĞİL, TEK KÖPÜK!) ──
     const coreMat = new THREE.MeshStandardMaterial({
@@ -5700,7 +5785,7 @@ function render3DDoorModel(data) {
     coreGroup.add(singleCore.group);
 
     three3D.meshes.core = { group: coreGroup, mesh: singleCore.mesh };
-    three3D.doorGroup.add(coreGroup);
+    leafContentGroup.add(coreGroup);
 
     // ── 5. ÖN VE ARKA WPC/KOMPOZİT PANELLER (İKİ TARAFI DA AYNI DESENLİ!) ──
     const colorHexStr = data.color_hex || '#D4B185';
@@ -5745,7 +5830,7 @@ function render3DDoorModel(data) {
     three3D.meshes.front = frontBox;
     three3D.frontFaceMat = frontFaceMat;
     three3D.backFaceMat = backFaceMat;
-    three3D.doorGroup.add(frontBox.group);
+    leafContentGroup.add(frontBox.group);
 
     // Arka Panel (-Z Yüzü Aynı Desenli)
     const backBoxMaterials = [
@@ -5753,7 +5838,7 @@ function render3DDoorModel(data) {
     ];
     const backBox = makeBox(W, H, PTH, backBoxMaterials);
     three3D.meshes.back = backBox;
-    three3D.doorGroup.add(backBox.group);
+    leafContentGroup.add(backBox.group);
 
     // ── 5.A ASIL ERDOOR KATALOG FOTOĞRAFI DOKUSU (ÖN VE ARKA İKİ TARAFA DA) ──
     const mCodeClean = (data.model_code || 'ER100').replace(/\s+/g, '_').toUpperCase();
@@ -6261,7 +6346,152 @@ function render3DDoorModel(data) {
     pvcGroup.add(pvcBot.group);
 
     three3D.meshes.pvc = { group: pvcGroup };
-    three3D.doorGroup.add(pvcGroup);
+    leafContentGroup.add(pvcGroup);
+
+    // ════════════════════════════════════════════════════════════
+    // ── 8. TELESKOPİK AYARLI KASA, PERVAZLAR VE ÇELİK MENTEŞELER ──
+    // ════════════════════════════════════════════════════════════
+    const frameGroup = new THREE.Group();
+    three3D.frameGroup = frameGroup;
+    three3D.doorGroup.add(frameGroup);
+
+    // Kasa ve Pervaz Rengi Malzemesi
+    let initFrameColor = colorHex;
+    if (three3D.frameColorKey === 'anthracite') initFrameColor = 0x334155;
+    else if (three3D.frameColorKey === 'white') initFrameColor = 0xF8FAFC;
+    else if (three3D.frameColorKey === 'black') initFrameColor = 0x0F172A;
+    else if (three3D.frameColorKey === 'walnut') initFrameColor = 0x5C3D2E;
+    else if (three3D.frameColorKey === 'oak') initFrameColor = 0xC8A26A;
+
+    const frameMat = new THREE.MeshStandardMaterial({
+        color: initFrameColor,
+        roughness: 0.50,
+        metalness: 0.08
+    });
+    three3D.frameMaterials = [frameMat];
+
+    const gap = 0.004; // 4 mm çalışma payı
+    const jambTh = 0.040; // 40 mm kasa et kalınlığı
+    const jambDepth = 0.120; // 120 mm standart duvar kalınlığı
+    const casingW = 0.080; // 80 mm lüks pervaz genişliği
+    const casingTh = 0.014; // 14 mm pervaz et kalınlığı
+
+    // 8.1. SOL KASA DİREĞİ (Menteşe Tarafı Kasa)
+    const leftJamb = makeBox(jambTh, H + gap + jambTh, jambDepth, frameMat, 0x000000, 0.3);
+    leftJamb.group.position.set(-W/2 - gap - jambTh/2, (gap + jambTh)/2, 0);
+    frameGroup.add(leftJamb.group);
+
+    // 8.2. SAĞ KASA DİREĞİ (Kilit Karşılığı Tarafı Kasa)
+    const rightJamb = makeBox(jambTh, H + gap + jambTh, jambDepth, frameMat, 0x000000, 0.3);
+    rightJamb.group.position.set(W/2 + gap + jambTh/2, (gap + jambTh)/2, 0);
+    frameGroup.add(rightJamb.group);
+
+    // 8.3. ÜST KASA BAŞLIĞI
+    const topJambW = W + (gap + jambTh) * 2;
+    const topJamb = makeBox(topJambW, jambTh, jambDepth, frameMat, 0x000000, 0.3);
+    topJamb.group.position.set(0, H/2 + gap + jambTh/2, 0);
+    frameGroup.add(topJamb.group);
+
+    // 8.4. KASA İÇİ AKUSTİK EPDM CONTA FİTİLİ (Gri/Siyah fitil şeritleri)
+    const gasketMat = new THREE.MeshBasicMaterial({ color: 0x1E293B });
+    const gasketTh = 0.005;
+    const gasketZ = -TH/2 - 0.002;
+
+    const gLeft = makeBox(gasketTh, H, gasketTh, gasketMat);
+    gLeft.group.position.set(-W/2 - gap/2, 0, gasketZ);
+    frameGroup.add(gLeft.group);
+
+    const gRight = makeBox(gasketTh, H, gasketTh, gasketMat);
+    gRight.group.position.set(W/2 + gap/2, 0, gasketZ);
+    frameGroup.add(gRight.group);
+
+    const gTop = makeBox(W, gasketTh, gasketTh, gasketMat);
+    gTop.group.position.set(0, H/2 + gap/2, gasketZ);
+    frameGroup.add(gTop.group);
+
+    // 8.5. SAĞ KASA DİREĞİNDE KİLİT KARŞILIĞI (Striker Plate)
+    const strikerMat = new THREE.MeshStandardMaterial({ color: 0xD1D5DB, metalness: 0.90, roughness: 0.20 });
+    const striker = makeBox(0.002, 0.18, 0.024, strikerMat);
+    striker.group.position.set(W/2 + gap + 0.001, 0, 0);
+    frameGroup.add(striker.group);
+
+    // 8.6. ÖN PERVAZLAR (+Z Dış Yüzü - 80 mm Ayarlı Pervazlar)
+    const frontPervazZ = jambDepth/2 + casingTh/2;
+    const casingTotH = H + gap + jambTh + casingW;
+    const casingTotW = W + 2*(gap + jambTh + casingW) - 0.010;
+
+    // Sol Ön Pervaz
+    const fLeftCasing = makeBox(casingW, casingTotH, casingTh, frameMat, 0x000000, 0.3);
+    fLeftCasing.group.position.set(-W/2 - gap - jambTh - casingW/2 + 0.015, casingW/2, frontPervazZ);
+    frameGroup.add(fLeftCasing.group);
+
+    // Sağ Ön Pervaz
+    const fRightCasing = makeBox(casingW, casingTotH, casingTh, frameMat, 0x000000, 0.3);
+    fRightCasing.group.position.set(W/2 + gap + jambTh + casingW/2 - 0.015, casingW/2, frontPervazZ);
+    frameGroup.add(fRightCasing.group);
+
+    // Üst Ön Pervaz (Taç)
+    const fTopCasing = makeBox(casingTotW, casingW, casingTh, frameMat, 0x000000, 0.3);
+    fTopCasing.group.position.set(0, H/2 + gap + jambTh + casingW/2, frontPervazZ);
+    frameGroup.add(fTopCasing.group);
+
+    // 8.7. ARKA PERVAZLAR (-Z İç Yüzü - 80 mm Ayarlı Pervazlar)
+    const backPervazZ = -jambDepth/2 - casingTh/2;
+
+    // Sol Arka Pervaz
+    const bLeftCasing = makeBox(casingW, casingTotH, casingTh, frameMat, 0x000000, 0.3);
+    bLeftCasing.group.position.set(-W/2 - gap - jambTh - casingW/2 + 0.015, casingW/2, backPervazZ);
+    frameGroup.add(bLeftCasing.group);
+
+    // Sağ Arka Pervaz
+    const bRightCasing = makeBox(casingW, casingTotH, casingTh, frameMat, 0x000000, 0.3);
+    bRightCasing.group.position.set(W/2 + gap + jambTh + casingW/2 - 0.015, casingW/2, backPervazZ);
+    frameGroup.add(bRightCasing.group);
+
+    // Üst Arka Pervaz (Taç)
+    const bTopCasing = makeBox(casingTotW, casingW, casingTh, frameMat, 0x000000, 0.3);
+    bTopCasing.group.position.set(0, H/2 + gap + jambTh + casingW/2, backPervazZ);
+    frameGroup.add(bTopCasing.group);
+
+    // 8.8. 3 ADET RULMANLI ÇELİK MENTEŞE (Sol Menteşe Direğinde)
+    const hingeMat = new THREE.MeshStandardMaterial({
+        color: 0xE2E8F0,
+        metalness: 0.92,
+        roughness: 0.18
+    });
+    const hingeGroup = new THREE.Group();
+    const hingePositions = [H/2 - 0.22, 0, -H/2 + 0.25]; // Üst, Orta, Alt menteşeler
+
+    hingePositions.forEach(hy => {
+        const hGrp = new THREE.Group();
+        hGrp.position.set(-W/2 - gap/2, hy, 0);
+
+        // Menteşe Mili (Pim Silindiri)
+        const pinGeo = new THREE.CylinderGeometry(0.007, 0.007, 0.09, 16);
+        const pinMesh = new THREE.Mesh(pinGeo, hingeMat);
+        pinMesh.rotation.z = 0;
+        hGrp.add(pinMesh);
+
+        // Kasa Yaprağı (Kasaya vidalanan kısım)
+        const frameLeaf = makeBox(0.016, 0.08, 0.003, hingeMat);
+        frameLeaf.group.position.set(-0.008, 0, 0);
+        hGrp.add(frameLeaf.group);
+
+        // Kanat Yaprağı (Kanada bağlanan kısım)
+        const doorLeafPlate = makeBox(0.016, 0.08, 0.003, hingeMat);
+        doorLeafPlate.group.position.set(0.008, 0, 0);
+        hGrp.add(doorLeafPlate.group);
+
+        hingeGroup.add(hGrp);
+    });
+    frameGroup.add(hingeGroup);
+
+    three3D.meshes.frame = { group: frameGroup, jambs: [leftJamb.group, rightJamb.group, topJamb.group] };
+    three3D.meshes.casing = { group: frameGroup };
+    three3D.meshes.hinges = { group: hingeGroup };
+
+    // Initial frame visibility based on current step
+    frameGroup.visible = (three3D.currentStep === 5 || three3D.currentStep === 0) && (three3D.showFrame !== false);
 
     // Set Initial Position according to current Step
     applyStepVisibility(three3D.currentStep || 1);
@@ -6317,6 +6547,8 @@ function applyStepVisibility(step) {
         setVis('fuga', false);
         setVis('cam', false);
 
+        if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.seren?.group) three3D.meshes.seren.group.position.set(0, 0, 0);
         if (three3D.meshes.cornerTakoz?.group) three3D.meshes.cornerTakoz.group.position.set(0, 0, 0);
 
@@ -6340,6 +6572,8 @@ function applyStepVisibility(step) {
         setVis('fuga', false);
         setVis('cam', false);
 
+        if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.lockStile?.group) {
             three3D.meshes.lockStile.group.position.set(0, 0, 0);
         }
@@ -6364,6 +6598,8 @@ function applyStepVisibility(step) {
         setVis('fuga', false);
         setVis('cam', false);
 
+        if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.core?.group) {
             three3D.meshes.core.group.position.set(0, 0, 0);
         }
@@ -6388,6 +6624,8 @@ function applyStepVisibility(step) {
         setVis('fuga', false);
         setVis('cam', false);
 
+        if (three3D.frameGroup) three3D.frameGroup.visible = false;
+        if (three3D.leafPivotGroup) { three3D.targetDoorAngle = 0; three3D.doorOpenAngle = 0; three3D.leafPivotGroup.rotation.y = 0; }
         if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
         if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
 
@@ -6411,15 +6649,17 @@ function applyStepVisibility(step) {
         setVis('fuga', three3D.showPattern && (three3D.currentData?.has_fuga) && (three3D.showFuga !== false));
         setVis('cam', (three3D.currentData?.has_cam) && (three3D.showCam !== false));
 
+        if (three3D.frameGroup) three3D.frameGroup.visible = (three3D.showFrame !== false);
+        if (three3D.leafPivotGroup) three3D.leafPivotGroup.rotation.y = three3D.doorOpenAngle;
         if (three3D.meshes.front?.group) three3D.meshes.front.group.position.z = frontBaseZ;
         if (three3D.meshes.back?.group) three3D.meshes.back.group.position.z = backBaseZ;
         if (three3D.meshes.pvc?.group) three3D.meshes.pvc.group.scale.set(1, 1, 1);
 
-        if (hudBadge) hudBadge.textContent = '5. NİHAİ KANAT';
-        if (hudStation) hudStation.textContent = '📍 Homag Kenar Bantlama & CNC';
-        if (hudTitle) hudTitle.textContent = '5. Adım: CNC Ebatlama & 4 Kenar PVC Kenar Bandı';
-        if (hudDesc) hudDesc.textContent = 'Homag hattında 4 kenar 45x1 mm PVC bantlanır, CNC istasyonunda kilit/kol delikleri ve model deseni açılarak kanat tamamlanır.';
-        if (hudParts) hudParts.textContent = '🎯 4 Kenar PVC Bandı • CNC Fuga & Kilit Boşaltmaları Tamamlandı';
+        if (hudBadge) hudBadge.textContent = '5. NİHAİ KANAT & MONTAJ';
+        if (hudStation) hudStation.textContent = '📍 Homag & Teleskopik Kasa';
+        if (hudTitle) hudTitle.textContent = '5. Adım: Teleskopik Kasa, Pervazlar & Nihai Kanat';
+        if (hudDesc) hudDesc.textContent = 'PVC bantlı kanat, 120 mm teleskopik ayarlı kasa ve 80 mm geçme pervazlar ile montaja hazır hale getirilir. 3 rulmanlı menteşe ile açılıp kapanabilir.';
+        if (hudParts) hudParts.textContent = '🎯 4 Kenar PVC Bandı • 🖼️ Teleskopik Kasa • 🪟 80 mm Pervazlar • 🔩 3x Menteşe';
 
         reset3DCamera('iso');
 
@@ -6434,6 +6674,9 @@ function applyStepVisibility(step) {
         setVis('pvc', true);
         setVis('fuga', three3D.showPattern && (three3D.currentData?.has_fuga) && (three3D.showFuga !== false));
         setVis('cam', (three3D.currentData?.has_cam) && (three3D.showCam !== false));
+
+        if (three3D.frameGroup) three3D.frameGroup.visible = (three3D.showFrame !== false);
+        if (three3D.leafPivotGroup) three3D.leafPivotGroup.rotation.y = three3D.doorOpenAngle;
 
         if (hudBadge) hudBadge.textContent = '💥 SERBEST PATLATMA';
         if (hudStation) hudStation.textContent = '📐 3D Katman İnceleme Modu';
@@ -6643,7 +6886,119 @@ function reset3DCamera(view) {
     }
 }
 
+function toggleDoorOpen() {
+    three3D.isDoorOpen = !three3D.isDoorOpen;
+    const btn = document.getElementById('btn-3d-toggle-open');
+    if (three3D.isDoorOpen) {
+        three3D.targetDoorAngle = 1.62; // ~93 derece açık
+        if (btn) {
+            btn.innerHTML = '🚪 Kapıyı Kapat (0°)';
+            btn.style.background = '#DC2626';
+            btn.style.borderColor = '#F87171';
+        }
+    } else {
+        three3D.targetDoorAngle = 0;
+        if (btn) {
+            btn.innerHTML = '🚪 Kapıyı Aç (90°)';
+            btn.style.background = '#0284C7';
+            btn.style.borderColor = '#38BDF8';
+        }
+    }
+}
+
+function updateDoorSwingAngle(deg) {
+    three3D.isDraggingSwing = true;
+    const angle = (Number(deg) / 180) * Math.PI;
+    three3D.targetDoorAngle = angle;
+    three3D.doorOpenAngle = angle;
+    if (three3D.leafPivotGroup) {
+        three3D.leafPivotGroup.rotation.y = angle;
+    }
+    three3D.isDoorOpen = (angle > 0.05);
+    const degLabel = document.getElementById('door-3d-swing-val');
+    if (degLabel) degLabel.textContent = `${deg}°`;
+    const btn = document.getElementById('btn-3d-toggle-open');
+    if (btn) {
+        if (three3D.isDoorOpen) {
+            btn.innerHTML = '🚪 Kapıyı Kapat (0°)';
+            btn.style.background = '#DC2626';
+            btn.style.borderColor = '#F87171';
+        } else {
+            btn.innerHTML = '🚪 Kapıyı Aç (90°)';
+            btn.style.background = '#0284C7';
+            btn.style.borderColor = '#38BDF8';
+        }
+    }
+    setTimeout(() => { three3D.isDraggingSwing = false; }, 50);
+}
+
+function toggle3DFrame() {
+    three3D.showFrame = !three3D.showFrame;
+    if (three3D.frameGroup) {
+        three3D.frameGroup.visible = three3D.showFrame;
+    }
+    const btn = document.getElementById('btn-3d-toggle-frame');
+    if (btn) {
+        btn.textContent = three3D.showFrame ? '🖼️ Kasa & Pervaz: Açık' : '🖼️ Kasa & Pervaz: Gizli';
+        btn.style.background = three3D.showFrame ? '#0284C7' : 'rgba(255,255,255,0.1)';
+        btn.style.borderColor = three3D.showFrame ? '#38BDF8' : 'rgba(255,255,255,0.2)';
+    }
+    const chk = document.getElementById('layer-frame');
+    if (chk) chk.checked = three3D.showFrame;
+}
+
+function change3DFrameColor(key) {
+    three3D.frameColorKey = key;
+    if (!three3D.frameMaterials || three3D.frameMaterials.length === 0) return;
+
+    let targetColor = 0xD4B185;
+    if (key === 'same') {
+        const hex = three3D.currentData?.color_hex || '#D4B185';
+        targetColor = parseInt(hex.replace('#', '0x'), 16);
+    } else if (key === 'anthracite') {
+        targetColor = 0x334155;
+    } else if (key === 'white') {
+        targetColor = 0xF8FAFC;
+    } else if (key === 'black') {
+        targetColor = 0x0F172A;
+    } else if (key === 'walnut') {
+        targetColor = 0x5C3D2E;
+    } else if (key === 'oak') {
+        targetColor = 0xC8A26A;
+    }
+
+    three3D.frameMaterials.forEach(mat => {
+        mat.color.setHex(targetColor);
+        mat.needsUpdate = true;
+    });
+
+    const swatch = document.getElementById('legend-frame-box');
+    if (swatch) swatch.style.background = '#' + targetColor.toString(16).padStart(6, '0');
+}
+
 function toggle3DLayer(layer, isVisible) {
+    if (layer === 'frame') {
+        three3D.showFrame = isVisible;
+        if (three3D.frameGroup) three3D.frameGroup.visible = isVisible;
+        const btn = document.getElementById('btn-3d-toggle-frame');
+        if (btn) {
+            btn.textContent = isVisible ? '🖼️ Kasa & Pervaz: Açık' : '🖼️ Kasa & Pervaz: Gizli';
+            btn.style.background = isVisible ? '#0284C7' : 'rgba(255,255,255,0.1)';
+        }
+        return;
+    }
+    if (layer === 'casing') {
+        if (three3D.meshes.casing?.group) {
+            three3D.meshes.casing.group.visible = isVisible;
+        }
+        return;
+    }
+    if (layer === 'hinges') {
+        if (three3D.meshes.hinges?.group) {
+            three3D.meshes.hinges.group.visible = isVisible;
+        }
+        return;
+    }
     if (three3D.meshes[layer]?.group) {
         three3D.meshes[layer].group.visible = isVisible;
     }
