@@ -797,8 +797,14 @@ def parse_door_specs(model_str: str, custom_color: str = None) -> dict:
         width, height, thick = 800, 2020, 40
 
     # 2. Parse Model Code
-    parts = m.split()
-    model_code = parts[0] if parts else "ER100"
+    model_code = "ER100"
+    for cat_item in sorted(ERDOOR_MODELS_CATALOG, key=lambda x: len(x["code"]), reverse=True):
+        if m_up.startswith(cat_item["code"].upper()):
+            model_code = cat_item["code"]
+            break
+    else:
+        parts = m.split()
+        model_code = parts[0] if parts else "ER100"
     cat_match = next((item for item in ERDOOR_MODELS_CATALOG if item["code"] == model_code), None)
 
     # 3. Determine if CNC / Fuga is required
@@ -2282,6 +2288,17 @@ def get_door_3d_model(oid: str):
     model_name = cat_entry.get("name", specs.get("model_code", "ER100")) if cat_entry else specs.get("model_code", "ER100")
     series_name = cat_entry.get("series", "Daphne Serisi") if cat_entry else "Daphne Serisi"
     
+    model_code = specs.get("model_code", "ER100")
+    clean_code = model_code.replace(" ", "_").upper()
+    ascii_code = clean_code.replace("Ö", "O").replace("Ü", "U").replace("Ç", "C").replace("Ş", "S").replace("İ", "I").replace("Ğ", "G")
+    base_img = os.path.splitext(pattern_img)[0]
+    
+    leaf_url = pattern_url
+    for c in [f"{clean_code}.jpg", f"{ascii_code}.jpg", f"{base_img}.jpg"]:
+        if os.path.exists(os.path.join("static", "door_leaves", c)):
+            leaf_url = f"/static/door_leaves/{c}"
+            break
+
     return {
         "order_id": oid,
         "order_code": order.get("order_no", oid),
@@ -2293,6 +2310,7 @@ def get_door_3d_model(oid: str):
         "series": series_name,
         "pattern_image": pattern_img,
         "pattern_url": pattern_url,
+        "leaf_texture_url": leaf_url,
         "has_fuga": has_fuga,
         "has_cam": has_cam,
         "fuga_pattern": {

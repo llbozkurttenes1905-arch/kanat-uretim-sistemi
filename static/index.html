@@ -4781,7 +4781,7 @@ function on3DResize() {
 
 async function fetchAndRender3DDoor(orderIdOrModel) {
     try {
-        const r = await fetch(`/api/doors/3d-model/${orderIdOrModel}`);
+        const r = await fetch(`/api/doors/3d-model/${encodeURIComponent(orderIdOrModel)}`);
         const data = await r.json();
         three3D.currentData = data;
         render3DDoorModel(data);
@@ -4868,9 +4868,11 @@ function populate3DSidebar(data) {
 }
 
 // ════════════════════════════════════════════════════════════
-// ERDOOR VEKTÖREL CNC DESEN & DOKU ÇİZİM MOTORU (PROCEDURAL)
-// Panel üzerine doğrudan CNC deseni, ayna, göbek ve tarak çizer!
+// ERDOOR KATALOG FOTOĞRAFLI PANEL DOKU MOTORU
+// Doğrudan kullanıcının resmi kataloğundaki kapı fotoğrafını çizer!
 // ════════════════════════════════════════════════════════════
+const doorLeafImageCache = {};
+
 function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
     const canvas = document.createElement('canvas');
     canvas.width = 1024;
@@ -4882,6 +4884,42 @@ function generateProceduralDoorTexture(data, colorHexStr, showPattern = true) {
     // 1. Taban Kapı Rengi (WPC / Ahşap Kaplama)
     ctx.fillStyle = colorHexStr || '#D4B185';
     ctx.fillRect(0, 0, W, H);
+
+    if (!showPattern) {
+        return canvas;
+    }
+
+    const mCode = (data.model_code || 'ER100').toUpperCase();
+    const mCodeClean = mCode.replace(/\s+/g, '_');
+    const leafUrl = data.leaf_texture_url || `/static/door_leaves/${mCodeClean}.jpg`;
+
+    // Eğer katalog görseli önceden yüklenmişse doğrudan çiz
+    if (doorLeafImageCache[leafUrl] && doorLeafImageCache[leafUrl].complete) {
+        ctx.drawImage(doorLeafImageCache[leafUrl], 0, 0, W, H);
+        return canvas;
+    } else if (leafUrl) {
+        const cacheImg = new Image();
+        cacheImg.crossOrigin = "anonymous";
+        cacheImg.src = leafUrl;
+        cacheImg.onload = function() {
+            doorLeafImageCache[leafUrl] = cacheImg;
+            if (three3D.frontFaceMat && three3D.showPattern !== false) {
+                const refreshedCanvas = document.createElement('canvas');
+                refreshedCanvas.width = 1024;
+                refreshedCanvas.height = 2048;
+                const rCtx = refreshedCanvas.getContext('2d');
+                rCtx.drawImage(cacheImg, 0, 0, 1024, 2048);
+                const tex = new THREE.CanvasTexture(refreshedCanvas);
+                tex.colorSpace = THREE.SRGBColorSpace;
+                three3D.frontFaceMat.map = tex;
+                three3D.frontFaceMat.needsUpdate = true;
+                if (three3D.backFaceMat) {
+                    three3D.backFaceMat.map = tex;
+                    three3D.backFaceMat.needsUpdate = true;
+                }
+            }
+        };
+    }
 
     // 2. Doğal Ahşap / Kompozit Hare & Doku Çizgileri
     ctx.save();
@@ -5613,6 +5651,34 @@ function render3DDoorModel(data) {
     three3D.meshes.back = backBox;
     three3D.doorGroup.add(backBox.group);
 
+    // ── 5.A ASIL ERDOOR KATALOG FOTOĞRAFI DOKUSU (ÖN VE ARKA İKİ TARAFA DA) ──
+    const mCodeClean = (data.model_code || 'ER100').replace(/\s+/g, '_').toUpperCase();
+    const leafUrl = data.leaf_texture_url || `/static/door_leaves/${mCodeClean}.jpg`;
+    three3D.catalogTexture = null;
+
+    if (leafUrl) {
+        const texLoader = new THREE.TextureLoader();
+        texLoader.load(leafUrl, function(realTex) {
+            realTex.colorSpace = THREE.SRGBColorSpace;
+            realTex.wrapS = THREE.ClampToEdgeWrapping;
+            realTex.wrapT = THREE.ClampToEdgeWrapping;
+            three3D.catalogTexture = realTex;
+
+            if (three3D.showPattern !== false) {
+                if (frontFaceMat) {
+                    frontFaceMat.map = realTex;
+                    frontFaceMat.needsUpdate = true;
+                }
+                if (backFaceMat) {
+                    backFaceMat.map = realTex; // İki tarafı da aynı desenli!
+                    backFaceMat.needsUpdate = true;
+                }
+            }
+        }, undefined, function(err) {
+            console.warn("Katalog dokusu yüklenirken hata:", leafUrl, err);
+        });
+    }
+
     // ── 5.B FİZİKSEL 3D CNC FREZE KANALLARI VE RÖLYEFLERİ (ÖN VE ARKA İKİ TARAFA DA EKLENİR!) ──
     const allFugaGroups = [];
     const allCamGroups = [];
@@ -5691,67 +5757,83 @@ function render3DDoorModel(data) {
         const fType = data.fuga_pattern?.type || 'none';
 
         if (mCode === 'ER550' || mCode === 'EROZL001') {
-            // ER550: Üst Ayna + Orta 13 Tarak Çıtası + Alt Ayna
-            const uW = W * 0.68;
-            const uH = H * 0.32;
-            addFrame(0, H * 0.28, uW, uH);
+            // ER550: 5 Yatay Kapsül Oluk ve Çizgiler (Katalog Gerçek Deseni)
+            [-0.34, -0.17, 0, 0.17, 0.34].forEach(py => {
+                const pill = makeBox(W * 0.28, 0.028, fTh, fugaMat, 0x0F172A, 0.4);
+                pill.group.position.set(-W * 0.18, H * py, fZ);
+                fGrp.add(pill.group);
+                const line = makeBox(W * 0.36, fH, fTh, fugaMat, 0x0F172A, 0.4);
+                line.group.position.set(W * 0.18, H * py, fZ);
+                fGrp.add(line.group);
+            });
 
+        } else if (mCode === 'ER520' || mCode === 'EROZL020') {
+            // ER520: Alev / Kuğu Akıcı Dalga CNC Oyma (Katalog Gerçek Deseni)
+            addWave(-W * 0.12, H * 0.40, -W * 0.12, -H * 0.40, 0.08, 16);
+            addWave(W * 0.06, H * 0.38, W * 0.06, -H * 0.38, 0.10, 16);
+            addFrame(0, 0, W * 0.68, H * 0.82);
+
+        } else if (mCode === 'ER540' || mCode === 'EROZL011') {
+            // ER540: Kum Saati Formlu CNC Oyması (Katalog Gerçek Deseni)
+            addChevron(H * 0.22, W * 0.58, -0.16);
+            addChevron(-H * 0.22, W * 0.58, 0.16);
+            addH(0, W * 0.20, 0.016);
+            addFrame(0, 0, W * 0.68, H * 0.84);
+
+        } else if (mCode === 'ER560' || mCode === 'EROZL013') {
+            // ER560: Sol Dikey Panel + Sağ 5 Geometrik Form (Katalog Gerçek Deseni)
+            addFrame(-W * 0.18, 0, W * 0.26, H * 0.82);
+            [-0.32, -0.16, 0, 0.16, 0.32].forEach((py, idx) => {
+                addChevron(H * py, W * 0.30, idx % 2 === 0 ? 0.06 : -0.06);
+                fGrp.children[fGrp.children.length - 1].position.x = W * 0.18;
+            });
+
+        } else if (mCode === 'ER570' || mCode === 'EROZL017') {
+            // ER570: Sağ Hilal Kanat + Sol 2 Çerçeve (Katalog Gerçek Deseni)
+            addFrame(-W * 0.20, H * 0.22, W * 0.32, H * 0.38);
+            addFrame(-W * 0.20, -H * 0.22, W * 0.32, H * 0.38);
+            addWave(W * 0.16, H * 0.40, W * 0.16, -H * 0.40, 0.09, 16);
+
+        } else if (mCode === 'ER590' || mCode === 'EROZL009') {
+            // ER590: Sol 5 Yamuk Panel + Sağ Açılı Dikey Çıta (Katalog Gerçek Deseni)
+            [-0.34, -0.17, 0, 0.17, 0.34].forEach(py => {
+                addFrame(-W * 0.18, H * py, W * 0.32, H * 0.13);
+            });
+            addV(W * 0.20, H * 0.82, 0.035);
+
+        } else if (mCode === 'ER210') {
+            // ER210: Üst Ayna + Orta Fluted Tarak Çıtaları + Alt Ayna (Katalog Gerçek Deseni)
+            addFrame(0, H * 0.28, W * 0.66, H * 0.32);
             const gCount = 13;
             const gStep = (W * 0.52) / gCount;
             for (let i = -Math.floor(gCount/2); i <= Math.floor(gCount/2); i++) {
-                addV(i * gStep, H * 0.12, 0.005, -H * 0.005);
+                addV(i * gStep, H * 0.09, 0.006, 0);
             }
-            addH(H * 0.055, W * 0.60);
-            addH(-H * 0.065, W * 0.60);
-
-            addFrame(0, -H * 0.28, uW, uH);
-
-        } else if (mCode === 'ER520' || mCode === 'EROZL020') {
-            // ER520: Büyük Üst Panel + Çift Orta Derz + Küçük Alt Panel
-            addFrame(0, H * 0.18, W * 0.68, H * 0.50);
-            addH(-H * 0.14, W * 0.88);
-            addH(-H * 0.18, W * 0.88);
-            addFrame(0, -H * 0.33, W * 0.68, H * 0.22);
-
-        } else if (mCode === 'ER540' || mCode === 'EROZL011') {
-            // ER540: 4 Eşit Kare Ayna Göbek
-            [0.34, 0.11, -0.11, -0.34].forEach(py => {
-                addFrame(0, H * py, W * 0.68, H * 0.18);
-            });
-
-        } else if (mCode === 'ER560' || mCode === 'EROZL013') {
-            // ER560: Çift Dikey Boy CNC Hattı
-            addV(-0.045, H * 0.85);
-            addV(0.045, H * 0.85);
-            addH(H * 0.425, 0.14);
-            addH(-H * 0.425, 0.14);
-
-        } else if (mCode === 'ER570' || mCode === 'EROZL017') {
-            // ER570: 3 Eşit Yatay Ayna Göbek
-            [0.28, 0, -0.28].forEach(py => {
-                addFrame(0, H * py, W * 0.68, H * 0.23);
-            });
-
-        } else if (mCode === 'ER590' || mCode === 'EROZL009') {
-            // ER590: Kemerli Üst Ayna + Düz Alt Ayna
-            addFrame(0, H * 0.20, W * 0.68, H * 0.42);
-            addFrame(0, -H * 0.28, W * 0.68, H * 0.34);
+            addH(H * 0.05, W * 0.56);
+            addH(-H * 0.05, W * 0.56);
+            addFrame(0, -H * 0.28, W * 0.66, H * 0.32);
 
         } else if (mCode === 'ER220') {
-            // ER220: 3 Eşit Kademeli Ayna Göbek
-            [0.28, 0, -0.28].forEach(py => {
-                addFrame(0, H * py, W * 0.68, H * 0.23);
-            });
+            // ER220: Sol Boy Ayna + Sağ 2 Tarak Bölümü (Katalog Gerçek Deseni)
+            addFrame(-W * 0.16, 0, W * 0.38, H * 0.82);
+            for (let i = 0; i < 5; i++) {
+                addV(W * 0.16 + (i * 0.024), H * 0.28, 0.006, H * 0.22);
+                addV(W * 0.16 + (i * 0.024), -H * 0.28, 0.006, -H * 0.22);
+            }
 
         } else if (mCode === 'ER230') {
-            // ER230: Kesişen Çizgiler
-            addV(-W * 0.22, H * 0.88);
-            addH(H * 0.20, W * 0.88);
-            addH(-H * 0.20, W * 0.88);
+            // ER230: Baklava Kafes Üst/Alt + Orta Madalyon (Katalog Gerçek Deseni)
+            addFrame(0, H * 0.26, W * 0.58, H * 0.36);
+            addH(0, W * 0.40, 0.012);
+            addFrame(0, -H * 0.26, W * 0.58, H * 0.36);
 
-        } else if (mCode === 'ER250' || mCode === 'ER700') {
-            // ER250 / ER700: Tek Büyük Dikdörtgen Çerçeve
-            addFrame(0, 0, W * 0.72, H * 0.82);
+        } else if (mCode === 'ER250') {
+            // ER250: 4 Panel Klasik Model (2 Üst Kemerli + 2 Alt Dikdörtgen)
+            const pw = W * 0.30;
+            addFrame(-W * 0.18, H * 0.22, pw, H * 0.40);
+            addFrame(W * 0.18, H * 0.22, pw, H * 0.40);
+            addFrame(-W * 0.18, -H * 0.24, pw, H * 0.38);
+            addFrame(W * 0.18, -H * 0.24, pw, H * 0.38);
 
         } else if (mCode === 'ER280') {
             // ER280: Asimetrik İkili Dikey Hat & Üst Kavis
@@ -5759,59 +5841,107 @@ function render3DDoorModel(data) {
             addV(-W * 0.22, H * 0.85);
             addH(H * 0.425, W * 0.08);
 
+        } else if (mCode === 'ER300') {
+            // ER300: 4 Eşit Yatay Ayna Panel (Katalog Gerçek Deseni)
+            [0.34, 0.11, -0.11, -0.34].forEach(py => {
+                addFrame(0, H * py, W * 0.72, H * 0.18);
+            });
+
         } else if (mCode === 'ER330') {
-            // ER330: Akıcı S-Dalga CNC Fuga
-            addWave(0, H * 0.42, 0, -H * 0.42, 0.07, 18);
+            // ER330: 3 İç İçe Konsantrik Çerçeve (Katalog Gerçek Deseni)
+            addFrame(0, 0, W * 0.68, H * 0.82);
+            addFrame(0, 0, W * 0.52, H * 0.72);
+            addFrame(0, 0, W * 0.36, H * 0.62);
 
         } else if (mCode === 'ER400') {
-            // ER400: Modern Çapraz / Geometrik CNC
-            addChevron(H * 0.15, W * 0.70, 0.10);
-            addChevron(-H * 0.15, W * 0.70, -0.10);
-            addV(0, H * 0.85);
+            // ER400: Baklava / Sivri Oval CNC Geometri (Katalog Gerçek Deseni)
+            addFrame(0, 0, W * 0.68, H * 0.84);
+            addChevron(H * 0.18, W * 0.58, 0.16);
+            addChevron(-H * 0.18, W * 0.58, -0.16);
+            addChevron(0, W * 0.58, 0.16);
+            addChevron(0, W * 0.58, -0.16);
+
+        } else if (mCode === 'ER500') {
+            // ER500: Taç Başlıklı Klasik 2 Panel (Katalog Gerçek Deseni)
+            addFrame(0, H * 0.18, W * 0.66, H * 0.48);
+            addH(H * 0.42, W * 0.70, 0.014);
+            addFrame(0, -H * 0.26, W * 0.66, H * 0.28);
+
+        } else if (mCode === 'ER510') {
+            // ER510: Orta Oval Madalyon & Üst/Alt Ayna (Katalog Gerçek Deseni)
+            addFrame(0, H * 0.25, W * 0.68, H * 0.36);
+            addFrame(0, 0, W * 0.32, H * 0.12);
+            addFrame(0, -H * 0.25, W * 0.68, H * 0.36);
+
+        } else if (mCode === 'ER620') {
+            // ER620: Boydan Dev Oval / Elips Ayna Panel (Katalog Gerçek Deseni)
+            addFrame(0, 0, W * 0.70, H * 0.84);
+            addWave(-W * 0.22, H * 0.38, -W * 0.22, -H * 0.38, 0.06, 16);
+            addWave(W * 0.22, H * 0.38, W * 0.22, -H * 0.38, -0.06, 16);
+
+        } else if (mCode === 'ER700') {
+            // ER700: Kavisli Çıta + 5 Konsantrik Daire (Katalog Gerçek Deseni)
+            addWave(-W * 0.15, H * 0.42, -W * 0.15, -H * 0.42, 0.08, 16);
+            [-0.32, -0.16, 0, 0.16, 0.32].forEach(py => {
+                addFrame(W * 0.18, H * py, 0.07, 0.07);
+            });
+
+        } else if (mCode === 'ER800') {
+            // ER800: Sol Boy Panel + Sağ 4 Kare Panel (Katalog Gerçek Deseni)
+            addFrame(-W * 0.18, 0, W * 0.28, H * 0.82);
+            [-0.30, -0.10, 0.10, 0.30].forEach(py => {
+                addFrame(W * 0.18, H * py, W * 0.28, H * 0.16);
+            });
 
         } else if (mCode === 'ER900') {
-            // ER900: 3 Kademeli Zikzak / V-Kanal
-            [0.20, 0, -0.20].forEach(py => addChevron(H * py, W * 0.65, 0.08));
+            // ER900: Üst Trapez Göbek + Dikey Flütler (Katalog Gerçek Deseni)
+            addChevron(H * 0.30, W * 0.65, 0.10);
+            addFrame(0, -H * 0.10, W * 0.68, H * 0.58);
 
         } else if (mCode === 'ER930') {
-            // ER930: Asimetrik Kademeli Fuga
-            addV(-W * 0.25, H * 0.85);
-            addH(H * 0.32, W * 0.60);
-            addH(H * 0.15, W * 0.85);
-            addH(-H * 0.10, W * 0.70);
-            addH(-H * 0.35, W * 0.85);
+            // ER930: Klasik 6 Panel (2 Sütun x 3 Satır Ayna Göbekler - Katalog Gerçek Deseni)
+            const pw = W * 0.30;
+            const pLeft = -W * 0.18;
+            const pRight = W * 0.18;
+            addFrame(pLeft, H * 0.32, pw, H * 0.20);
+            addFrame(pRight, H * 0.32, pw, H * 0.20);
+            addFrame(pLeft, H * 0.02, pw, H * 0.32);
+            addFrame(pRight, H * 0.02, pw, H * 0.32);
+            addFrame(pLeft, -H * 0.30, pw, H * 0.24);
+            addFrame(pRight, -H * 0.30, pw, H * 0.24);
 
         } else if (mCode === 'ER1004') {
-            // ER1004: Daphne S-Wave Kavis & Yatay Aks
-            addWave(-W * 0.20, H * 0.42, -W * 0.20, -H * 0.42, 0.05, 16);
-            addH(H * 0.22, W * 0.70);
-            addH(-H * 0.22, W * 0.70);
+            // ER1004: 3 Çift Kademeli Ofset Yatay Hat (Katalog Gerçek Deseni)
+            addH(H * 0.32, W * 0.52);
+            addH(H * 0.27, W * 0.52);
+            addH(H * 0.03, W * 0.52);
+            addH(-H * 0.02, W * 0.52);
+            addH(-H * 0.28, W * 0.52);
+            addH(-H * 0.33, W * 0.52);
 
         } else if (mCode === 'ER1005') {
-            // ER1005: Kemer Başlıklı Çift Dikey CNC
-            addV(-0.06, H * 0.78, fH, -H * 0.04);
-            addV(0.06, H * 0.78, fH, -H * 0.04);
-            addH(H * 0.35, 0.14);
-            [-0.15, 0.05, 0.25].forEach(py => addH(H * py, 0.30));
+            // ER1005: Mozaik Labirent Izgara (Katalog Gerçek Deseni)
+            addFrame(0, 0, W * 0.68, H * 0.82);
+            addV(-W * 0.12, H * 0.78);
+            addV(W * 0.12, H * 0.78);
+            [-0.26, -0.09, 0.09, 0.26].forEach(py => addH(H * py, W * 0.66));
 
         } else if (mCode === 'ER1006') {
-            // ER1006: Daphne Basamaklı Asimetrik Çizgi
-            addH(H * 0.35, W * 0.50);
-            addV(W * 0.25, H * 0.35, fH, H * 0.175);
-            addH(0, W * 0.50);
-            addV(-W * 0.25, H * 0.35, fH, -H * 0.175);
-            addH(-H * 0.35, W * 0.50);
+            // ER1006: 8 Yatay Yastık Panel Kademesi (Katalog Gerçek Deseni)
+            addFrame(0, 0, W * 0.68, H * 0.84);
+            for (let i = 0; i < 7; i++) {
+                const py = -0.36 + (i * 0.12);
+                addH(H * py, W * 0.66);
+            }
 
         } else if (mCode === 'ER1007') {
-            // ER1007: 3 İnce Merkezi Dikey Hat + Kesişen Fuga
-            addV(-0.045, H * 0.85);
-            addV(0, H * 0.85);
-            addV(0.045, H * 0.85);
-            addH(H * 0.20, W * 0.85);
-            addH(-H * 0.20, W * 0.85);
+            // ER1007: 5 Yatay Kabartma Yastık Ayna (Katalog Gerçek Deseni)
+            [-0.32, -0.16, 0, 0.16, 0.32].forEach(py => {
+                addFrame(0, H * py, W * 0.68, H * 0.12);
+            });
 
         } else if (mCode === 'ER1008') {
-            // ER1008: Kilit Yanı Çift Dikey + 4 Yatay Bağlantı (Merdiven Fuga)
+            // ER1008: Dikey Hat & Yatay Bölmeler (Katalog Gerçek Deseni)
             addV(W * 0.20, H * 0.85);
             addV(W * 0.28, H * 0.85);
             [-0.18, -0.06, 0.06, 0.18].forEach(py => {
@@ -5821,16 +5951,21 @@ function render3DDoorModel(data) {
             });
 
         } else if (mCode === 'ER1012') {
-            // ER1012: Menteşe Yanı Minimalist İkili Hat
-            addV(-W * 0.30, H * 0.85);
-            addV(-W * 0.24, H * 0.85);
+            // ER1012: Kilit Aksı Yanı 3 İnce Dikey Hat (Katalog Gerçek Deseni)
+            addV(W * 0.22, H * 0.86, 0.005);
+            addV(W * 0.26, H * 0.86, 0.005);
+            addV(W * 0.30, H * 0.86, 0.005);
 
-        } else if (mCode === 'ER1014' || mCode === 'ER1014 ÖZEL') {
-            // ER1014 / ER1014 ÖZEL: İkili Geniş Kare Ayna & Çift Orta Derz Bandı
-            addFrame(0, H * 0.24, W * 0.68, H * 0.36);
-            addH(H * 0.02, W * 0.88);
-            addH(-H * 0.02, W * 0.88);
-            addFrame(0, -H * 0.24, W * 0.68, H * 0.36);
+        } else if (mCode === 'ER1014') {
+            // ER1014: 2 Klasik Panel (Büyük Üst + Küçük Alt)
+            addFrame(0, H * 0.18, W * 0.68, H * 0.46);
+            addFrame(0, -H * 0.26, W * 0.68, H * 0.30);
+
+        } else if (mCode === 'ER1014 ÖZEL' || mCode === 'ER1014_OZEL') {
+            // ER1014 ÖZEL: Sağ Boydan 3 Oluklu Hat (Katalog Gerçek Deseni)
+            addV(W * 0.24, H * 0.86, 0.006);
+            addV(W * 0.28, H * 0.86, 0.006);
+            addV(W * 0.32, H * 0.86, 0.006);
 
         } else if (mCode === 'ER5000') {
             // ER5000: Titus Standart 3x Yatay Fuga
@@ -6321,17 +6456,33 @@ function toggle3DPattern() {
 
     if (three3D.currentData) {
         const colorHexStr = three3D.currentData.color_hex || '#D4B185';
-        const canvas = generateProceduralDoorTexture(three3D.currentData, colorHexStr, three3D.showPattern);
-        const tex = new THREE.CanvasTexture(canvas);
-        tex.colorSpace = THREE.SRGBColorSpace;
+        const colorHexInt = parseInt(colorHexStr.replace('#', '0x'), 16);
 
-        if (three3D.frontFaceMat) {
-            three3D.frontFaceMat.map = tex;
-            three3D.frontFaceMat.needsUpdate = true;
-        }
-        if (three3D.backFaceMat) {
-            three3D.backFaceMat.map = tex; // İki tarafı da aynı desenli!
-            three3D.backFaceMat.needsUpdate = true;
+        if (three3D.showPattern) {
+            const activeTex = three3D.catalogTexture || new THREE.CanvasTexture(generateProceduralDoorTexture(three3D.currentData, colorHexStr, true));
+            if (activeTex.colorSpace !== undefined) activeTex.colorSpace = THREE.SRGBColorSpace;
+            if (three3D.frontFaceMat) {
+                three3D.frontFaceMat.color.setHex(0xFFFFFF);
+                three3D.frontFaceMat.map = activeTex;
+                three3D.frontFaceMat.needsUpdate = true;
+            }
+            if (three3D.backFaceMat) {
+                three3D.backFaceMat.color.setHex(0xFFFFFF);
+                three3D.backFaceMat.map = activeTex; // İki tarafı da aynı desenli!
+                three3D.backFaceMat.needsUpdate = true;
+            }
+        } else {
+            // Desensiz düz ham panel
+            if (three3D.frontFaceMat) {
+                three3D.frontFaceMat.map = null;
+                three3D.frontFaceMat.color.setHex(colorHexInt);
+                three3D.frontFaceMat.needsUpdate = true;
+            }
+            if (three3D.backFaceMat) {
+                three3D.backFaceMat.map = null;
+                three3D.backFaceMat.color.setHex(colorHexInt);
+                three3D.backFaceMat.needsUpdate = true;
+            }
         }
     }
 
