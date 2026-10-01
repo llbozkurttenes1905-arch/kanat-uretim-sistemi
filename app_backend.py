@@ -2415,6 +2415,456 @@ def get_door_3d_model(oid: str):
         ]
     }
 
+# ════════════════════════════════════════════════════════════
+# 📐 AI DESTEKLİ 2D PLAKA KESİM & NESTİNG MOTORU (MADDE 1)
+# ════════════════════════════════════════════════════════════
+
+class NestingPartItem(BaseModel):
+    id: Optional[str] = "P1"
+    name: Optional[str] = "Parça"
+    order_no: Optional[str] = ""
+    order_id: Optional[str] = ""
+    customer: Optional[str] = ""
+    width: float
+    height: float
+    qty: int = 1
+    color: Optional[str] = "#3B82F6"
+    material: Optional[str] = "MDF"
+    category: Optional[str] = "Yüzey Paneli"
+    can_rotate: Optional[bool] = False
+    allow_cross_grain: Optional[bool] = False
+
+class NestingRequest(BaseModel):
+    sheet_width: float = 2100.0
+    sheet_height: float = 2800.0
+    blade_kerf: float = 3.2
+    trim_margin: float = 10.0
+    grain_direction: str = "vertical"  # "vertical", "horizontal", "none"
+    auto_orient_sheet: bool = True
+    sheet_cost_tl: float = 1150.0
+    parts: List[NestingPartItem] = []
+
+class AdvancedNestingOptimizer:
+    def __init__(self, sheet_width=2100.0, sheet_height=2800.0, kerf=3.2, trim=10.0, grain='vertical', auto_orient=True, sheet_cost=1150.0):
+        self.sheet_width = float(sheet_width)
+        self.sheet_height = float(sheet_height)
+        self.kerf = float(kerf)
+        self.trim = float(trim)
+        self.grain = grain
+        self.auto_orient = auto_orient
+        self.sheet_cost = float(sheet_cost)
+
+    def optimize(self, items):
+        start_t = datetime.now()
+        
+        parts = []
+        for it in items:
+            qty = int(it.get('qty', 1))
+            for i in range(qty):
+                p = dict(it)
+                p['qty'] = 1
+                p['instance_id'] = f"{it.get('id', 'P')}_{i+1}"
+                parts.append(p)
+                
+        if not parts:
+            return self._empty_result()
+            
+        orientations = []
+        if self.auto_orient and abs(self.sheet_width - self.sheet_height) > 1:
+            orientations = [
+                (self.sheet_width, self.sheet_height),
+                (self.sheet_height, self.sheet_width)
+            ]
+        else:
+            orientations = [(self.sheet_width, self.sheet_height)]
+            
+        strategies = ['area_desc', 'max_dim_desc', 'height_desc', 'width_desc']
+        cut_heuristics = ['rip_first', 'cross_first', 'balanced']
+        
+        best_plan = None
+        best_score = (-float('inf'), -float('inf'))
+        
+        for sw, sh in orientations:
+            usable_w = sw - 2 * self.trim
+            usable_h = sh - 2 * self.trim
+            if usable_w <= 0 or usable_h <= 0:
+                continue
+                
+            for strat in strategies:
+                sorted_parts = self._sort_parts(parts, strat)
+                for cut_type in cut_heuristics:
+                    candidate = self._pack_with_params(sorted_parts, sw, sh, usable_w, usable_h, cut_type)
+                    summary = candidate['summary']
+                    sheets_count = summary['total_sheets']
+                    eff = summary['efficiency_pct']
+                    score = (-sheets_count, eff)
+                    if score > best_score:
+                        best_score = score
+                        best_plan = candidate
+                        
+        elapsed_ms = (datetime.now() - start_t).total_seconds() * 1000.0
+        if best_plan:
+            best_plan['summary']['computation_time_ms'] = round(elapsed_ms, 1)
+            total_sheets = best_plan['summary']['total_sheets']
+            total_cost = total_sheets * self.sheet_cost
+            placed_count = best_plan['summary']['placed_parts']
+            cost_per_part = (total_cost / placed_count) if placed_count > 0 else 0
+            
+            waste_pct = best_plan['summary']['waste_pct']
+            baseline_waste_pct = 22.0
+            saved_waste_pct = max(0.0, baseline_waste_pct - waste_pct)
+            saved_money = (saved_waste_pct / 100.0) * total_cost
+            
+            best_plan['summary']['total_cost_tl'] = round(total_cost, 2)
+            best_plan['summary']['cost_per_part_tl'] = round(cost_per_part, 2)
+            best_plan['summary']['saved_money_tl'] = round(saved_money, 2)
+            best_plan['summary']['saved_waste_pct'] = round(saved_waste_pct, 1)
+            best_plan['summary']['selected_sheet_orientation'] = f"{best_plan['sheet_width']} x {best_plan['sheet_height']} mm"
+            
+        return best_plan
+
+    def _empty_result(self):
+        return {
+            'summary': {
+                'total_parts': 0, 'placed_parts': 0, 'unplaced_parts': 0, 'total_sheets': 0,
+                'total_parts_area_m2': 0, 'total_sheet_area_m2': 0, 'total_waste_area_m2': 0,
+                'efficiency_pct': 0, 'waste_pct': 0, 'computation_time_ms': 0,
+                'total_cost_tl': 0, 'cost_per_part_tl': 0, 'saved_money_tl': 0, 'saved_waste_pct': 0
+            },
+            'sheet_width': self.sheet_width,
+            'sheet_height': self.sheet_height,
+            'sheets': [],
+            'unplaced': []
+        }
+
+    def _sort_parts(self, parts, strategy):
+        p = list(parts)
+        if strategy == 'area_desc':
+            p.sort(key=lambda x: x['width'] * x['height'], reverse=True)
+        elif strategy == 'max_dim_desc':
+            p.sort(key=lambda x: max(x['width'], x['height']), reverse=True)
+        elif strategy == 'height_desc':
+            p.sort(key=lambda x: (x['height'], x['width']), reverse=True)
+        elif strategy == 'width_desc':
+            p.sort(key=lambda x: (x['width'], x['height']), reverse=True)
+        return p
+
+    def _pack_with_params(self, parts, sw, sh, usable_w, usable_h, cut_type):
+        sheets = []
+        unplaced = []
+        
+        for part in parts:
+            pw, ph = float(part['width']), float(part['height'])
+            can_rot = bool(part.get('can_rotate', False))
+            if self.grain == 'none':
+                can_rot = True
+            elif self.grain == 'vertical' and not part.get('allow_cross_grain', False):
+                can_rot = False
+                
+            placed = False
+            for s in sheets:
+                rect_idx, rot = self._find_fit(s['free_rects'], pw, ph, can_rot)
+                if rect_idx is not None:
+                    self._place_and_split(s, rect_idx, part, pw, ph, rot, cut_type)
+                    placed = True
+                    break
+                    
+            if not placed:
+                new_sheet = {
+                    'sheet_index': len(sheets) + 1,
+                    'sheet_width': sw,
+                    'sheet_height': sh,
+                    'placed_parts': [],
+                    'free_rects': [{'x': self.trim, 'y': self.trim, 'w': usable_w, 'h': usable_h}],
+                    'cut_lines': []
+                }
+                rect_idx, rot = self._find_fit(new_sheet['free_rects'], pw, ph, can_rot)
+                if rect_idx is not None:
+                    self._place_and_split(new_sheet, rect_idx, part, pw, ph, rot, cut_type)
+                    sheets.append(new_sheet)
+                    placed = True
+                else:
+                    unplaced.append(part)
+                    
+        total_sheet_area = len(sheets) * (sw * sh) * 1e-6
+        total_parts_area = sum(p['width'] * p['height'] for s in sheets for p in s['placed_parts']) * 1e-6
+        total_waste_area = max(0.0, total_sheet_area - total_parts_area)
+        overall_eff = (total_parts_area / total_sheet_area * 100) if total_sheet_area > 0 else 0
+        
+        for s in sheets:
+            s_parts_area = sum(p['width'] * p['height'] for p in s['placed_parts']) * 1e-6
+            s_total_area = (sw * sh) * 1e-6
+            s['efficiency_pct'] = round((s_parts_area / s_total_area) * 100, 1)
+            s['waste_area_m2'] = round(max(0.0, s_total_area - s_parts_area), 3)
+            s['waste_rects'] = []
+            for r in s['free_rects']:
+                if r['w'] >= 10 and r['h'] >= 10:
+                    area_m2 = (r['w'] * r['h']) * 1e-6
+                    is_reusable = (r['w'] >= 100 and r['h'] >= 300) or (r['h'] >= 100 and r['w'] >= 300)
+                    s['waste_rects'].append({
+                        'x': round(r['x'], 1),
+                        'y': round(r['y'], 1),
+                        'w': round(r['w'], 1),
+                        'h': round(r['h'], 1),
+                        'area_m2': round(area_m2, 3),
+                        'is_reusable': is_reusable
+                    })
+            del s['free_rects']
+            
+        return {
+            'summary': {
+                'total_parts': len(parts),
+                'placed_parts': sum(len(s['placed_parts']) for s in sheets),
+                'unplaced_parts': len(unplaced),
+                'total_sheets': len(sheets),
+                'total_parts_area_m2': round(total_parts_area, 3),
+                'total_sheet_area_m2': round(total_sheet_area, 3),
+                'total_waste_area_m2': round(total_waste_area, 3),
+                'efficiency_pct': round(overall_eff, 1),
+                'waste_pct': round(max(0.0, 100.0 - overall_eff), 1)
+            },
+            'sheet_width': sw,
+            'sheet_height': sh,
+            'sheets': sheets,
+            'unplaced': unplaced
+        }
+
+    def _find_fit(self, free_rects, pw, ph, can_rot):
+        best_idx = None
+        best_rot = False
+        min_rem_area = float('inf')
+        
+        for idx, r in enumerate(free_rects):
+            rw, rh = r['w'], r['h']
+            if pw <= rw and ph <= rh:
+                rem_area = (rw * rh) - (pw * ph)
+                if rem_area < min_rem_area:
+                    min_rem_area = rem_area
+                    best_idx = idx
+                    best_rot = False
+            if can_rot and ph <= rw and pw <= rh:
+                rem_area = (rw * rh) - (pw * ph)
+                if rem_area < min_rem_area:
+                    min_rem_area = rem_area
+                    best_idx = idx
+                    best_rot = True
+                    
+        return best_idx, best_rot
+
+    def _place_and_split(self, sheet, rect_idx, part, pw, ph, rot, cut_type):
+        w = ph if rot else pw
+        h = pw if rot else ph
+        target = sheet['free_rects'].pop(rect_idx)
+        rx, ry, rw, rh = target['x'], target['y'], target['w'], target['h']
+        
+        placed_obj = {
+            'instance_id': part.get('instance_id', ''),
+            'id': part.get('id', ''),
+            'name': part.get('name', 'Parça'),
+            'order_no': part.get('order_no', ''),
+            'customer': part.get('customer', ''),
+            'color': part.get('color', '#3B82F6'),
+            'material': part.get('material', 'MDF'),
+            'x': round(rx, 1),
+            'y': round(ry, 1),
+            'width': round(w, 1),
+            'height': round(h, 1),
+            'orig_width': pw,
+            'orig_height': ph,
+            'rotated': rot
+        }
+        sheet['placed_parts'].append(placed_obj)
+        
+        rem_w = rw - w - self.kerf
+        rem_h = rh - h - self.kerf
+        step_no = len(sheet['cut_lines']) + 1
+        new_rects = []
+        
+        if cut_type == 'rip_first' or (cut_type == 'balanced' and rem_w >= rem_h):
+            if rem_w > 0:
+                new_rects.append({'x': rx + w + self.kerf, 'y': ry, 'w': rem_w, 'h': h})
+            if rem_h > 0:
+                new_rects.append({'x': rx, 'y': ry + h + self.kerf, 'w': rw, 'h': rem_h})
+            sheet['cut_lines'].append({
+                'step': step_no,
+                'x1': round(rx, 1), 'y1': round(ry + h, 1),
+                'x2': round(rx + rw, 1), 'y2': round(ry + h, 1),
+                'cut_type': 'Boyuna Kesim (Rip Cut)',
+                'dimension_mm': round(ry + h, 1)
+            })
+        else:
+            if rem_h > 0:
+                new_rects.append({'x': rx, 'y': ry + h + self.kerf, 'w': w, 'h': rem_h})
+            if rem_w > 0:
+                new_rects.append({'x': rx + w + self.kerf, 'y': ry, 'w': rem_w, 'h': rh})
+            sheet['cut_lines'].append({
+                'step': step_no,
+                'x1': round(rx + w, 1), 'y1': round(ry, 1),
+                'x2': round(rx + w, 1), 'y2': round(ry + rh, 1),
+                'cut_type': 'Enine Kesim (Cross Cut)',
+                'dimension_mm': round(rx + w, 1)
+            })
+            
+        sheet['free_rects'].extend(new_rects)
+
+@app.get("/api/nesting/presets")
+def get_nesting_presets():
+    return {
+        "presets": [
+            {"id": "std_2100_2800", "name": "Standart Ham MDF (2100 x 2800 mm)", "width": 2100, "height": 2800, "cost": 1150.0},
+            {"id": "wide_1830_3660", "name": "Geniş Format MDF (1830 x 3660 mm)", "width": 1830, "height": 3660, "cost": 1450.0},
+            {"id": "high_2200_2800", "name": "Yüksek Kapı Formatı (2200 x 2800 mm)", "width": 2200, "height": 2800, "cost": 1280.0},
+            {"id": "ply_1220_2440", "name": "Marin Kontrplak / Plywood (1220 x 2440 mm)", "width": 1220, "height": 2440, "cost": 920.0},
+            {"id": "compact_1300_3050", "name": "Kompakt Laminat (1300 x 3050 mm)", "width": 1300, "height": 3050, "cost": 2100.0}
+        ],
+        "default_kerf": 3.2,
+        "default_trim": 10.0,
+        "default_grain": "vertical"
+    }
+
+@app.get("/api/nesting/orders-parts")
+def get_nesting_orders_parts(filter_type: Optional[str] = "panels", status: Optional[str] = "open"):
+    d = load_data()
+    orders = d.get("orders", {})
+    parts_list = []
+    
+    color_palette = [
+        "#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", 
+        "#EC4899", "#06B6D4", "#F97316", "#14B8A6", "#6366F1"
+    ]
+    color_map = {}
+    color_idx = 0
+    
+    for oid, o in orders.items():
+        if status and o.get("status") != status:
+            continue
+            
+        m_str = o.get("model", "")
+        specs = parse_door_specs(m_str, custom_color=o.get("color"))
+        w = float(specs["width"])
+        h = float(specs["height"])
+        qty = int(o.get("qty", 1))
+        order_no = o.get("order_no", oid)
+        customer = o.get("customer", "Müşteri")
+        model_name = specs.get("model_code", "ER100")
+        color_name = specs.get("color", "DİŞBUDAK BEYAZ")
+        
+        if color_name not in color_map:
+            color_map[color_name] = color_palette[color_idx % len(color_palette)]
+            color_idx += 1
+        part_color = color_map[color_name]
+        
+        # 1. Yüzey Panelleri (2 adet/kapı: Ön & Arka MDF)
+        if filter_type in ("panels", "all"):
+            parts_list.append({
+                "id": f"PANEL_{oid}",
+                "name": f"{model_name} Yüzey Paneli ({int(w)}x{int(h)})",
+                "category": "Yüzey Paneli (MDF/WPC)",
+                "order_no": order_no,
+                "order_id": oid,
+                "customer": customer,
+                "width": w,
+                "height": h,
+                "qty": qty * 2,
+                "color": part_color,
+                "material": f"4mm MDF - {color_name}",
+                "can_rotate": False if "BEYAZ" not in color_name and "LAKE" not in color_name else True,
+                "allow_cross_grain": False
+            })
+            
+        # 2. Boy & En Seren Çıtaları
+        if filter_type in ("stiles", "all"):
+            parts_list.append({
+                "id": f"SEREN_BOY_{oid}",
+                "name": f"Boy Seren (42x{int(h)})",
+                "category": "Seren & Karkas",
+                "order_no": order_no,
+                "order_id": oid,
+                "customer": customer,
+                "width": 42.0,
+                "height": h,
+                "qty": qty * 2,
+                "color": "#D97706",
+                "material": "Kompozit Ahşap Seren (42x42)",
+                "can_rotate": True,
+                "allow_cross_grain": True
+            })
+            en_len = max(100.0, w - 84.0)
+            parts_list.append({
+                "id": f"SEREN_EN_{oid}",
+                "name": f"En Seren (42x{int(en_len)})",
+                "category": "Seren & Karkas",
+                "order_no": order_no,
+                "order_id": oid,
+                "customer": customer,
+                "width": 42.0,
+                "height": en_len,
+                "qty": qty * 2,
+                "color": "#B45309",
+                "material": "Kompozit Ahşap Seren (42x42)",
+                "can_rotate": True,
+                "allow_cross_grain": True
+            })
+            parts_list.append({
+                "id": f"SEREN_KILIT_{oid}",
+                "name": "Kilit Takviye Sereni (80x1150)",
+                "category": "Seren & Karkas",
+                "order_no": order_no,
+                "order_id": oid,
+                "customer": customer,
+                "width": 80.0,
+                "height": 1150.0,
+                "qty": qty,
+                "color": "#92400E",
+                "material": "Masif Ahşap Kilit Takviyesi",
+                "can_rotate": True,
+                "allow_cross_grain": True
+            })
+
+        # 3. Dolgu Strafor Köpüğü
+        if filter_type in ("core", "all"):
+            core_w = max(100.0, w - 84.0)
+            core_h = max(100.0, h - 84.0)
+            parts_list.append({
+                "id": f"CORE_EPS_{oid}",
+                "name": f"Yekpare EPS Dolgu ({int(core_w)}x{int(core_h)})",
+                "category": "Dolgu Strafor",
+                "order_no": order_no,
+                "order_id": oid,
+                "customer": customer,
+                "width": core_w,
+                "height": core_h,
+                "qty": qty,
+                "color": "#94A3B8",
+                "material": "32mm EPS Strafor Blok",
+                "can_rotate": True,
+                "allow_cross_grain": True
+            })
+
+    total_parts_count = sum(p["qty"] for p in parts_list)
+    return {
+        "parts": parts_list,
+        "total_part_types": len(parts_list),
+        "total_pieces_qty": total_parts_count,
+        "filter_type": filter_type,
+        "active_orders_count": len([o for o in orders.values() if o.get("status") == status])
+    }
+
+@app.post("/api/nesting/optimize")
+def run_nesting_optimization(req: NestingRequest):
+    optimizer = AdvancedNestingOptimizer(
+        sheet_width=req.sheet_width,
+        sheet_height=req.sheet_height,
+        kerf=req.blade_kerf,
+        trim=req.trim_margin,
+        grain=req.grain_direction,
+        auto_orient=req.auto_orient_sheet,
+        sheet_cost=req.sheet_cost_tl
+    )
+    parts_data = [p.dict() for p in req.parts]
+    result = optimizer.optimize(parts_data)
+    return result
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
