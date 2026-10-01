@@ -1146,15 +1146,48 @@ def save_downtime(date_key: str, payload: DailyDowntime):
 
 # ── 1. BARKOD / QR KOD & İSTASYON TAKİP (MADDE 1) ─────────
 
-STAGES_ORDER = ["seren", "strafor", "vakum", "pres", "homag", "paket"]
+STAGES_ORDER = ["ekstruder", "seren", "strafor", "pres", "cnc", "homag", "paket"]
 STAGE_NAMES = {
-    "seren": "Seren Kesim & Hazırlık",
-    "strafor": "Strafor / Petek Dolgu",
-    "vakum": "Levha & Vakum Pres",
-    "pres": "Sıcak Pres Hattı",
-    "homag": "Homag Ebatlama & Kenar",
-    "paket": "Paketleme & Sevkiyata Hazır"
+    "ekstruder": "0. Ekstrüder Levha Hattı",
+    "seren": "1. Seren Çakım & Karkas",
+    "strafor": "2. Köpük & Kilit Takviyesi",
+    "pres": "3. Sıcak Pres Masası",
+    "cnc": "4. CNC Çizim & Model Fuga",
+    "homag": "5. Homag Kenar Bantlama",
+    "paket": "6. Kalite & Paketleme"
 }
+
+class ExtruderBatchDeliver(BaseModel):
+    color: str
+    width_mm: Optional[int] = None
+    operator: Optional[str] = "Ekstrüder Operatörü"
+
+@app.post("/api/stages/extruder-deliver-batch")
+def deliver_extruder_batch(req: ExtruderBatchDeliver):
+    d = load_data()
+    orders = d.get("orders", {})
+    stages_data = d.setdefault("order_stages", {})
+    
+    delivered_count = 0
+    for oid, o in orders.items():
+        if o.get("status") != "open":
+            continue
+        specs = parse_door_specs(o.get("model", ""), custom_color=o.get("color"))
+        order_color = o.get("color") or specs.get("color") or "D.BEYAZ"
+        order_w = specs.get("width", 800)
+        
+        if order_color == req.color:
+            if req.width_mm is None or abs(order_w - req.width_mm) <= 10:
+                st_info = stages_data.setdefault(oid, {"current_stage": "ekstruder", "qty_completed_in_stage": 0})
+                st_info["extruder_sheets_ready"] = True
+                st_info["extruder_delivered_at"] = datetime.now().isoformat()
+                # Eğer ekstrüder aşamasındaysa bir sonraki aşamaya (seren karkas) aktar
+                if st_info.get("current_stage") == "ekstruder":
+                    st_info["current_stage"] = "seren"
+                delivered_count += 1
+                
+    save_data(d)
+    return {"status": "ok", "delivered_orders_count": delivered_count, "color": req.color}
 
 @app.get("/api/barcode/label/{oid}")
 def get_barcode_label(oid: str):
@@ -1162,13 +1195,11 @@ def get_barcode_label(oid: str):
     orders = d.get("orders", {})
     order = orders.get(oid)
     if not order:
-        # lookup by order_no or matching substring
         found_id = next((k for k, v in orders.items() if v.get("order_no") == oid or k == oid), None)
         if found_id:
             oid = found_id
             order = orders[found_id]
         else:
-            # fallback to first order if exists
             if orders:
                 oid = list(orders.keys())[0]
                 order = orders[oid]
@@ -1186,6 +1217,8 @@ def get_barcode_label(oid: str):
     width_cm = round(width_mm / 10)
     height_cm = round(height_mm / 10)
     core_type = specs.get("core_type", "STRAFOR")
+    doors_qty = order.get("qty", 0)
+    sheets_qty = doors_qty * 2
 
     return {
         "order_id": oid,
@@ -1193,6 +1226,7 @@ def get_barcode_label(oid: str):
         "order_no": order.get("order_no", oid),
         "customer": order.get("customer", ""),
         "model": model_str or "Standart Kanat Kapı",
+        "model_code": specs.get("model_code", "ER100"),
         "surface_finish": color,
         "color": color,
         "core_type": core_type,
@@ -1203,15 +1237,24 @@ def get_barcode_label(oid: str):
         "thickness_mm": thick_mm,
         "dim_str": f"{width_mm}x{height_mm}x{thick_mm}",
         "dims_formatted": f"{width_cm} x {height_cm} cm",
-        "doors": order.get("qty", 0),
-        "total_doors": order.get("qty", 0),
+        "doors": doors_qty,
+        "total_doors": doors_qty,
+        "sheets_qty": sheets_qty,
         "facility_name": fac_name,
         "facility": order.get("facility_id", "fac1"),
         "facility_id": order.get("facility_id", "fac1"),
         "delivery_date": order.get("delivery_date", ""),
         "barcode": f"ERG-{order.get('order_no', oid)}",
-        "barcode_text": f"ERG-{oid}-{order.get('qty', 0)}",
-        "qr_payload": f"ERGUNBAS|{oid}|{order.get('order_no')}|{order.get('qty')}|{order.get('model')}|{color}|{width_mm}x{height_mm}"
+        "barcode_text": f"ERG-{oid}-{doors_qty}",
+        "qr_payload": f"ERGUNBAS|{oid}|{order.get('order_no')}|{doors_qty}|{order.get('model')}|{color}|{width_mm}x{height_mm}",
+        "station_work_orders": [
+            {"step": 0, "icon": "🏭", "station": "Ekstrüder Levha Hattı", "spec": f"{sheets_qty} Adet {width_mm}x{height_mm} {color} Levha", "instruction": "Kalıp & Renk Kontrolü"},
+            {"step": 1, "icon": "🪵", "station": "Seren Çakım & Karkas", "spec": "Standart 210 cm Boy Seren + En Seren + 4 Takoz", "instruction": "Gönyeli Çatı Karkası"},
+            {"step": 2, "icon": "🧊", "station": "Köpük & Kilit Takviyesi", "spec": "Yekpare 32mm EPS Strafor + 1150 mm Kilit Takviyesi", "instruction": "Boşluksuz Dolgu Montajı"},
+            {"step": 3, "icon": "🔥", "station": "Sıcak Pres Masası", "spec": f"2x {color} Levhayla Sıcak Presleme", "instruction": "Poliüretan Tutkal & Yüksek Basınç"},
+            {"step": 4, "icon": "⚡", "station": "CNC Çizim & Model Fuga", "spec": f"{specs.get('model_code', 'ER100')} Model Fuga & Kilit/Kol Delikleri", "instruction": "CNC Freze Çizimi"},
+            {"step": 5, "icon": "📏", "station": "Homag Kenar & Paket", "spec": "4 Kenar 45x1 mm PVC Kenar Bandı", "instruction": "Temizleme & Barkodlu Paket"}
+        ]
     }
 
 @app.get("/api/stages/pipeline")
@@ -1223,36 +1266,79 @@ def get_stages_pipeline():
     pipeline = {s: [] for s in STAGES_ORDER}
     all_flat = []
     
+    # Ekstrüder için renklere ve enlere göre toplu parti (batch) hesaplaması
+    extruder_batches_map = {}
+    
     for oid, o in orders.items():
         if o.get("status") != "open":
             continue
-        st_info = stages_data.get(oid, {"current_stage": "seren", "qty_completed_in_stage": 0})
-        curr_stage = st_info.get("current_stage", "seren")
-        if curr_stage not in pipeline: curr_stage = "seren"
+            
+        st_info = stages_data.get(oid, {"current_stage": "ekstruder", "qty_completed_in_stage": 0})
+        curr_stage = st_info.get("current_stage", "ekstruder")
+        # Eski stage isimlerini yenisine migrate et
+        if curr_stage == "vakum": curr_stage = "pres"
+        if curr_stage not in pipeline: curr_stage = "ekstruder"
         
         specs = parse_door_specs(o.get("model", ""), custom_color=o.get("color"))
-        color = o.get("color") or specs.get("color", "")
+        color = o.get("color") or specs.get("color", "D.BEYAZ")
+        w_mm = specs.get("width", 800)
+        h_mm = specs.get("height", 2020)
+        doors_cnt = o.get("qty", 0)
+        sheets_cnt = doors_cnt * 2
+        is_sheets_ready = st_info.get("extruder_sheets_ready", False)
+        
+        # Ekstrüder Partisi Ekle (eğer levhalar henüz hazır değilse)
+        if not is_sheets_ready:
+            b_key = f"{color}|{w_mm}"
+            if b_key not in extruder_batches_map:
+                extruder_batches_map[b_key] = {
+                    "color": color,
+                    "width_mm": w_mm,
+                    "width_label": f"{round(w_mm/10)}'lik ({w_mm} mm)",
+                    "total_sheets": 0,
+                    "total_doors": 0,
+                    "orders_count": 0,
+                    "order_ids": []
+                }
+            extruder_batches_map[b_key]["total_sheets"] += sheets_cnt
+            extruder_batches_map[b_key]["total_doors"] += doors_cnt
+            extruder_batches_map[b_key]["orders_count"] += 1
+            extruder_batches_map[b_key]["order_ids"].append(oid)
+        
         item = {
             "order_id": oid,
             "order_code": o.get("order_no", oid),
             "order_no": o.get("order_no", oid),
             "customer": o.get("customer", ""),
             "model": o.get("model", ""),
+            "model_code": specs.get("model_code", "ER100"),
             "color": color,
             "surface_finish": color,
             "specs": specs,
-            "width": round(specs.get("width", 800) / 10),
-            "height": round(specs.get("height", 2020) / 10),
-            "total_doors": o.get("qty", 0),
-            "doors": o.get("qty", 0),
-            "total_qty": o.get("qty", 0),
+            "width": round(w_mm / 10),
+            "height": round(h_mm / 10),
+            "width_mm": w_mm,
+            "height_mm": h_mm,
+            "total_doors": doors_cnt,
+            "doors": doors_cnt,
+            "total_qty": doors_cnt,
+            "sheets_qty": sheets_cnt,
             "facility": o.get("facility_id", "fac1"),
             "facility_id": o.get("facility_id", "fac1"),
             "stage_qty": st_info.get("qty_completed_in_stage", 0),
             "current_stage": curr_stage,
             "stage": curr_stage,
             "stage_name": STAGE_NAMES.get(curr_stage, curr_stage),
-            "operator": st_info.get("operator", "Operatör")
+            "operator": st_info.get("operator", "Operatör"),
+            "extruder_sheets_ready": is_sheets_ready,
+            "station_specs": {
+                "ekstruder": f"{sheets_cnt} Adet {w_mm}x{h_mm} mm {color} Levha",
+                "seren": "Standart 210 cm Boy Seren + En Seren + 4 Takoz",
+                "strafor": f"Yekpare 32mm EPS Strafor + 1150 mm Kilit Takviyesi",
+                "pres": f"2x {color} Levhayla Sıcak Pres (Levha: {'HAZIR 🟢' if is_sheets_ready else 'BEKLİYOR 🔴'})",
+                "cnc": f"{specs.get('model_code', 'ER100')} Model Fuga & Kilit Delikleri",
+                "homag": "4 Kenar 45x1 mm PVC Kenar Bandı & Paketleme"
+            }
         }
         pipeline[curr_stage].append(item)
         all_flat.append(item)
@@ -1262,6 +1348,7 @@ def get_stages_pipeline():
             {"id": s, "name": STAGE_NAMES[s], "orders_count": len(pipeline[s]), "orders": pipeline[s]}
             for s in STAGES_ORDER
         ],
+        "extruder_batches": list(extruder_batches_map.values()),
         "orders": all_flat
     }
 
@@ -1277,12 +1364,15 @@ def advance_stage(req: StageAdvance):
     stages_data = d.setdefault("order_stages", {})
     order_stage = stages_data.setdefault(oid, {
         "order_id": oid,
-        "current_stage": "seren",
+        "current_stage": "ekstruder",
         "qty_completed_in_stage": 0,
+        "extruder_sheets_ready": False,
         "history": []
     })
     
-    curr = order_stage.get("current_stage", "seren")
+    curr = order_stage.get("current_stage", "ekstruder")
+    if curr == "vakum": curr = "pres"
+    
     target = req.target_stage or req.next_stage
     if not target:
         try:
@@ -1295,6 +1385,9 @@ def advance_stage(req: StageAdvance):
             target = STAGES_ORDER[0]
             
     order_stage["current_stage"] = target
+    if curr == "ekstruder":
+        order_stage["extruder_sheets_ready"] = True
+        
     if req.qty > 0:
         order_stage["qty_completed_in_stage"] = req.qty
     order_stage["last_updated"] = date.today().isoformat()
@@ -1309,7 +1402,6 @@ def advance_stage(req: StageAdvance):
         "notes": req.notes
     })
     
-    # Eğer son aşamaya (Paketleme) ulaştıysa, Günlük Giriş sekmesine otomatik üretim kaydı düş
     if target == "paket":
         order = d["orders"].get(oid, {})
         today_str = date.today().isoformat()
@@ -1325,7 +1417,7 @@ def advance_stage(req: StageAdvance):
                 "model": order.get("model", ""),
                 "output_qty": order.get("qty", 0),
                 "shift": "Gündüz",
-                "notes": "QR/Barkod ile otomatik tamamlandı"
+                "notes": "Kanat hattında başarıyla tamamlandı"
             })
     
     save_data(d)

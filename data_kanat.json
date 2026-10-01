@@ -3574,28 +3574,36 @@
           "operator": "",
           "notes": ""
         }
-      ]
+      ],
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.213858"
     },
     "SIP-UST-0002": {
       "order_id": "SIP-UST-0002",
       "current_stage": "strafor",
       "qty_completed_in_stage": 4,
       "last_updated": "2026-09-29",
-      "operator": "Kanat Operatörü 1"
+      "operator": "Kanat Operatörü 1",
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.213946"
     },
     "SIP-UST-0003": {
       "order_id": "SIP-UST-0003",
       "current_stage": "vakum",
       "qty_completed_in_stage": 2,
       "last_updated": "2026-09-29",
-      "operator": "Kanat Operatörü 1"
+      "operator": "Kanat Operatörü 1",
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.214007"
     },
     "SIP-UST-0004": {
       "order_id": "SIP-UST-0004",
       "current_stage": "pres",
       "qty_completed_in_stage": 4,
       "last_updated": "2026-09-29",
-      "operator": "Kanat Operatörü 1"
+      "operator": "Kanat Operatörü 1",
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.214059"
     },
     "SIP-UST-0005": {
       "order_id": "SIP-UST-0005",
@@ -3624,6 +3632,78 @@
       "qty_completed_in_stage": 2,
       "last_updated": "2026-09-29",
       "operator": "Kanat Operatörü 1"
+    },
+    "SIP-UST-0021": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.215660"
+    },
+    "SIP-UST-0040": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.216242"
+    },
+    "SIP-UST-0041": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.216268"
+    },
+    "SIP-UST-0158": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.221206"
+    },
+    "SIP-UST-0177": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.221937"
+    },
+    "SIP-UST-0178": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.221962"
+    },
+    "SIP-UST-0179": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.221985"
+    },
+    "SIP-UST-0180": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.222008"
+    },
+    "SIP-UST-0181": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.222033"
+    },
+    "SIP-ALT-0237": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.223265"
+    },
+    "SIP-ALT-0238": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.223290"
+    },
+    "SIP-ALT-0239": {
+      "current_stage": "seren",
+      "qty_completed_in_stage": 0,
+      "extruder_sheets_ready": true,
+      "extruder_delivered_at": "2026-10-01T10:52:50.223314"
     }
   },
   "recipes": {
@@ -4147,5 +4227,98 @@
         }
       ]
     }
-  }
+  },
+  "maintenance_tools": {
+    "TOOL_HOMAG_BLADE": {
+      "id": "TOOL_HOMAG_BLADE",
+      "name": "Homag Kazıma & Kalibre Jileti",
+      "station": "Homag Ebatlama & Kenar",
+      "metric_unit": "Metre",
+      "metric_type": "pvc_meters",
+      "max_capacity": 15000,
+      "warning_threshold": 12000,
+      "current_usage": 8420,
+      "last_service_date": "2026-09-18",
+      "last_service_operator": "Murat Usta",
+      "service_count": 5,
+      "status": "good",
+      "notes": "4 kenar PVC kenar frezeleme ve radüs kazıma elmas jilet takımı"
+    },
+    "TOOL_HOMAG_GLUE": {
+      "id": "TOOL_HOMAG_GLUE",
+      "name": "Homag Tutkal Kazanı & Sürme Merdanesi",
+      "station": "Homag Ebatlama & Kenar",
+      "metric_unit": "Kapı",
+      "metric_type": "door_count",
+      "max_capacity": 5000,
+      "warning_threshold": 4000,
+      "current_usage": 4120,
+      "last_service_date": "2026-09-15",
+      "last_service_operator": "Murat Usta",
+      "service_count": 8,
+      "status": "warning",
+      "notes": "EVA/PUR tutkal haznesi teflon temizliği ve sürme valfi bakımı"
+    },
+    "TOOL_SEREN_SAW": {
+      "id": "TOOL_SEREN_SAW",
+      "name": "Seren Kesim Elmas Dairesel Testere",
+      "station": "Seren Kesim",
+      "metric_unit": "Kesim / Kapı",
+      "metric_type": "door_count",
+      "max_capacity": 8000,
+      "warning_threshold": 6500,
+      "current_usage": 3200,
+      "last_service_date": "2026-09-20",
+      "last_service_operator": "Kenan Usta",
+      "service_count": 6,
+      "status": "good",
+      "notes": "Kompozit seren boy ve en ebatlama çift kafa dairesel testeresi"
+    },
+    "TOOL_PRESS_TEFLON": {
+      "id": "TOOL_PRESS_TEFLON",
+      "name": "Sıcak Pres Teflon Bezi & Baskı Keçesi",
+      "station": "Pres",
+      "metric_unit": "Pres Baskısı",
+      "metric_type": "door_count",
+      "max_capacity": 4000,
+      "warning_threshold": 3200,
+      "current_usage": 3850,
+      "last_service_date": "2026-09-10",
+      "last_service_operator": "Ali Usta",
+      "service_count": 4,
+      "status": "warning",
+      "notes": "Sıcak pres tablaları yapışmaz teflon izolasyon bezi"
+    },
+    "TOOL_CNC_FUGA": {
+      "id": "TOOL_CNC_FUGA",
+      "name": "CNC Yüzey Freze Bıçağı (Fuga & Derz)",
+      "station": "CNC Yüzey Freze / Fuga",
+      "metric_unit": "Kapı",
+      "metric_type": "fuga_doors",
+      "max_capacity": 2500,
+      "warning_threshold": 2000,
+      "current_usage": 1150,
+      "last_service_date": "2026-09-22",
+      "last_service_operator": "Hasan Usta",
+      "service_count": 5,
+      "status": "good",
+      "notes": "V-Kanal ve özel fuga desen freze ucu (R3/V90)"
+    },
+    "TOOL_CNC_CAM": {
+      "id": "TOOL_CNC_CAM",
+      "name": "CNC Cam Yeri Boşaltma Freze Ucu",
+      "station": "Cam Yeri Boşaltma",
+      "metric_unit": "Kapı",
+      "metric_type": "cam_doors",
+      "max_capacity": 1500,
+      "warning_threshold": 1200,
+      "current_usage": 480,
+      "last_service_date": "2026-09-12",
+      "last_service_operator": "Hasan Usta",
+      "service_count": 3,
+      "status": "good",
+      "notes": "Karkas içi cam boşaltma karbür parmak freze ucu"
+    }
+  },
+  "maintenance_history": []
 }

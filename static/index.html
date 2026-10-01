@@ -1034,11 +1034,35 @@
 
     <!-- ===== 3. İSTASYON & BARKOD TAKİP ===== -->
     <div id="section-stages" class="hidden">
+        <!-- Top Extruder Batch Pool -->
+        <div class="panel" style="margin-bottom:16px; border-left:5px solid #EA580C; background:#FFFBF5;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                <div>
+                    <div style="font-size:15px; font-weight:800; color:#9A3412; display:flex; align-items:center; gap:8px;">
+                        <span>🏭</span> <strong>Ekstrüder Levha Çekim Havuzu (Renk &amp; Ebat Gruplu Siparişler)</strong>
+                        <span class="badge" style="background:#FED7AA; color:#9A3412; font-size:11px;">2x Levha / Kapı</span>
+                    </div>
+                    <div style="font-size:12px; color:#C2410C; margin-top:2px;">
+                        Ekstrüder operatörü rengi değiştirmeden aynı renk ve genişlikteki siparişlerin levhalarını toplu çeker ve tek tıkla Kanat Hattına teslim eder.
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <span style="font-size:11px; color:#9A3412; font-weight:700;">Hammadde: WPC Kompozit</span>
+                    <button class="btn-secondary" style="font-size:11px; padding:4px 10px;" onclick="loadStages()">🔄 Havuzu Yenile</button>
+                </div>
+            </div>
+            
+            <!-- Dynamic Batch Cards Container -->
+            <div id="extruder-batches-container" style="display:flex; gap:12px; overflow-x:auto; padding-bottom:6px;">
+                <div style="font-size:12px; color:#94A3B8; padding:8px;">Ekstrüder partileri yükleniyor...</div>
+            </div>
+        </div>
+
         <div class="panel" style="margin-bottom:20px; border-top:4px solid var(--brand-red);">
             <div class="panel-header">
                 <div>
                     <div class="panel-title"><span>🏷️</span> İstasyon Bazlı Canlı Üretim Hattı &amp; Barkod Takip</div>
-                    <div class="panel-sub">6 Aşamalı Hat: Seren Hazırlık → Dolgu/Strafor → Vakum Pres → Sıcak Pres → Homag &amp; Ebatlama → Kalite &amp; Paketleme</div>
+                    <div class="panel-sub">7 Aşamalı Kompozit Hat: 0. Ekstrüder Levha → 1. Seren Çakım → 2. Köpük/Strafor → 3. Sıcak Pres → 4. CNC Çizim → 5. Homag PVC Bant → 6. Kalite &amp; Paketleme</div>
                 </div>
                 <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
                     <div style="position:relative;">
@@ -1055,13 +1079,13 @@
             <div style="padding:12px 20px; background:var(--slate-50); border-bottom:1px solid var(--slate-200); display:flex; gap:20px; flex-wrap:wrap; font-size:12px; font-weight:600; color:var(--slate-600);">
                 <div>Toplam İstasyonda: <span id="pipeline-total-cnt" style="color:var(--slate-950); font-weight:800;">0</span> sipariş</div>
                 <div>Tamamlanan: <span id="pipeline-done-cnt" style="color:#16A34A; font-weight:800;">0</span> sipariş</div>
-                <div>Barkod Etiketi Hazır: <span id="pipeline-label-cnt" style="color:#2563EB; font-weight:800;">243</span> adet</div>
-                <div style="margin-left:auto; color:var(--slate-400);">Kart üzerindeki "Etiket" butonundan QR/Barkod çıktısı alabilirsiniz.</div>
+                <div>Barkod Etiketi Hazır: <span id="pipeline-label-cnt" style="color:#2563EB; font-weight:800;">0</span> adet</div>
+                <div style="margin-left:auto; color:var(--slate-400);">Kart üzerindeki "Etiket" butonundan 6 istasyonlu iş emri çıktısı alabilirsiniz.</div>
             </div>
 
             <!-- Kanban Pipeline Columns -->
             <div style="padding:18px; overflow-x:auto;">
-                <div style="display:grid; grid-template-columns:repeat(6, 270px); gap:14px; min-width:1650px;" id="pipeline-columns-container">
+                <div style="display:grid; grid-template-columns:repeat(7, 280px); gap:14px; min-width:2050px;" id="pipeline-columns-container">
                     <!-- Populated by JS -->
                 </div>
             </div>
@@ -2450,37 +2474,43 @@
                 </div>
 
                 <div style="border-top:1px solid #E2E8F0; padding-top:12px;">
-                    <div style="font-size:10px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:8px;">İSTASYON ONAY VE İMZA ÇİZELGESİ:</div>
+                    <div style="font-size:10px; font-weight:800; color:#64748B; text-transform:uppercase; margin-bottom:8px;">OTOMATİK İSTASYON İŞ EMİRLERİ &amp; ONAY ÇİZELGESİ:</div>
                     <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:6px; text-align:center;">
-                        <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
-                            <div style="font-weight:800; color:#0F172A;">1. Seren</div>
-                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
-                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                        <div style="border:1px solid #8B5CF6; background:#FAF5FF; border-radius:6px; padding:6px 2px; font-size:10px;">
+                            <div style="font-weight:800; color:#6B21A8;">0. Ekstrüder</div>
+                            <div style="font-size:8.5px; color:#7C3AED; font-weight:700;" id="lbl-ext-info">2x Levha</div>
+                            <div style="height:18px; border-bottom:1px dashed #C4B5FD; margin:4px 4px 2px;"></div>
+                            <span style="font-size:8.5px; color:#6B21A8;">Çekildi</span>
                         </div>
                         <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
-                            <div style="font-weight:800; color:#0F172A;">2. Dolgu</div>
-                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
-                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                            <div style="font-weight:800; color:#0F172A;">1. Seren Çakım</div>
+                            <div style="font-size:8.5px; color:#64748B;">210 cm + Takoz</div>
+                            <div style="height:18px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:8.5px; color:#94A3B8;">Çakıldı</span>
                         </div>
                         <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
-                            <div style="font-weight:800; color:#0F172A;">3. Vakum</div>
-                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
-                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                            <div style="font-weight:800; color:#0F172A;">2. Köpük/Strafor</div>
+                            <div style="font-size:8.5px; color:#64748B;">EPS + Takviye</div>
+                            <div style="height:18px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:8.5px; color:#94A3B8;">Kondu</span>
                         </div>
                         <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
-                            <div style="font-weight:800; color:#0F172A;">4. Pres</div>
-                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
-                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                            <div style="font-weight:800; color:#0F172A;">3. Sıcak Pres</div>
+                            <div style="font-size:8.5px; color:#DC2626; font-weight:700;">Levha Presi</div>
+                            <div style="height:18px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:8.5px; color:#94A3B8;">Basıldı</span>
                         </div>
                         <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
-                            <div style="font-weight:800; color:#0F172A;">5. Homag</div>
-                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
-                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                            <div style="font-weight:800; color:#0F172A;">4. CNC Çizim</div>
+                            <div style="font-size:8.5px; color:#D97706; font-weight:700;" id="lbl-cnc-info">Model Fuga</div>
+                            <div style="height:18px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:8.5px; color:#94A3B8;">Açıldı</span>
                         </div>
                         <div style="border:1px solid #CBD5E1; border-radius:6px; padding:6px 2px; font-size:10px;">
-                            <div style="font-weight:800; color:#0F172A;">6. Paket</div>
-                            <div style="height:22px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
-                            <span style="font-size:9px; color:#94A3B8;">İmza</span>
+                            <div style="font-weight:800; color:#0F172A;">5. Kenar &amp; Paket</div>
+                            <div style="font-size:8.5px; color:#2563EB;">PVC Bant</div>
+                            <div style="height:18px; border-bottom:1px dashed #CBD5E1; margin:4px 4px 2px;"></div>
+                            <span style="font-size:8.5px; color:#94A3B8;">Pakette</span>
                         </div>
                     </div>
                 </div>
@@ -4397,13 +4427,45 @@ async function loadStages() {
         const data = await r.json();
         allPipelineOrders = data.orders || [];
 
+        // 1. Ekstrüder Renk/Ebat Toplu Çekim Havuzunu Doldur
+        const batchContainer = document.getElementById('extruder-batches-container');
+        if (batchContainer) {
+            const batches = data.extruder_batches || [];
+            if (batches.length === 0) {
+                batchContainer.innerHTML = `<div style="font-size:12px; color:#94A3B8; padding:8px 12px;">Şu an bekleyen ekstrüder partisi bulunmuyor.</div>`;
+            } else {
+                batchContainer.innerHTML = batches.map(b => `
+                    <div style="background:#FFFFFF; border:1.5px solid ${b.all_delivered ? '#86EFAC' : '#FED7AA'}; border-radius:8px; padding:10px 14px; min-width:230px; box-shadow:0 1px 3px rgba(0,0,0,0.05); flex-shrink:0;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-weight:800; font-size:13px; color:#1E293B;">🎨 ${b.color || 'Standart'}</span>
+                            <span class="badge ${b.all_delivered ? 'badge-success' : 'badge-warning'}" style="font-size:10px;">${b.width_label || (b.width_mm + ' mm')}</span>
+                        </div>
+                        <div style="font-size:12px; color:#475569; margin:6px 0;">
+                            🎯 <strong>${b.total_sheets || b.sheet_qty || 0}</strong> Levha <span style="color:#94A3B8;">(${b.total_doors} kapı / ${b.orders_count} sipariş)</span>
+                        </div>
+                        <div>
+                            ${b.all_delivered ? `
+                                <div style="font-size:11px; font-weight:700; color:#16A34A; padding:4px 0; text-align:center; background:#F0FDF4; border-radius:4px;">✓ Kanat Hattına Teslim Edildi</div>
+                            ` : `
+                                <button class="btn-primary" style="width:100%; font-size:11px; padding:5px 8px; background:#EA580C; border-color:#EA580C; font-weight:700;" onclick="deliverExtruderBatch('${b.color}', ${b.width_mm})">
+                                    🚀 Çekildi ➔ Kanata Teslim Et
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 2. Gerçek 7 Aşamalı Kompozit Kapı Hattı
         const stagesList = [
-            { id: 'seren', name: '1. Seren Hazırlık', icon: '🪵', color: '#64748B' },
-            { id: 'strafor', name: '2. Dolgu & Strafor', icon: '📦', color: '#D97706' },
-            { id: 'vakum', name: '3. Vakum Pres', icon: '♨️', color: '#EA580C' },
-            { id: 'pres', name: '4. Sıcak Pres', icon: '🔥', color: '#DC2626' },
-            { id: 'homag', name: '5. Homag & Ebat', icon: '⚙️', color: '#2563EB' },
-            { id: 'paket', name: '6. Kalite & Paket', icon: '✅', color: '#059669' }
+            { id: 'ekstruder', name: '0. Ekstrüder Levha', icon: '🏭', color: '#EA580C', sub: '2x Levha Çekimi' },
+            { id: 'seren', name: '1. Seren Çakım', icon: '🪵', color: '#64748B', sub: '210cm + Köşe Takozu' },
+            { id: 'strafor', name: '2. Köpük / Strafor', icon: '📦', color: '#D97706', sub: '32mm EPS + Kilit Seren' },
+            { id: 'pres', name: '3. Sıcak Pres', icon: '🔥', color: '#DC2626', sub: 'Karkas + Levha Presi' },
+            { id: 'cnc', name: '4. CNC Desen & Kilit', icon: '⚙️', color: '#7C3AED', sub: 'Fuga Çizim & Kilit Yeri' },
+            { id: 'homag', name: '5. Homag PVC Bant', icon: '📐', color: '#2563EB', sub: '45x1mm 4 Kenar Bant' },
+            { id: 'paket', name: '6. Kalite & Paket', icon: '✅', color: '#059669', sub: 'Sevkiyat Kontrol' }
         ];
 
         let totalInStages = 0;
@@ -4411,33 +4473,69 @@ async function loadStages() {
 
         const container = document.getElementById('pipeline-columns-container');
         container.innerHTML = stagesList.map(st => {
-            const inStage = allPipelineOrders.filter(o => (o.stage || 'seren') === st.id);
+            const inStage = allPipelineOrders.filter(o => (o.stage || 'ekstruder') === st.id);
             totalInStages += inStage.length;
             if (st.id === 'paket') totalDone += inStage.length;
 
             return `
-                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; display:flex; flex-direction:column; max-height:750px; overflow:hidden;">
+                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; display:flex; flex-direction:column; max-height:800px; overflow:hidden;">
                     <div style="padding:12px 14px; background:#FFFFFF; border-bottom:2px solid ${st.color}; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="font-weight:800; font-size:12.5px; color:#0F172A; display:flex; align-items:center; gap:6px;">
-                            <span>${st.icon}</span> <span>${st.name}</span>
+                        <div>
+                            <div style="font-weight:800; font-size:12.5px; color:#0F172A; display:flex; align-items:center; gap:6px;">
+                                <span>${st.icon}</span> <span>${st.name}</span>
+                            </div>
+                            <div style="font-size:10px; color:#64748B; margin-top:2px;">${st.sub}</div>
                         </div>
                         <span style="font-size:11px; font-weight:800; padding:2px 7px; border-radius:10px; background:#F1F5F9; color:#475569;">${inStage.length}</span>
                     </div>
 
                     <div style="padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; flex:1;">
                         ${inStage.length === 0 ? `<div style="text-align:center; padding:30px 10px; color:#94A3B8; font-size:12px;">Bu hatta sipariş yok</div>` : ''}
-                        ${inStage.map(o => `
+                        ${inStage.map(o => {
+                            const spec = (o.station_specs && o.station_specs[st.id]) ? o.station_specs[st.id] : '';
+                            const totalDoors = o.total_doors || o.doors || 0;
+                            const totalSheets = o.sheet_qty || (totalDoors * 2);
+
+                            return `
                             <div style="background:#FFFFFF; border:1px solid #CBD5E1; border-radius:8px; padding:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04); transition:all 0.15s ease;">
                                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                                     <span style="font-weight:800; font-size:12.5px; color:#0F172A; font-family:var(--font-mono);">${o.order_code || o.order_id}</span>
-                                    <span class="badge badge-slate" style="font-size:9.5px;">FABRİKA</span>
+                                    <span class="badge ${o.extruder_sheets_ready ? 'badge-success' : 'badge-slate'}" style="font-size:9.5px;">${o.extruder_sheets_ready ? 'LEVHA TAM' : 'FABRİKA'}</span>
                                 </div>
                                 <div style="font-weight:700; font-size:12px; color:#334155; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${o.customer || ''}">${o.customer || 'İsimsiz Müşteri'}</div>
-                                <div style="font-size:11px; color:#64748B; margin-top:2px;">${o.model || 'Model'} • <strong>${o.total_doors || o.doors || 0}</strong> kapı</div>
+                                <div style="font-size:11px; color:#64748B; margin-top:2px;">
+                                    ${o.model || 'Model'} • <strong>${totalDoors}</strong> kapı / <span style="color:#EA580C; font-weight:700;">${totalSheets}</span> levha
+                                </div>
+                                <div style="font-size:10.5px; color:#475569; margin-top:2px;">
+                                    🎨 ${o.color || 'Standart'} (${o.width || 800} mm)
+                                </div>
+
+                                <!-- Otomatik Dağıtılan İstasyon İş Emri -->
+                                ${spec ? `
+                                    <div style="margin-top:8px; padding:6px 8px; background:#F8FAFC; border:1px dashed #CBD5E1; border-radius:6px; font-size:10.5px; color:#334155; line-height:1.35;">
+                                        <div style="font-weight:700; color:#0F172A; font-size:10px; margin-bottom:2px;">🛠️ İSTASYON GÖREVİ:</div>
+                                        <div>${spec}</div>
+                                    </div>
+                                ` : ''}
+
+                                <!-- Pres İstasyonu İçin Levha Hazırlık Uyarısı -->
+                                ${st.id === 'pres' ? `
+                                    <div style="margin-top:6px;">
+                                        ${o.extruder_sheets_ready ? `
+                                            <div style="padding:4px 6px; background:#DCFCE7; border:1px solid #86EFAC; border-radius:4px; font-size:10.5px; font-weight:700; color:#166534; display:flex; align-items:center; gap:4px;">
+                                                🟢 Levhalar Geldi (Preslenebilir)
+                                            </div>
+                                        ` : `
+                                            <div style="padding:4px 6px; background:#FEE2E2; border:1px solid #FCA5A5; border-radius:4px; font-size:10.5px; font-weight:700; color:#991B1B; display:flex; align-items:center; gap:4px;">
+                                                🔴 Ekstrüderden Levha Bekliyor
+                                            </div>
+                                        `}
+                                    </div>
+                                ` : ''}
                                 
                                 <div style="margin-top:10px; padding-top:8px; border-top:1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center; gap:6px;">
                                     <div style="display:flex; gap:4px;">
-                                        <button class="btn-secondary" style="padding:3px 7px; font-size:11px;" onclick="openBarcodeModal('${o.order_id}')" title="Etiketi Yazdır">🏷️ Etiket</button>
+                                        <button class="btn-secondary" style="padding:3px 7px; font-size:11px;" onclick="openBarcodeModal('${o.order_id}')" title="Etiketi / İş Emrini Yazdır">🏷️ Etiket</button>
                                         <button class="btn-secondary" style="padding:3px 7px; font-size:11px; background:#0F172A; color:#FFFFFF; border-color:#0F172A;" onclick="open3DDoorModal('${o.order_id}')" title="3D Karkas Görünümü">🧊 3D</button>
                                     </div>
                                     ${st.id !== 'paket' ? `
@@ -4447,7 +4545,8 @@ async function loadStages() {
                                     `}
                                 </div>
                             </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                 </div>
             `;
@@ -4462,6 +4561,26 @@ async function loadStages() {
 
     } catch (e) {
         console.error('loadStages error', e);
+    }
+}
+
+async function deliverExtruderBatch(color, width) {
+    try {
+        const r = await fetch('/api/stages/extruder-deliver-batch', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ color: color, width: parseInt(width) })
+        });
+        const d = await r.json();
+        if (d.status === 'ok') {
+            toast(`✓ ${color} (${width} mm) için ${d.updated_count} siparişin levhaları Kanat Hattına teslim edildi!`);
+            loadStages();
+        } else {
+            alert(d.detail || 'Hata oluştu');
+        }
+    } catch (e) {
+        console.error(e);
+        toast('Hata oluştu');
     }
 }
 
@@ -4548,6 +4667,15 @@ async function openBarcodeModal(orderId) {
         barsHolder.innerHTML = barHeights.map((h, idx) => `
             <div style="background:#0F172A; width:${idx%3===0?'3px':'1.5px'}; height:${h}px;"></div>
         `).join('');
+
+        window.currentBarcodeOrderId = orderId;
+        const totalD = data.doors || data.total_doors || 0;
+        if (document.getElementById('lbl-ext-info')) {
+            document.getElementById('lbl-ext-info').innerText = `${totalD * 2}x Levha (${data.width||800}mm)`;
+        }
+        if (document.getElementById('lbl-cnc-info')) {
+            document.getElementById('lbl-cnc-info').innerText = data.model || 'Model Fuga';
+        }
 
         openModal('modal-label');
     } catch (e) {
