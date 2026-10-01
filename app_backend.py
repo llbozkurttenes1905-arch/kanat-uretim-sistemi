@@ -470,11 +470,11 @@ def save_users(u):
 
 class OrderCreate(BaseModel):
     order_no: str
-    facility_id: str
+    facility_id: Optional[str] = "fac1"
     customer: str
     model: str
     qty: int
-    delivery_date: str
+    delivery_date: Optional[str] = None
     notes: Optional[str] = ""
 
 class OrderUpdate(BaseModel):
@@ -1023,7 +1023,7 @@ def create_order(req: OrderCreate):
         "customer": req.customer,
         "model": req.model,
         "qty": req.qty,
-        "delivery_date": req.delivery_date,
+        "delivery_date": req.delivery_date or (date.today() + timedelta(days=14)).isoformat(),
         "status": "open",
         "notes": req.notes or "",
         "created_at": datetime.now().isoformat()
@@ -1031,7 +1031,8 @@ def create_order(req: OrderCreate):
     # Initialize stage pipeline for order
     d.setdefault("order_stages", {})[oid] = {
         "order_id": oid,
-        "current_stage": "seren",
+        "current_stage": "ekstruder",
+        "extruder_sheets_ready": False,
         "qty_completed_in_stage": 0,
         "last_updated": date.today().isoformat(),
         "operator": "Sistem"
@@ -2803,14 +2804,14 @@ class AdvancedNestingOptimizer:
 def get_nesting_presets():
     return {
         "presets": [
-            {"id": "std_2100_2800", "name": "Standart Ham MDF (2100 x 2800 mm)", "width": 2100, "height": 2800, "cost": 1150.0},
-            {"id": "wide_1830_3660", "name": "Geniş Format MDF (1830 x 3660 mm)", "width": 1830, "height": 3660, "cost": 1450.0},
-            {"id": "high_2200_2800", "name": "Yüksek Kapı Formatı (2200 x 2800 mm)", "width": 2200, "height": 2800, "cost": 1280.0},
-            {"id": "ply_1220_2440", "name": "Marin Kontrplak / Plywood (1220 x 2440 mm)", "width": 1220, "height": 2440, "cost": 920.0},
-            {"id": "compact_1300_3050", "name": "Kompakt Laminat (1300 x 3050 mm)", "width": 1300, "height": 3050, "cost": 2100.0}
+            {"id": "eps_1200_3000", "name": "Yekpare EPS Strafor Blok (1200 x 3000 x 32 mm)", "width": 1200, "height": 3000, "cost": 320.0},
+            {"id": "eps_1000_2000", "name": "Standart EPS Strafor Tabaka (1000 x 2000 x 32 mm)", "width": 1000, "height": 2000, "cost": 180.0},
+            {"id": "wpc_1000_2200", "name": "WPC Kompozit Levha Boy Plaka (1000 x 2200 mm)", "width": 1000, "height": 2200, "cost": 175.0},
+            {"id": "wpc_900_2100", "name": "WPC Kompozit Levha Standart (900 x 2100 mm)", "width": 900, "height": 2100, "cost": 160.0},
+            {"id": "seren_2100", "name": "WPC Karkas Seren Boy Kesim (42 x 2100 mm)", "width": 420, "height": 2100, "cost": 75.0}
         ],
-        "default_kerf": 3.2,
-        "default_trim": 10.0,
+        "default_kerf": 2.5,
+        "default_trim": 5.0,
         "default_grain": "vertical"
     }
 
@@ -2846,12 +2847,12 @@ def get_nesting_orders_parts(filter_type: Optional[str] = "panels", status: Opti
             color_idx += 1
         part_color = color_map[color_name]
         
-        # 1. Yüzey Panelleri (2 adet/kapı: Ön & Arka MDF)
+        # 1. Yüzey Panelleri (2 adet/kapı: WPC Kompozit Levha)
         if filter_type in ("panels", "all"):
             parts_list.append({
                 "id": f"PANEL_{oid}",
-                "name": f"{model_name} Yüzey Paneli ({int(w)}x{int(h)})",
-                "category": "Yüzey Paneli (MDF/WPC)",
+                "name": f"{model_name} WPC Levha ({int(w)}x{int(h)})",
+                "category": "WPC Kompozit Levha",
                 "order_no": order_no,
                 "order_id": oid,
                 "customer": customer,
@@ -2859,7 +2860,7 @@ def get_nesting_orders_parts(filter_type: Optional[str] = "panels", status: Opti
                 "height": h,
                 "qty": qty * 2,
                 "color": part_color,
-                "material": f"4mm MDF - {color_name}",
+                "material": f"4mm WPC Levha - {color_name}",
                 "can_rotate": False if "BEYAZ" not in color_name and "LAKE" not in color_name else True,
                 "allow_cross_grain": False
             })

@@ -1626,7 +1626,7 @@
                     <span>📐 AI Destekli Akıllı Plaka Kesim &amp; Fire Minimizasyonu</span>
                     <span style="font-size:11px;background:#10B981;color:#FFF;padding:2px 8px;border-radius:6px;font-weight:800;letter-spacing:0.5px;">2D NESTING</span>
                 </div>
-                <div style="font-size:12px;color:#64748B;margin-top:2px;">Ham MDF, WPC yüzey paneli ve karkas seren kesimlerinde minimum fire, otomatik giyotin kesim şeması ve hammadde tasarrufu</div>
+                <div style="font-size:12px;color:#64748B;margin-top:2px;">Yekpare EPS Strafor (32mm) ve WPC Kompozit Levha kesimlerinde minimum fire, otomatik ebatlama ve hammadde tasarrufu</div>
             </div>
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <button class="btn-secondary" onclick="openNestingOrdersModal()" style="display:flex;align-items:center;gap:6px;">
@@ -1681,17 +1681,17 @@
                 <div class="card" style="padding:16px;">
                     <div style="font-size:13px;font-weight:800;color:#0F172A;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
                         <span>1. Ham Plaka Ebatları (Master Sheet)</span>
-                        <span style="font-size:11px;color:#3B82F6;cursor:pointer;" onclick="setPresetSheet('std_2100_2800')">Standart MDF</span>
+                        <span style="font-size:11px;color:#3B82F6;cursor:pointer;" onclick="setPresetSheet('eps_1200_3000')">Standart EPS Blok</span>
                     </div>
                     
                     <div style="margin-bottom:10px;">
                         <label style="font-size:11px;color:#64748B;font-weight:600;display:block;margin-bottom:4px;">Hazır Ebat Şablonu</label>
                         <select id="nesting-preset-select" class="form-control" onchange="onNestingPresetChange()" style="font-size:12px;">
-                            <option value="std_2100_2800">Standart Ham MDF (2100 x 2800 mm)</option>
-                            <option value="wide_1830_3660">Geniş Format MDF (1830 x 3660 mm)</option>
-                            <option value="high_2200_2800">Yüksek Kapı Formatı (2200 x 2800 mm)</option>
-                            <option value="ply_1220_2440">Marin Kontrplak / Plywood (1220 x 2440 mm)</option>
-                            <option value="compact_1300_3050">Kompakt Laminat (1300 x 3050 mm)</option>
+                            <option value="eps_1200_3000">Yekpare EPS Strafor Blok (1200 x 3000 x 32 mm)</option>
+                            <option value="eps_1000_2000">Standart EPS Strafor Tabaka (1000 x 2000 x 32 mm)</option>
+                            <option value="wpc_1000_2200">WPC Kompozit Levha Boy Plaka (1000 x 2200 mm)</option>
+                            <option value="wpc_900_2100">WPC Kompozit Levha Standart (900 x 2100 mm)</option>
+                            <option value="seren_2100">WPC Karkas Seren Boy Kesim (42 x 2100 mm)</option>
                             <option value="custom">Özel Ebat (Manuel Giriş)</option>
                         </select>
                     </div>
@@ -1699,15 +1699,15 @@
                     <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
                         <div>
                             <label style="font-size:11px;color:#64748B;font-weight:600;display:block;margin-bottom:4px;">En (W, mm)</label>
-                            <input type="number" id="nesting-sheet-w" class="form-control" value="2100" style="font-size:12px;font-weight:700;">
+                            <input type="number" id="nesting-sheet-w" class="form-control" value="1200" style="font-size:12px;font-weight:700;">
                         </div>
                         <div>
                             <label style="font-size:11px;color:#64748B;font-weight:600;display:block;margin-bottom:4px;">Boy (H, mm)</label>
-                            <input type="number" id="nesting-sheet-h" class="form-control" value="2800" style="font-size:12px;font-weight:700;">
+                            <input type="number" id="nesting-sheet-h" class="form-control" value="3000" style="font-size:12px;font-weight:700;">
                         </div>
                         <div>
                             <label style="font-size:11px;color:#64748B;font-weight:600;display:block;margin-bottom:4px;">Birim Fiyat (TL)</label>
-                            <input type="number" id="nesting-sheet-cost" class="form-control" value="1150" style="font-size:12px;font-weight:700;">
+                            <input type="number" id="nesting-sheet-cost" class="form-control" value="320" style="font-size:12px;font-weight:700;">
                         </div>
                     </div>
                 </div>
@@ -1896,9 +1896,9 @@
                 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:10px; flex-wrap:wrap;">
                     <div style="display:flex; align-items:center; gap:8px;">
                         <span style="font-size:12px; font-weight:700; color:#334155;">Kategori Filtresi:</span>
-                        <button class="btn-secondary active" id="btn-nfilter-panels" onclick="changeNestingOrdersFilter('panels')" style="font-size:11px; padding:4px 10px;">Yüzey Panelleri (Ön/Arka MDF)</button>
-                        <button class="btn-secondary" id="btn-nfilter-stiles" onclick="changeNestingOrdersFilter('stiles')" style="font-size:11px; padding:4px 10px;">Seren Çıtaları (42x42)</button>
-                        <button class="btn-secondary" id="btn-nfilter-core" onclick="changeNestingOrdersFilter('core')" style="font-size:11px; padding:4px 10px;">Dolgu Straforları</button>
+                        <button class="btn-secondary active" id="btn-nfilter-panels" onclick="changeNestingOrdersFilter('panels')" style="font-size:11px; padding:4px 10px;">WPC Yüzey Levhaları</button>
+                        <button class="btn-secondary" id="btn-nfilter-stiles" onclick="changeNestingOrdersFilter('stiles')" style="font-size:11px; padding:4px 10px;">Seren Çıtaları (210 cm)</button>
+                        <button class="btn-secondary" id="btn-nfilter-core" onclick="changeNestingOrdersFilter('core')" style="font-size:11px; padding:4px 10px;">EPS Strafor Dolgu (32mm)</button>
                     </div>
 
                     <div style="display:flex; align-items:center; gap:8px;">
@@ -3099,13 +3099,13 @@
                     <div>
                         <label class="form-label">Makine / İstasyon *</label>
                         <select id="sc-station" required class="form-select">
-                            <option value="Vakum Pres">Vakum Pres</option>
-                            <option value="Sıcak Pres">Sıcak Pres</option>
-                            <option value="Homag Ebatlama">Homag Ebatlama</option>
-                            <option value="Kenar Bantlama">Kenar Bantlama</option>
-                            <option value="Seren Kesim">Seren Kesim</option>
-                            <option value="Strafor / Petek">Strafor / Petek</option>
-                            <option value="Son Kalite Kontrol">Son Kalite Kontrol</option>
+                            <option value="0. Ekstrüder Levha Hattı">0. Ekstrüder Levha Hattı</option>
+                            <option value="1. Seren Çakım &amp; Takoz">1. Seren Çakım &amp; Takoz</option>
+                            <option value="2. EPS Strafor Ebatlama">2. EPS Strafor Ebatlama</option>
+                            <option value="3. Sıcak Pres Hattı">3. Sıcak Pres Hattı</option>
+                            <option value="4. CNC Fuga Desen &amp; Kilit">4. CNC Fuga Desen &amp; Kilit</option>
+                            <option value="5. Homag PVC Kenar Bant">5. Homag PVC Kenar Bant</option>
+                            <option value="6. Kalite Kontrol &amp; Paket">6. Kalite Kontrol &amp; Paket</option>
                         </select>
                     </div>
                     <div>
@@ -3116,12 +3116,14 @@
                 <div>
                     <label class="form-label">Hata / Fire Nedeni *</label>
                     <select id="sc-reason" required class="form-select">
-                        <option value="Yüzey Baloncuk / Folyo Hatası">Yüzey Baloncuk / Folyo Hatası</option>
-                        <option value="Ebat Sapması / Gönye Bozukluğu">Ebat Sapması / Gönye Bozukluğu</option>
-                        <option value="Pres Yanığı / Isı Dağılım Hatası">Pres Yanığı / Isı Dağılım Hatası</option>
-                        <option value="Kenar Bant Açılması / Tutkal Hatası">Kenar Bant Açılması / Tutkal Hatası</option>
-                        <option value="Çizik / Ezilme / Taşıma Hasarı">Çizik / Ezilme / Taşıma Hasarı</option>
-                        <option value="Seren / Petek Boşluğu">Seren / Petek Boşluğu</option>
+                        <option value="Levha Çekim Dalgası / Kalınlık Hatası">Levha Çekim Dalgası / Kalınlık Hatası</option>
+                        <option value="Seren Gönye Sapması / Takoz Çatlağı">Seren Gönye Sapması / Takoz Çatlağı</option>
+                        <option value="Strafor Ebat Hatası / Boşluk Kalması">Strafor Ebat Hatası / Boşluk Kalması</option>
+                        <option value="Pres Isı-Basınç Hatası / Levha Yapışmama">Pres Isı-Basınç Hatası / Levha Yapışmama</option>
+                        <option value="CNC Fuga Çizim / Desen Kayması">CNC Fuga Çizim / Desen Kayması</option>
+                        <option value="CNC Kilit &amp; Kol Yuvası Sapması">CNC Kilit &amp; Kol Yuvası Sapması</option>
+                        <option value="Homag Kenar Bant Açılması / Tutkal Hatası">Homag Kenar Bant Açılması / Tutkal Hatası</option>
+                        <option value="Yüzey Çizik / Darbe / Taşıma Hasarı">Yüzey Çizik / Darbe / Taşıma Hasarı</option>
                         <option value="Diğer Kalite Kusuru">Diğer Kalite Kusuru</option>
                     </select>
                 </div>
@@ -5152,7 +5154,7 @@ function renderNestingPresetsSelect() {
     const sel = document.getElementById('nesting-preset-select');
     if (!sel || !nestingState.presets.length) return;
     sel.innerHTML = nestingState.presets.map(p => `
-        <option value="${p.id}" ${p.id==='std_2100_2800'?'selected':''}>${p.name}</option>
+        <option value="${p.id}" ${p.id==='eps_1200_3000'?'selected':''}>${p.name}</option>
     `).join('') + `<option value="custom">Özel Ebat (Manuel Giriş)</option>`;
 }
 
