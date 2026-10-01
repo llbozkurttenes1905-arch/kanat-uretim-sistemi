@@ -1015,7 +1015,7 @@ def get_order_routing(oid: str):
 @app.post("/api/orders")
 def create_order(req: OrderCreate):
     d = load_data()
-    oid = "SIP-" + datetime.now().strftime("%Y%m%d-%H%M%S")
+    oid = "SIP-" + datetime.now().strftime("%Y%m%d-%H%M%S") + "-" + str(uuid.uuid4())[:4].upper()
     d["orders"][oid] = {
         "id": oid,
         "facility_id": req.facility_id,

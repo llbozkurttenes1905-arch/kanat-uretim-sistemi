@@ -77,8 +77,62 @@
       "notes": "Yüzey temizlik kontrolü, koruyucu köşe takozları ve sevkiyat ambalajı"
     }
   },
-  "orders": {},
-  "daily_entries": {},
+  "orders": {
+    "SIP-20261001-124856-31A9": {
+      "id": "SIP-20261001-124856-31A9",
+      "facility_id": "fac1",
+      "order_no": "2026-001",
+      "customer": "ÖZDEMİR İNŞAAT - Liman Projesi",
+      "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 10,
+      "delivery_date": "2026-10-15",
+      "status": "open",
+      "notes": "Liman projesi Blok A - 80lik beyaz kapılar",
+      "created_at": "2026-10-01T12:48:56.041103"
+    },
+    "SIP-20261001-124856-1870": {
+      "id": "SIP-20261001-124856-1870",
+      "facility_id": "fac1",
+      "order_no": "2026-002",
+      "customer": "KUZEY MİMARLIK - Villa Etabı",
+      "model": "ER700 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+      "qty": 15,
+      "delivery_date": "2026-10-15",
+      "status": "open",
+      "notes": "Villa etabı - 80lik beyaz kapılar",
+      "created_at": "2026-10-01T12:48:56.051365"
+    },
+    "SIP-20261001-124856-369A": {
+      "id": "SIP-20261001-124856-369A",
+      "facility_id": "fac1",
+      "order_no": "2026-003",
+      "customer": "METROPOL KONUTLARI",
+      "model": "ER103 KANAT K.CEVİZ KOM.SEREN STRAFOR 700X2020X40",
+      "qty": 8,
+      "delivery_date": "2026-10-15",
+      "status": "open",
+      "notes": "Otel odaları - 70lik koyu ceviz kapılar",
+      "created_at": "2026-10-01T12:48:56.065426"
+    }
+  },
+  "daily_entries": {
+    "2026-10-01": {
+      "date": "2026-10-01",
+      "order_entries": [
+        {
+          "order_id": "SIP-20261001-124856-31A9",
+          "order_no": "2026-001",
+          "customer": "ÖZDEMİR İNŞAAT - Liman Projesi",
+          "model": "ER100 KANAT D.BEYAZ KOM.SEREN STRAFOR 800X2020X40",
+          "output_qty": 10,
+          "shift": "Gündüz",
+          "notes": "Kanat hattında başarıyla tamamlandı"
+        }
+      ],
+      "machine_entries": [],
+      "downtimes": []
+    }
+  },
   "materials": {
     "MAT_SEREN_KOMP": {
       "id": "MAT_SEREN_KOMP",
@@ -232,8 +286,113 @@
     }
   },
   "scraps": {},
-  "shipments": {},
-  "order_stages": {},
+  "shipments": {
+    "SEVK-20261001-1252": {
+      "id": "SEVK-20261001-1252",
+      "shipment_code": "SEVK-20261001-1252",
+      "shipment_no": "SEVK-20261001-1252",
+      "customer": "ÖZDEMİR İNŞAAT - Liman Projesi",
+      "order_id": "",
+      "plate": "34 YLM 58",
+      "plate_no": "34 YLM 58",
+      "driver": "Mustafa Usta",
+      "driver_name": "Mustafa Usta",
+      "driver_phone": "",
+      "destination": "",
+      "ship_date": "2026-10-01",
+      "shipment_date": "2026-10-01",
+      "facility": "fac1",
+      "facility_id": "fac1",
+      "status": "Hazırlanıyor",
+      "items": [
+        {
+          "order_no": "2026-001",
+          "model": "ER100 D.BEYAZ",
+          "doors": 10
+        }
+      ],
+      "doors": 10,
+      "total_doors": 10,
+      "notes": "Liman projesi Blok A kapıları - 10 adet ambalajlı",
+      "created_at": "2026-10-01T12:52:13.234568"
+    }
+  },
+  "order_stages": {
+    "SIP-20261001-124856-31A9": {
+      "order_id": "SIP-20261001-124856-31A9",
+      "current_stage": "paket",
+      "extruder_sheets_ready": true,
+      "qty_completed_in_stage": 0,
+      "last_updated": "2026-10-01",
+      "operator": "Operatör",
+      "history": [
+        {
+          "timestamp": "2026-10-01T12:49:56.087406",
+          "stage": "seren",
+          "stage_name": "1. Seren Çakım & Karkas",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        },
+        {
+          "timestamp": "2026-10-01T12:49:56.102298",
+          "stage": "strafor",
+          "stage_name": "2. Köpük & Kilit Takviyesi",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        },
+        {
+          "timestamp": "2026-10-01T12:49:56.113922",
+          "stage": "pres",
+          "stage_name": "3. Sıcak Pres Masası",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        },
+        {
+          "timestamp": "2026-10-01T12:51:00.042756",
+          "stage": "cnc",
+          "stage_name": "4. CNC Çizim & Model Fuga",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        },
+        {
+          "timestamp": "2026-10-01T12:51:00.053772",
+          "stage": "homag",
+          "stage_name": "5. Homag Kenar Bantlama",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        },
+        {
+          "timestamp": "2026-10-01T12:51:00.065481",
+          "stage": "paket",
+          "stage_name": "6. Kalite & Paketleme",
+          "qty": 0,
+          "operator": "",
+          "notes": ""
+        }
+      ]
+    },
+    "SIP-20261001-124856-1870": {
+      "order_id": "SIP-20261001-124856-1870",
+      "current_stage": "ekstruder",
+      "extruder_sheets_ready": false,
+      "qty_completed_in_stage": 0,
+      "last_updated": "2026-10-01",
+      "operator": "Sistem"
+    },
+    "SIP-20261001-124856-369A": {
+      "order_id": "SIP-20261001-124856-369A",
+      "current_stage": "ekstruder",
+      "extruder_sheets_ready": false,
+      "qty_completed_in_stage": 0,
+      "last_updated": "2026-10-01",
+      "operator": "Sistem"
+    }
+  },
   "recipes": {
     "REC_KANAT_BEYAZ": {
       "id": "REC_KANAT_BEYAZ",
